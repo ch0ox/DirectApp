@@ -3,6 +3,10 @@
 //								WinApp.h
 /*------------------------------------------------------------------------*/
 
+#ifndef __CHAE_App_H
+#define __CHAE_App_H
+
+
 #include <windows.h>
 #include <iostream>
 #include <d3d9.h>
@@ -92,7 +96,7 @@ private:
 };
 
 
-
+#endif //__CHAE_App_H
 
 
 

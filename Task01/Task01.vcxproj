@@ -32,6 +32,7 @@
     <ClCompile Include="DXInput.cpp" />
     <ClCompile Include="KeyboardMgr.cpp" />
     <ClCompile Include="MouseMgr.cpp" />
+    <ClCompile Include="ObjParser.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
@@ -51,6 +52,7 @@
     <ClInclude Include="DXInput.h" />
     <ClInclude Include="KeyboardMgr.h" />
     <ClInclude Include="MouseMgr.h" />
+    <ClInclude Include="ObjParser.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="WinApp.h" />
     <ClInclude Include="main.h" />

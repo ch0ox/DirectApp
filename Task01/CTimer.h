@@ -1,6 +1,10 @@
 #pragma once
 #include <windows.h>
 
+#ifndef __CHAE_Timer_H
+#define __CHAE_Timer_H
+
+
 class CTimer
 {
 public:
@@ -26,3 +30,5 @@ private:
 	unsigned long m_fpsFrameCount;	// 해당 초 동안 발생한 총 프레임 수. -> m_frameRate 에 저장.
 	FLOAT m_fpsTimeElapsed;			// 처리 중인 현재 초가 시작된 후 경과한 시간.
 };
+
+#endif //__CHAE_Timer_H

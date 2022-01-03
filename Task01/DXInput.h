@@ -3,6 +3,9 @@
 //								Input.h
 /*------------------------------------------------------------------------*/
 
+#ifndef __CHAE_DxInput_H
+#define __CHAE_DxInput_H
+
 #include <windows.h>
 #include <dinput.h>
 #include "MouseMgr.h"
@@ -34,3 +37,5 @@ private:
 	CKeyboard* GetKeyboardMgr() const;
 
 };	
+
+#endif //__CHAE_DxInput_H

@@ -3,6 +3,10 @@
 //								CDraw.h
 /*------------------------------------------------------------------------*/
 
+#ifndef __CHAE_Draw_H
+#define __CHAE_Draw_H
+
+
 #include <D3dx9tex.h>
 #include <vector>
 
@@ -122,8 +126,7 @@ public:
 
 
 
-
-
+#endif //__CHAE_Draw_H
 
 
 

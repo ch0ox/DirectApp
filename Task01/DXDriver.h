@@ -3,6 +3,10 @@
 //								CDxDriver.h
 /*------------------------------------------------------------------------*/
 
+#ifndef __CHAE_DxDriver_H
+#define __CHAE_DxDriver_H
+
+
 class CKeyboard;
 class CDraw;
 class CMouse;
@@ -97,7 +101,7 @@ private:
 };
 
 
-
+#endif //__CHAE_DxDriver_H
 
 
 

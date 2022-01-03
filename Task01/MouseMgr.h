@@ -2,6 +2,9 @@
 /*------------------------------------------------------------------------*/
 //								MouseMgr.h
 /*------------------------------------------------------------------------*/
+#ifndef __CHAE_MouseMgr_H
+#define __CHAE_MouseMgr_H
+
 #include <vector>
 #define idle 1
 #define over 2
@@ -42,3 +45,4 @@ private:
 
 };
 
+#endif // __CHAE_MouseMgr_H

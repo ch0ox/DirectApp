@@ -3,6 +3,9 @@
 //								KeyboardMgr.h
 /*------------------------------------------------------------------------*/
 
+#ifndef __CHAE_KeyboardMgr_H
+#define __CHAE_KeyboardMgr_H
+
 class CDxDriver;
 class CDraw;
 
@@ -25,3 +28,4 @@ protected:
 
 };
 
+#endif //__CHAE_KeyboardMgr_H
