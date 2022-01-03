@@ -208,9 +208,6 @@ LRESULT CALLBACK App::MsgHandelr(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IPar
 		pDXDriver->pMouse->MouseManager(hWnd, msg, wParam, IParam, move);
 		break;
 
-// 	case WM_PAINT:
-// 		break;
-
 	case WM_COMMAND:
 		switch (LOWORD(wParam))
 		{
@@ -219,6 +216,8 @@ LRESULT CALLBACK App::MsgHandelr(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IPar
 				return 0;
 			break;
 		case ID_FILE_LOAD:
+			// Menu Load Click ?
+			// Load Action Code
 			break;
 		case ID_ABOUT:
 			MessageBox(NULL, TEXT("과제입니당!"), TEXT("About"), MB_OK);
