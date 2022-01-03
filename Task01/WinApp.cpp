@@ -14,6 +14,7 @@
 #include "KeyboardMgr.h"
 #include "MouseMgr.h"
 #include "Draw.h"
+#include "Menu.h"
 
 /*------------------------------------------------------------------------*/
 //								GLOBALS
@@ -171,8 +172,25 @@ BOOL App::Render()
 
 LRESULT CALLBACK App::MsgHandelr(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IParam)
 {
+	HMENU hMenu, hSubMenu;
+
 	switch (msg)
 	{
+	case WM_CREATE:
+		hMenu = CreateMenu();
+
+		hSubMenu = CreatePopupMenu();
+		AppendMenuW(hSubMenu, MF_STRING, ID_FILE_LOAD, TEXT("L&oad"));
+		AppendMenuW(hSubMenu, MF_STRING, ID_FILE_EXIT, TEXT("E&xit"));
+		AppendMenuW(hMenu, MF_STRING | MF_POPUP, (UINT)hSubMenu,TEXT("&File"));
+
+		hSubMenu = CreatePopupMenu();
+		AppendMenuW(hSubMenu, MF_STRING, ID_ABOUT, TEXT("&Help"));
+		AppendMenuW(hMenu, MF_STRING | MF_POPUP, (UINT)hSubMenu, TEXT("&About"));
+
+		SetMenu(hWnd, hMenu);
+
+		break;
 	case WM_KEYDOWN:
 		//pDXDriver->pKey->KeyManager(hWnd, msg, wParam, IParam);
 		pDxInput->pKey->KeyManager(hWnd, msg, wParam, IParam, pDXDriver);
@@ -193,6 +211,20 @@ LRESULT CALLBACK App::MsgHandelr(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IPar
 // 	case WM_PAINT:
 // 		break;
 
+	case WM_COMMAND:
+		switch (LOWORD(wParam))
+		{
+		case ID_FILE_EXIT:
+			if (pDXDriver->ExitMessageBox() == IDNO)
+				return 0;
+			break;
+		case ID_FILE_LOAD:
+			break;
+		case ID_ABOUT:
+			MessageBox(NULL, TEXT("과제입니당!"), TEXT("About"), MB_OK);
+			break;
+		}
+		break;
 	case WM_CLOSE:							// 종료(X) 클릭
 		if (pDXDriver->ExitMessageBox() == IDNO)
 			return 0;

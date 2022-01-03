@@ -41,12 +41,12 @@ BOOL CDxDriver::Initialize(HWND hWnd)												// App ÀÇ HWND ¹Þ¾Æ ¿È.
 		{
 			if (SUCCEEDED(InitGeometry()))
 			{
-
+				return TRUE;
 			}
 		}
 
 	}
-	return TRUE;
+	return FALSE;
 }
 
 HRESULT CDxDriver::InitD3D()

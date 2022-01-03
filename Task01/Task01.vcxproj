@@ -22,7 +22,7 @@
     <ClCompile Include="Button.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="CTimer.cpp" />
+    <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Draw.cpp" />
     <ClCompile Include="DXDriver.cpp" />
     <ClCompile Include="DXInput.cpp" />
@@ -40,7 +40,9 @@
     <ClInclude Include="Button.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="CTimer.h" />
+    <ClInclude Include="Menu.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Timer.h" />
     <ClInclude Include="Draw.h" />
     <ClInclude Include="DXDriver.h" />
     <ClInclude Include="DXInput.h" />

@@ -37,8 +37,6 @@ constexpr int right = 2;
 
 VOID CMouse::MouseManager(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, INT flag)
 {
-
-
 	BOOL pressedFlag = FALSE;
 
 	switch (flag)

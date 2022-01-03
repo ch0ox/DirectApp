@@ -7,8 +7,6 @@
 #include <Winnt.h>
 
 
-
-/*
 CTimer::CTimer()
 {
 	if (QueryPerformanceFrequency((LARGE_INTEGER *) &m_perfFreq))
@@ -17,5 +15,31 @@ CTimer::CTimer()
 		QueryPerformanceCounter((LARGE_INTEGER*)&m_lastTime);
 		m_timeScale = 1.0f / m_perfFreq;
 	}
+	else
+	{
+		m_perfHardware = FALSE;
+		m_lastTime = timeGetTime();
+		m_timeScale = 0.001f;
+	}
 }
-*/
+
+CTimer::~CTimer()
+{
+
+}
+
+VOID CTimer::Tick(float fLockFPS)
+{
+	float fTimeElapsed;
+
+}
+
+FLOAT CTimer::GetTimeElapsed() const
+{
+	return m_timeElapsed;
+}
+
+unsigned long CTimer::GetFrameRate(LPTSTR lpszString) const
+{
+	return m_frameRate;
+}
