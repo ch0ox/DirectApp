@@ -50,6 +50,7 @@ private:
 
 public:
 	char* m_btnName;
+	UINT			m_action = -1;
 	FLOAT			m_scaleX = 1.0f;
 	FLOAT			m_scaleY = 1.0f;
 	FLOAT			m_posX;

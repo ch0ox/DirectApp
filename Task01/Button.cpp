@@ -69,31 +69,24 @@ VOID CButton::LinkD3D(CDxDriver* pDriver)
 
 VOID CButton::LoadIniFile(char* imgName_1, char* imgName_2, char* imgName_3, char* btnName)
 {
+	// 	USES_CONVERSION;
  	m_btnName = btnName;
+	m_normal_path = imgName_1;
+	m_over_path = imgName_2;
+	m_click_path = imgName_3;
 
 	// ini file read
 	LPCSTR szp = "\\\\ifs01\\서든어택1실\\SA_Depts\\클라이언트팀\\99. 공유\\김채원\\Study_Git\\directApp\\button.ini";
 	UINT16 posX, posY, width, height;
 	UINT default = -1;
 
-	posX = GetPrivateProfileIntA(m_btnName, "posX", default, szp);
-	posY = GetPrivateProfileIntA(m_btnName, "posY", default, szp);
-	width = GetPrivateProfileIntA(m_btnName, "width", default, szp);
-	height = GetPrivateProfileIntA(m_btnName, "height", default, szp);
-	
-	m_posX = (FLOAT)posX;
-	m_posY = (FLOAT)posY;
-	m_width = width;
-	m_height = height;
-
-	m_normal_path = imgName_1;
-	m_over_path = imgName_2;
-	m_click_path = imgName_3;
-
-// 	USES_CONVERSION;
+	m_action = GetPrivateProfileIntA(m_btnName, "action", default, szp);
+	m_posX = (FLOAT)GetPrivateProfileIntA(m_btnName, "posX", default, szp);
+	m_posY = (FLOAT)GetPrivateProfileIntA(m_btnName, "posY", default, szp);
+	m_width = GetPrivateProfileIntA(m_btnName, "width", default, szp);
+	m_height = GetPrivateProfileIntA(m_btnName, "height", default, szp);
 
 	SetWideInit();
-
 }
 
 VOID CButton::SetTexture()
