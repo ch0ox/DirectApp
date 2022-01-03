@@ -31,6 +31,7 @@
     <ClCompile Include="ObjParser.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="WinApp.cpp" />
     <ClCompile Include="main.cpp" />
@@ -46,7 +47,9 @@
     <ClInclude Include="KeyboardMgr.h" />
     <ClInclude Include="MouseMgr.h" />
     <ClInclude Include="ObjParser.h" />
-    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="stdafx.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="WinApp.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>

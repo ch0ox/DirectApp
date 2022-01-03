@@ -10,6 +10,7 @@
 #define over 2
 #define click 3
 
+
 class CDxDriver;
 class Button;
 class CButton;
@@ -17,6 +18,12 @@ class CButton;
 class CMouse
 {
 public:
+// 	enum EState {
+// 		idle = 1,
+// 		over,
+// 		click
+// 	};
+
 	CMouse();
 	virtual ~CMouse();
 

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "WinApp.h"
-#include "CTimer.h"
+#include "Timer.h"
 #include "main.h"
 #include "windows.h"
 #include <Windows.h>
