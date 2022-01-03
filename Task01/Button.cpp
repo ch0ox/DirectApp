@@ -6,7 +6,6 @@
 #include "WinApp.h"
 #include "Button.h"
 #include "MouseMgr.h"
-#include "Cini.h"
 #include <atlstr.h>
 
 #pragma warning(disable : 4996)
@@ -70,35 +69,28 @@ VOID CButton::LinkD3D(CDxDriver* pDriver)
 
 VOID CButton::LoadIniFile(char* imgName_1, char* imgName_2, char* imgName_3, char* btnName)
 {
-	// ini 파일 경로 변경 설정
-	wchar_t szPathName[MAX_PATH] = TEXT("\\\\ifs01\\서든어택1실\\SA_Depts\\클라이언트팀\\99. 공유\\김채원\\Task03_D\\button.ini"); 
-	CIni iniFile(szPathName);
-	m_btnName = btnName;
+ 	m_btnName = btnName;
 
 	// ini file read
 	LPCSTR szp = "\\\\ifs01\\서든어택1실\\SA_Depts\\클라이언트팀\\99. 공유\\김채원\\Study_Git\\directApp\\button.ini";
 	UINT16 posX, posY, width, height;
-	UINT default;
+	UINT default = -1;
 
 	posX = GetPrivateProfileIntA(m_btnName, "posX", default, szp);
 	posY = GetPrivateProfileIntA(m_btnName, "posY", default, szp);
 	width = GetPrivateProfileIntA(m_btnName, "width", default, szp);
 	height = GetPrivateProfileIntA(m_btnName, "height", default, szp);
-
-
-	USES_CONVERSION;
-	CString psz = CString(m_btnName);
-
-	m_posX = (FLOAT)iniFile.GetDouble(psz, TEXT("posX"), 0);						// pos X
-	m_posY = (FLOAT)iniFile.GetDouble(psz, TEXT("posY"), 0);						// pos Y
-	m_width = (UINT16)iniFile.GetInt(psz, TEXT("width"), 0);						// width
-	m_height = (UINT16)iniFile.GetInt(psz, TEXT("height"), 0);						// height
-
 	
+	m_posX = (FLOAT)posX;
+	m_posY = (FLOAT)posY;
+	m_width = width;
+	m_height = height;
 
 	m_normal_path = imgName_1;
 	m_over_path = imgName_2;
 	m_click_path = imgName_3;
+
+// 	USES_CONVERSION;
 
 	SetWideInit();
 
