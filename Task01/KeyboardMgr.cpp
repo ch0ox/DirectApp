@@ -1,0 +1,63 @@
+/*------------------------------------------------------------------------*/
+//								KeyboardMgr.cpp
+/*------------------------------------------------------------------------*/
+
+#include "stdafx.h"
+#include <windows.h>
+#include "KeyboardMgr.h"
+#include "WinApp.h"
+#include "Draw.h"
+
+CKeyboard::CKeyboard()
+{
+
+}
+
+CKeyboard::~CKeyboard()
+{
+
+}
+
+VOID CKeyboard::KeyManager(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, CDxDriver* pDriver)
+{
+	g_pDriver = pDriver;
+	switch (wParam)
+	{
+	case VK_ESCAPE:
+	{
+		if (g_pDriver->ExitMessageBox() == IDYES)
+			PostMessage(hWnd, WM_DESTROY, wParam, lParam);
+		else
+			return;
+	}break;
+
+	case VK_SPACE:
+	{
+		g_pDriver->d3dpp.Windowed = g_pDriver->WindowMode;
+
+		if (g_pDriver->WindowMode)														// 현재 창모드 여서 Full Screen 으로 바꾸려고 할 때
+		{
+			g_pDriver->d3dpp.FullScreen_RefreshRateInHz = TRUE;
+			g_pDriver->ChangeDisplayMode(fullScreenMode);
+			g_pDriver->WindowMode = FALSE;
+		}
+		else
+		{																	// 현재 Full Screen 이여서 창모드로 바꾸려고 할 때
+			g_pDriver->d3dpp.FullScreen_RefreshRateInHz = D3DPRESENT_RATE_DEFAULT;		// 창모드 일 때 0
+			g_pDriver->ChangeDisplayMode(windowMode);
+			g_pDriver->WindowMode = TRUE;
+		}
+
+		g_pDriver->DeviceLostRecovery();
+	}break;
+
+	case VK_LEFT:
+	{
+		g_pDriver->pDraw->m_fAngle += 0.2f;
+	}break;
+	case VK_RIGHT:
+	{
+		g_pDriver->pDraw->m_fAngle -= 0.2f;
+	}break;
+	}
+}

@@ -1,0 +1,21 @@
+﻿  Draw.cpp
+  C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+C:\Users\chaewon\Downloads\1208\Draw.cpp(78,10): warning C4189: 'hr': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+  KeyboardMgr.cpp
+  C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+C:\Users\chaewon\Downloads\1208\KeyboardMgr.cpp(24,43): warning C4100: 'msg': 참조되지 않은 정식 매개 변수입니다.
+  MouseMgr.cpp
+  C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+  WinApp.cpp
+  C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+C:\Users\chaewon\Downloads\1208\WinApp.cpp(262,17): warning C4456: 'hr' 선언은 이전 로컬 선언을 숨깁니다.
+C:\Users\chaewon\Downloads\1208\WinApp.cpp(253,11): message : 'hr' 선언을 참조하십시오.
+C:\Users\chaewon\Downloads\1208\WinApp.cpp(262,12): warning C4189: 'hr': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+  WinMain.cpp
+  C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+C:\Users\chaewon\Downloads\1208\WinMain.cpp(11,113): warning C4100: 'nShowCmd': 참조되지 않은 정식 매개 변수입니다.
+C:\Users\chaewon\Downloads\1208\WinMain.cpp(11,93): warning C4100: 'lpCmdLine': 참조되지 않은 정식 매개 변수입니다.
+C:\Users\chaewon\Downloads\1208\WinMain.cpp(11,66): warning C4100: 'hPrevInstance': 참조되지 않은 정식 매개 변수입니다.
+C:\Users\chaewon\Downloads\1208\WinMain.cpp(11,36): warning C4100: 'hInstance': 참조되지 않은 정식 매개 변수입니다.
+  코드를 생성하고 있습니다...
+  Task01.vcxproj -> C:\Users\chaewon\Downloads\Task01\Task01\Debug\Task01.exe
