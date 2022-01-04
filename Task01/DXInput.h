@@ -19,18 +19,18 @@ public:
 	CDxInput();
 	virtual ~CDxInput();
 
-	BOOL			Initialize(HINSTANCE hInstance, HWND hwnd);
+	BOOL			Initialize(HINSTANCE hInstance, HWND hwnd, DWORD keyboardFlags = DISCL_NONEXCLUSIVE | DISCL_FOREGROUND, DWORD mouseFlags = DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
 	VOID			Term();
 	BOOL			Render();
 
-	CMouse*			GetMouseMgr() const;
-	CKeyboard*		GetKeyboardMgr() const;
+	CMouse*			GetMouseMgr() const			{ return pMouse; }
+	CKeyboard*		GetKeyboardMgr() const		{ return pKey; }
 
 	CMouse*			pMouse;
 	CKeyboard*		pKey;
 
 private:
-	LPDIRECTINPUT8	m_inputMgr;
+	LPDIRECTINPUT8	m_inputMgr = nullptr;
 	HWND			m_hWnd = nullptr;
 
 

@@ -1,17 +1,5 @@
-﻿  Timer.cpp
+﻿  DXInput.cpp
   C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-  Draw.cpp
-  C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\Button.h(53,18): warning C4245: '초기화 중': 'int'에서 'UINT'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\Draw.cpp(207,14): warning C4458: 'triangle' 선언은 클래스 멤버를 숨깁니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\Draw.h(53,14): message : 'CDraw::triangle' 선언을 참조하십시오.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\Draw.cpp(242,12): warning C4458: 'rectangle' 선언은 클래스 멤버를 숨깁니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\Draw.h(52,12): message : 'CDraw::rectangle' 선언을 참조하십시오.
-  main.cpp
-  C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\main.cpp(24,113): warning C4100: 'nShowCmd': 참조되지 않은 정식 매개 변수입니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\main.cpp(24,93): warning C4100: 'lpCmdLine': 참조되지 않은 정식 매개 변수입니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\main.cpp(24,66): warning C4100: 'hPrevInstance': 참조되지 않은 정식 매개 변수입니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\main.cpp(24,36): warning C4100: 'hInstance': 참조되지 않은 정식 매개 변수입니다.
-  코드를 생성하고 있습니다...
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\DXInput.cpp(20,86): warning C4100: 'mouseFlags': 참조되지 않은 정식 매개 변수입니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\DXInput.cpp(20,65): warning C4100: 'keyboardFlags': 참조되지 않은 정식 매개 변수입니다.
   Task01.vcxproj -> \\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Debug\Task01.exe

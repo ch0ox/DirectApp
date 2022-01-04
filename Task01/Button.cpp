@@ -36,7 +36,6 @@ CButton::~CButton()
 		delete[] m_ppTexture;
 		m_ppTexture = nullptr;
 	}
-
 }
 
 VOID CButton::LinkD3D(CDxDriver* pDriver)
@@ -195,5 +194,3 @@ VOID CButton::SetScale(float scaleX, float scaleY)
 	m_scaleX = scaleX;
 	m_scaleY = scaleY;
 }
-
-

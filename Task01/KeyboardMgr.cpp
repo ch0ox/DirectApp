@@ -18,6 +18,12 @@ CKeyboard::~CKeyboard()
 
 }
 
+VOID CKeyboard::InitializeKeyboard()
+{
+
+}
+
+
 VOID CKeyboard::KeyManager(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, CDxDriver* pDriver)
 {
 	m_pDriver = pDriver;
