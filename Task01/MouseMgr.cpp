@@ -10,15 +10,19 @@
 #include "Button.h"
 #include <map>
 
+#pragma comment(lib, "dinput8.lib")
+#pragma comment(lib, "dxguid.lib")
+
 CMouse::CMouse()
 {
 	m_MousePt.x = 0;
 	m_MousePt.y = 0;
+	memset(&m_mouseState, 0, sizeof(m_mouseState));
 }
 
 CMouse::~CMouse()
 {
-	btnVector.clear();
+	m_btnVector.clear();
 }
 
 VOID CMouse::LinkD3D(CDxDriver* pDriver)
@@ -28,12 +32,17 @@ VOID CMouse::LinkD3D(CDxDriver* pDriver)
 
 VOID CMouse::LinkButton(std::vector<CButton*>& v)
 {
-	btnVector = v;
+	m_btnVector = v;
 }
 
 constexpr int close = 0;
 constexpr int left = 1;
 constexpr int right = 2;
+
+BOOL CMouse::MouseDown(int button)
+{
+	return (m_mouseState.rgbButtons[button] & 0x8000) != 0;
+}
 
 VOID CMouse::MouseManager(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, INT flag)
 {
@@ -45,13 +54,13 @@ VOID CMouse::MouseManager(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, INT
 	{
 		if (wParam == VK_LBUTTON)
 		{
-			for (int state = 0; state < static_cast<int>(this->btnVector.size()); state++)
+			for (int state = 0; state < static_cast<int>(this->m_btnVector.size()); state++)
 			{
-				if (InButton(hWnd, this->btnVector[state]))
+				if (InButton(hWnd, this->m_btnVector[state]))
 				{
 					pressedFlag = TRUE;
 
-					this->btnVector[state]->m_state = click;
+					this->m_btnVector[state]->m_state = click;
 
 					if (state == left)
 						m_pDriver->pDraw->m_fAngle += 0.2f;
@@ -66,13 +75,13 @@ VOID CMouse::MouseManager(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, INT
 
 	case up:
 	{
-		for (int state = 0; state < static_cast<int>(this->btnVector.size()); state++)
+		for (int state = 0; state < static_cast<int>(this->m_btnVector.size()); state++)
 		{
-			if (InButton(hWnd, this->btnVector[state]))
+			if (InButton(hWnd, this->m_btnVector[state]))
 			{
 				pressedFlag = FALSE;
 
-				this->btnVector[state]->m_state = over;
+				this->m_btnVector[state]->m_state = over;
 
 				if (state == close)
 				{
@@ -92,14 +101,14 @@ VOID CMouse::MouseManager(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, INT
 
 	case move:
 	{
-		for (int state = 0; state < static_cast<int>(this->btnVector.size()); state++)
+		for (int state = 0; state < static_cast<int>(this->m_btnVector.size()); state++)
 		{
-			if (InButton(hWnd, this->btnVector[state]))
+			if (InButton(hWnd, this->m_btnVector[state]))
 			{
-				this->btnVector[state]->m_state = over;
+				this->m_btnVector[state]->m_state = over;
 			}
 			else
-				this->btnVector[state]->m_state = idle;
+				this->m_btnVector[state]->m_state = idle;
 		}
 
 	}break;

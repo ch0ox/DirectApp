@@ -19,31 +19,27 @@ class CButton;
 class CMouse
 {
 public:
-// 	enum EState {
-// 		idle = 1,
-// 		over,
-// 		click
-// 	};
 
 	CMouse();
 	virtual ~CMouse();
 
-	VOID		LinkD3D(CDxDriver* pDriver);
-	VOID		LinkButton(std::vector<CButton*>& v);
-	POINT		ClientCursorPos();
-	//INT MouseManager();
-	VOID		MouseManager(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, INT flag);
-	BOOL		InButton(HWND hWnd, CButton* pButton);
-	INT			boxState = idle;
-
-	LPDIRECTINPUTDEVICE8		m_pMouse;				// 마우스 디바이스
+	VOID								LinkD3D(CDxDriver* pDriver);
+	VOID								LinkButton(std::vector<CButton*>& v);
+	POINT								ClientCursorPos();
+	VOID								MouseManager(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, INT flag);
+	BOOL								InButton(HWND hWnd, CButton* pButton);
+	BOOL								MouseDown(int button);
+	
+	INT									boxState = idle;
+	LPDIRECTINPUTDEVICE8				m_pMouse = nullptr;				// 마우스 디바이스
+	DIMOUSESTATE2						m_mouseState;
 
 private:
-	CDxDriver* m_pDriver = nullptr;
+	CDxDriver*							m_pDriver = nullptr;
 
-	BOOL		OnMouseMove(int x, int y);
-	std::vector<CButton*>				btnVector;
-	std::vector<CButton*>::iterator		btnIter;
+	BOOL								OnMouseMove(int x, int y);
+	std::vector<CButton*>				m_btnVector;
+	std::vector<CButton*>::iterator		m_btnIter;
 
 protected:
 	POINT		m_MousePt;

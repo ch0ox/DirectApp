@@ -21,12 +21,12 @@ CDraw::CDraw()
 
 CDraw::~CDraw()
 {
-	btnIter = this->btnVector.begin();
-	for (; this->btnVector.end() != btnIter; ++btnIter)
+	m_btnIter = this->m_btnVector.begin();
+	for (; this->m_btnVector.end() != m_btnIter; ++m_btnIter)
 	{
-		delete (*btnIter);
+		delete (*m_btnIter);
 	}
-	btnVector.clear();
+	m_btnVector.clear();
 }
 
 VOID CDraw::LinkD3D(CDxDriver* pDriver)
@@ -293,14 +293,14 @@ VOID CDraw::CreateButton()
 	CButton* pLeftBtn = new CButton("left_normal.png", "left_over.png", "left_click.png", "LeftButton");
 	CButton* pRightBtn = new CButton("right_normal.png", "right_over.png", "right_click.png", "RightButton");
 
-	btnVector.push_back(pCloseBtn);
-	btnVector.push_back(pLeftBtn);
-	btnVector.push_back(pRightBtn);
+	m_btnVector.push_back(pCloseBtn);
+	m_btnVector.push_back(pLeftBtn);
+	m_btnVector.push_back(pRightBtn);
 
-	btnIter = this->btnVector.begin();
-	for (; this->btnVector.end() != btnIter; ++btnIter)
+	m_btnIter = this->m_btnVector.begin();
+	for (; this->m_btnVector.end() != m_btnIter; ++m_btnIter)
 	{
-		RectangleInit(*btnIter);
+		RectangleInit(*m_btnIter);
 	}
 }
 

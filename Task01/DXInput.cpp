@@ -7,6 +7,9 @@
 #include "MouseMgr.h"
 #include "KeyboardMgr.h"
 
+#pragma comment(lib, "dinput8.lib")
+#pragma comment(lib, "dxguid.lib")
+
 CDxInput::CDxInput() : m_inputMgr(nullptr), pMouse(nullptr), pKey(nullptr)
 {
 
@@ -30,28 +33,28 @@ BOOL CDxInput::Initialize(HINSTANCE hInstance, HWND hwnd, DWORD keyboardFlags, D
 	// Mouse Connect
 	pMouse = new CMouse();
 
-// 	m_inputMgr->CreateDevice(GUID_SysMouse, &(pMouse->m_pMouse), 0);
-// 	if (pMouse->m_pMouse)
-// 	{
-// 		MessageBox(hwnd, TEXT("Mouse Create Failed!"), TEXT("Failed Msg"), MB_OK);
-// 		return FALSE;
-// 	}
-// 	pMouse->m_pMouse->SetDataFormat(&c_dfDIMouse2);
-// 	pMouse->m_pMouse->SetCooperativeLevel(hwnd, mouseFlags);
-// 	pMouse->m_pMouse->Acquire();
+	m_inputMgr->CreateDevice(GUID_SysMouse, &(pMouse->m_pMouse), 0);
+	if (!pMouse->m_pMouse)
+	{
+		MessageBox(hwnd, TEXT("Mouse Create Failed!"), TEXT("Failed Msg"), MB_OK);
+		return FALSE;
+	}
+	pMouse->m_pMouse->SetDataFormat(&c_dfDIMouse2);
+	pMouse->m_pMouse->SetCooperativeLevel(hwnd, mouseFlags);
+	pMouse->m_pMouse->Acquire();
 
 	// Keyboard Connect
 	pKey = new CKeyboard();
 
-// 	m_inputMgr->CreateDevice(GUID_SysKeyboard, &(pKey->m_pKeyboard), 0);
-// 	if (!pKey->m_pKeyboard)
-// 	{
-// 		MessageBox(hwnd, TEXT("Keyboard Create Failed!"), TEXT("Failed Msg"), MB_OK);
-// 		return FALSE;
-// 	}
-// 	pKey->m_pKeyboard->SetDataFormat(&c_dfDIKeyboard);
-// 	pKey->m_pKeyboard->SetCooperativeLevel(hwnd, keyboardFlags);
-// 	pKey->m_pKeyboard->Acquire();
+	m_inputMgr->CreateDevice(GUID_SysKeyboard, &(pKey->m_pKeyboard), 0);
+	if (!pKey->m_pKeyboard)
+	{
+		MessageBox(hwnd, TEXT("Keyboard Create Failed!"), TEXT("Failed Msg"), MB_OK);
+		return FALSE;
+	}
+	pKey->m_pKeyboard->SetDataFormat(&c_dfDIKeyboard);
+	pKey->m_pKeyboard->SetCooperativeLevel(hwnd, keyboardFlags);
+	pKey->m_pKeyboard->Acquire();
 
 	return TRUE;
 }

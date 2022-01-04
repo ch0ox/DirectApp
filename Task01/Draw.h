@@ -65,8 +65,8 @@ public:
 
 public:
 
-	std::vector<CButton*>				btnVector;
-	std::vector<CButton*>::iterator		btnIter;
+	std::vector<CButton*>				m_btnVector;
+	std::vector<CButton*>::iterator		m_btnIter;
 
 public:
 	VOID LinkD3D(CDxDriver* pDriver);

@@ -8,9 +8,12 @@
 #include "WinApp.h"
 #include "Draw.h"
 
+#pragma comment(lib, "dinput8.lib")
+#pragma comment(lib, "dxguid.lib")
+
 CKeyboard::CKeyboard()
 {
-
+	memset(&m_keyboardCount, 0, sizeof(char) * 256);
 }
 
 CKeyboard::~CKeyboard()
@@ -23,6 +26,10 @@ VOID CKeyboard::InitializeKeyboard()
 
 }
 
+BOOL CKeyboard::KeyDown(char key)
+{
+	return (m_keyboardCount[key] & 0x80) != 0;
+}
 
 VOID CKeyboard::KeyManager(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, CDxDriver* pDriver)
 {

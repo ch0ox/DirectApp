@@ -18,9 +18,10 @@ public:
 	virtual ~CKeyboard();
 
 	VOID KeyManager(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, CDxDriver* pDriver);
-	VOID InitializeKeyboard();
+	VOID						InitializeKeyboard();
+	BOOL						KeyDown(char key);
 
-	LPDIRECTINPUTDEVICE8		m_pKeyboard;
+	LPDIRECTINPUTDEVICE8		m_pKeyboard = nullptr;
 	char						m_keyboardCount[256];
 
 private:

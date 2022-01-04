@@ -122,12 +122,12 @@ HRESULT CDxDriver::InitGeometry()
 	pDraw->CreateButton();
 	pDraw->TriangleInit();
 
-	for (int i = 0; i < static_cast<int>(pDraw->btnVector.size()); i++)
+	for (int i = 0; i < static_cast<int>(pDraw->m_btnVector.size()); i++)
 	{
-		pDraw->btnVector[i]->CreateTexture(pd3dDevice);
+		pDraw->m_btnVector[i]->CreateTexture(pd3dDevice);
 	}
 
-	pMouse->LinkButton(pDraw->btnVector);
+	pMouse->LinkButton(pDraw->m_btnVector);
 
 	return S_OK;
 }
@@ -143,11 +143,11 @@ VOID CDxDriver::Drawing()
 	pDraw->DrawTriangle();
 
 	// Button
-	for (int i = 0; i < static_cast<int>(pDraw->btnVector.size()); i++)
+	for (int i = 0; i < static_cast<int>(pDraw->m_btnVector.size()); i++)
 	{
-		pd3dDevice->SetTexture(0, pDraw->btnVector[i]->m_pTexture);
-		pDraw->btnVector[i]->SetTexture();
-		pDraw->DrawRect(pDraw->btnVector[i]);
+		pd3dDevice->SetTexture(0, pDraw->m_btnVector[i]->m_pTexture);
+		pDraw->m_btnVector[i]->SetTexture();
+		pDraw->DrawRect(pDraw->m_btnVector[i]);
 	}
 
 }
