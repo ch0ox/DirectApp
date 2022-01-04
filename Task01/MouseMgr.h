@@ -31,7 +31,7 @@ public:
 	BOOL								MouseDown(int button);
 	
 	INT									boxState = idle;
-	LPDIRECTINPUTDEVICE8				m_pMouse = nullptr;				// 마우스 디바이스
+	LPDIRECTINPUTDEVICE8				m_pMouseDevice = nullptr;				// 마우스 디바이스
 	DIMOUSESTATE2						m_mouseState;
 
 private:

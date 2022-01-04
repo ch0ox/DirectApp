@@ -13,7 +13,7 @@
 
 CKeyboard::CKeyboard()
 {
-	memset(&m_keyboardCount, 0, sizeof(char) * 256);
+	memset(&m_keyboardState, 0, sizeof(char) * 256);
 }
 
 CKeyboard::~CKeyboard()
@@ -28,7 +28,7 @@ VOID CKeyboard::InitializeKeyboard()
 
 BOOL CKeyboard::KeyDown(char key)
 {
-	return (m_keyboardCount[key] & 0x80) != 0;
+	return (m_keyboardState[key] & 0x80) != 0;
 }
 
 VOID CKeyboard::KeyManager(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, CDxDriver* pDriver)
@@ -46,17 +46,17 @@ VOID CKeyboard::KeyManager(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, CD
 
 	case VK_SPACE:
 	{
-		m_pDriver->d3dpp.Windowed = m_pDriver->WindowMode;
+		m_pDriver->m_d3dpp.Windowed = m_pDriver->WindowMode;
 
 		if (m_pDriver->WindowMode)														// 현재 창모드 여서 Full Screen 으로 바꾸려고 할 때
 		{
-			m_pDriver->d3dpp.FullScreen_RefreshRateInHz = TRUE;
+			m_pDriver->m_d3dpp.FullScreen_RefreshRateInHz = TRUE;
 			m_pDriver->ChangeDisplayMode(fullScreenMode);
 			m_pDriver->WindowMode = FALSE;
 		}
 		else
 		{																	// 현재 Full Screen 이여서 창모드로 바꾸려고 할 때
-			m_pDriver->d3dpp.FullScreen_RefreshRateInHz = D3DPRESENT_RATE_DEFAULT;		// 창모드 일 때 0
+			m_pDriver->m_d3dpp.FullScreen_RefreshRateInHz = D3DPRESENT_RATE_DEFAULT;		// 창모드 일 때 0
 			m_pDriver->ChangeDisplayMode(windowMode);
 			m_pDriver->WindowMode = TRUE;
 		}

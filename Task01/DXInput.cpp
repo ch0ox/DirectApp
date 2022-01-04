@@ -33,28 +33,28 @@ BOOL CDxInput::Initialize(HINSTANCE hInstance, HWND hwnd, DWORD keyboardFlags, D
 	// Mouse Connect
 	pMouse = new CMouse();
 
-	m_inputMgr->CreateDevice(GUID_SysMouse, &(pMouse->m_pMouse), 0);
-	if (!pMouse->m_pMouse)
+	m_inputMgr->CreateDevice(GUID_SysMouse, &(pMouse->m_pMouseDevice), 0);
+	if (!pMouse->m_pMouseDevice)
 	{
 		MessageBox(hwnd, TEXT("Mouse Create Failed!"), TEXT("Failed Msg"), MB_OK);
 		return FALSE;
 	}
-	pMouse->m_pMouse->SetDataFormat(&c_dfDIMouse2);
-	pMouse->m_pMouse->SetCooperativeLevel(hwnd, mouseFlags);
-	pMouse->m_pMouse->Acquire();
+	pMouse->m_pMouseDevice->SetDataFormat(&c_dfDIMouse2);
+	pMouse->m_pMouseDevice->SetCooperativeLevel(hwnd, mouseFlags);
+	pMouse->m_pMouseDevice->Acquire();
 
 	// Keyboard Connect
 	pKey = new CKeyboard();
 
-	m_inputMgr->CreateDevice(GUID_SysKeyboard, &(pKey->m_pKeyboard), 0);
-	if (!pKey->m_pKeyboard)
+	m_inputMgr->CreateDevice(GUID_SysKeyboard, &(pKey->m_pKeyDevice), 0);
+	if (!pKey->m_pKeyDevice)
 	{
 		MessageBox(hwnd, TEXT("Keyboard Create Failed!"), TEXT("Failed Msg"), MB_OK);
 		return FALSE;
 	}
-	pKey->m_pKeyboard->SetDataFormat(&c_dfDIKeyboard);
-	pKey->m_pKeyboard->SetCooperativeLevel(hwnd, keyboardFlags);
-	pKey->m_pKeyboard->Acquire();
+	pKey->m_pKeyDevice->SetDataFormat(&c_dfDIKeyboard);
+	pKey->m_pKeyDevice->SetCooperativeLevel(hwnd, keyboardFlags);
+	pKey->m_pKeyDevice->Acquire();
 
 	return TRUE;
 }

@@ -89,30 +89,30 @@ VOID CButton::SetTexture()
 	}
 }
 
-HRESULT CButton::CreateTexture(LPDIRECT3DDEVICE9 pd3dDevice)
+HRESULT CButton::CreateTexture(LPDIRECT3DDEVICE9 m_pD3DDevice)
 {
 	m_ppTexture = new LPDIRECT3DTEXTURE9[m_textureCount];
 
 	memset(m_ppTexture, 0, sizeof(LPDIRECT3DTEXTURE9) * m_textureCount);
 
 	CString psz = CString(m_normal_path);
-	D3DXCreateTextureFromFile(pd3dDevice, psz, &m_pTexture);
+	D3DXCreateTextureFromFile(m_pD3DDevice, psz, &m_pTexture);
 
-	if (FAILED(D3DXCreateTextureFromFile(pd3dDevice, psz, &m_ppTexture[0])))
+	if (FAILED(D3DXCreateTextureFromFile(m_pD3DDevice, psz, &m_ppTexture[0])))
 	{
 		MessageBox(NULL, TEXT("Button Texture 1 Load Error"), TEXT("Texture Error"), MB_OK);
 		return E_FAIL;
 	}
 
 	psz = CString(m_over_path);
-	if (FAILED(D3DXCreateTextureFromFile(pd3dDevice, psz, &m_ppTexture[1])))
+	if (FAILED(D3DXCreateTextureFromFile(m_pD3DDevice, psz, &m_ppTexture[1])))
 	{
 		MessageBox(NULL, TEXT("Button Texture 2 Load Error"), TEXT("Texture Error"), MB_OK);
 		return E_FAIL;
 	}
 
 	psz = CString(m_click_path);
-	if (FAILED(D3DXCreateTextureFromFile(pd3dDevice, psz, &m_ppTexture[2])))
+	if (FAILED(D3DXCreateTextureFromFile(m_pD3DDevice, psz, &m_ppTexture[2])))
 	{
 		MessageBox(NULL, TEXT("Button Texture 3 Load Error"), TEXT("Texture Error"), MB_OK);
 		return E_FAIL;

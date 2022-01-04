@@ -44,58 +44,57 @@ BOOL CDxDriver::Initialize(HWND hWnd)												// App 의 HWND 받아 옴.
 				return TRUE;
 			}
 		}
-
 	}
 	return FALSE;
 }
 
 HRESULT CDxDriver::InitD3D()
 {
-	if ((pD3D = Direct3DCreate9(D3D_SDK_VERSION)) == NULL)
+	if ((m_pD3D = Direct3DCreate9(D3D_SDK_VERSION)) == NULL)
 		return E_FAIL;
 
 	D3DDISPLAYMODE mode;
-	pD3D->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &mode);
+	m_pD3D->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &mode);
 
-	ZeroMemory(&d3dpp, sizeof(d3dpp));
+	ZeroMemory(&m_d3dpp, sizeof(m_d3dpp));
 
 	// 처음에 창 모드로 생성.
-	d3dpp.Windowed = WindowMode;
-	d3dpp.BackBufferCount = 1;
-	d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;		// SWAP 할 때 효율적.
-	d3dpp.hDeviceWindow = m_hWnd;
+	m_d3dpp.Windowed = WindowMode;
+	m_d3dpp.BackBufferCount = 1;
+	m_d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;		// SWAP 할 때 효율적.
+	m_d3dpp.hDeviceWindow = m_hWnd;
 
-	d3dpp.BackBufferFormat = mode.Format;
+	m_d3dpp.BackBufferFormat = mode.Format;
 
 	if (WindowMode)
 	{
-		d3dpp.BackBufferWidth = nWidth;
-		d3dpp.BackBufferHeight = nHeight;
+		m_d3dpp.BackBufferWidth = nWidth;
+		m_d3dpp.BackBufferHeight = nHeight;
 	}
 	else											// FULL SCREEN
 	{
-		d3dpp.BackBufferWidth = mode.Width;
-		d3dpp.BackBufferHeight = mode.Height;
-		d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
-		d3dpp.FullScreen_RefreshRateInHz = mode.RefreshRate;
+		m_d3dpp.BackBufferWidth = mode.Width;
+		m_d3dpp.BackBufferHeight = mode.Height;
+		m_d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
+		m_d3dpp.FullScreen_RefreshRateInHz = mode.RefreshRate;
 	}
 
-	d3dpp.Flags = D3DPRESENTFLAG_DISCARD_DEPTHSTENCIL;
-	d3dpp.EnableAutoDepthStencil = TRUE;
-	d3dpp.AutoDepthStencilFormat = D3DFMT_D16;
+	m_d3dpp.Flags = D3DPRESENTFLAG_DISCARD_DEPTHSTENCIL;
+	m_d3dpp.EnableAutoDepthStencil = TRUE;
+	m_d3dpp.AutoDepthStencilFormat = D3DFMT_D16;
 
 	// HAL 퓨어 하드웨어 디바이스 시도
-	if (FAILED(pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, m_hWnd,
+	if (FAILED(m_pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, m_hWnd,
 		D3DCREATE_HARDWARE_VERTEXPROCESSING | D3DCREATE_PUREDEVICE
-		, &d3dpp, &pd3dDevice)))
+		, &m_d3dpp, &m_pD3DDevice)))
 	{
 		// 하드웨어 랑 T&L 시도
-		if (FAILED(pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, m_hWnd,
-			D3DCREATE_HARDWARE_VERTEXPROCESSING, &d3dpp, &pd3dDevice)))
+		if (FAILED(m_pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, m_hWnd,
+			D3DCREATE_HARDWARE_VERTEXPROCESSING, &m_d3dpp, &m_pD3DDevice)))
 		{
 			// 소프트웨어 정점
-			if (FAILED(pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, m_hWnd,
-				D3DCREATE_SOFTWARE_VERTEXPROCESSING, &d3dpp, &pd3dDevice)))
+			if (FAILED(m_pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, m_hWnd,
+				D3DCREATE_SOFTWARE_VERTEXPROCESSING, &m_d3dpp, &m_pD3DDevice)))
 			{
 				return E_FAIL;
 			}	// Hal - SW VP
@@ -124,7 +123,7 @@ HRESULT CDxDriver::InitGeometry()
 
 	for (int i = 0; i < static_cast<int>(pDraw->m_btnVector.size()); i++)
 	{
-		pDraw->m_btnVector[i]->CreateTexture(pd3dDevice);
+		pDraw->m_btnVector[i]->CreateTexture(m_pD3DDevice);
 	}
 
 	pMouse->LinkButton(pDraw->m_btnVector);
@@ -138,14 +137,14 @@ VOID CDxDriver::Drawing()
 	pDraw->DrawTextFPS();
 
 	// Triangle
-	pd3dDevice->SetTexture(0, pDraw->m_pTexture);
+	m_pD3DDevice->SetTexture(0, pDraw->m_pTexture);
 	pDraw->SetupMatrices();
 	pDraw->DrawTriangle();
 
 	// Button
 	for (int i = 0; i < static_cast<int>(pDraw->m_btnVector.size()); i++)
 	{
-		pd3dDevice->SetTexture(0, pDraw->m_btnVector[i]->m_pTexture);
+		m_pD3DDevice->SetTexture(0, pDraw->m_btnVector[i]->m_pTexture);
 		pDraw->m_btnVector[i]->SetTexture();
 		pDraw->DrawRect(pDraw->m_btnVector[i]);
 	}
@@ -154,12 +153,12 @@ VOID CDxDriver::Drawing()
 
 BOOL CDxDriver::Render()
 {
-	if (pd3dDevice == NULL)
+	if (m_pD3DDevice == NULL)
 		return FALSE;
 
-	if (g_bLostDevice)
+	if (m_bLostDevice)
 	{
-		HRESULT hr = pd3dDevice->TestCooperativeLevel();
+		HRESULT hr = m_pD3DDevice->TestCooperativeLevel();
 		// Resource 복구 시작			 
 		if (hr == D3DERR_DEVICELOST)							// Device Lost + 복구 불가능
 		{
@@ -168,7 +167,7 @@ BOOL CDxDriver::Render()
 		if (hr == D3DERR_DEVICENOTRESET)						// Device Lost + 복구 가능
 		{
 			// Reset
-			HRESULT hr = pd3dDevice->Reset(&d3dpp);
+			HRESULT hr = m_pD3DDevice->Reset(&m_d3dpp);
 
 			InitVB();
 			InitGeometry();
@@ -177,14 +176,18 @@ BOOL CDxDriver::Render()
 				MessageBox(NULL, TEXT("Device Reset Error"), TEXT("Device Error"), MB_OK);
 			}
 
-			g_bLostDevice = FALSE;
+			m_bLostDevice = FALSE;
 		}
 	}
 
-	pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 255), 1.0f, 0);
+	// DxInput here...
+
+
+
+	m_pD3DDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 255), 1.0f, 0);
 
 	// Rendering Start 
-	if (SUCCEEDED(pd3dDevice->BeginScene()))
+	if (SUCCEEDED(m_pD3DDevice->BeginScene()))
 	{
 
 
@@ -192,12 +195,12 @@ BOOL CDxDriver::Render()
 
 
 
-		pd3dDevice->EndScene();
+		m_pD3DDevice->EndScene();
 	}
-	if (FAILED(pd3dDevice->Present(NULL, NULL, NULL, NULL)))		// Rendering 내용을 화면으로 전송.
+	if (FAILED(m_pD3DDevice->Present(NULL, NULL, NULL, NULL)))		// Rendering 내용을 화면으로 전송.
 	{
 		// Lost
-		g_bLostDevice = TRUE;
+		m_bLostDevice = TRUE;
 	}
 
 	return TRUE;
@@ -217,29 +220,29 @@ VOID CDxDriver::Term()
 		pDraw = nullptr;
 	}
 
-	if (g_pTexture != NULL)
-		SAFE_RELEASE(g_pTexture);
+	if (m_pTexture != NULL)
+		SAFE_RELEASE(m_pTexture);
 
-	if (g_pFont != NULL)
+	if (m_pFont != NULL)
 	{
-		SAFE_RELEASE(g_pFont);
-		g_pDesc = { NULL };
+		SAFE_RELEASE(m_pFont);
+		m_pDesc = { NULL };
 	}
 
-	if (g_pIB != NULL)
-		SAFE_RELEASE(g_pIB);
+	if (m_pIB != NULL)
+		SAFE_RELEASE(m_pIB);
 
-	if (g_pVB_Tri != NULL)
-		SAFE_RELEASE(g_pVB_Tri);
+	if (m_pVB_Tri != NULL)
+		SAFE_RELEASE(m_pVB_Tri);
 
-	if (g_pVB != NULL)
-		SAFE_RELEASE(g_pVB);
+	if (m_pVB != NULL)
+		SAFE_RELEASE(m_pVB);
 
-	if (pd3dDevice != NULL)
-		SAFE_RELEASE(pd3dDevice);
+	if (m_pD3DDevice != NULL)
+		SAFE_RELEASE(m_pD3DDevice);
 
-	if (pD3D != NULL)
-		SAFE_RELEASE(pD3D);
+	if (m_pD3D != NULL)
+		SAFE_RELEASE(m_pD3D);
 
 }
 
@@ -255,7 +258,7 @@ INT CDxDriver::ExitMessageBox()
 VOID CDxDriver::ChangeDisplayMode(int mode)
 {
 	D3DDISPLAYMODE dmode;
-	pD3D->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &dmode);
+	m_pD3D->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &dmode);
 
 	int monitorX = (static_cast<int>(GetSystemMetrics(SM_CXSCREEN) / 2)) - nWidth / 2;
 	int monitorY = (static_cast<int>(GetSystemMetrics(SM_CYSCREEN) / 2)) - nHeight / 2;
@@ -285,30 +288,30 @@ VOID CDxDriver::ChangeDisplayMode(int mode)
 VOID CDxDriver::DeviceLostRecovery()
 {
 	D3DDISPLAYMODE mode;
-	pD3D->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &mode);
+	m_pD3D->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &mode);
 
 	{
-		ZeroMemory(&d3dpp, sizeof(d3dpp));
-		d3dpp.Windowed = WindowMode;
-		d3dpp.BackBufferCount = 1;
-		d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
-		d3dpp.hDeviceWindow = m_hWnd;
-		d3dpp.BackBufferFormat = mode.Format;
-		d3dpp.Flags = D3DPRESENTFLAG_DISCARD_DEPTHSTENCIL;
-		d3dpp.EnableAutoDepthStencil = TRUE;
-		d3dpp.AutoDepthStencilFormat = D3DFMT_D16;
+		ZeroMemory(&m_d3dpp, sizeof(m_d3dpp));
+		m_d3dpp.Windowed = WindowMode;
+		m_d3dpp.BackBufferCount = 1;
+		m_d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
+		m_d3dpp.hDeviceWindow = m_hWnd;
+		m_d3dpp.BackBufferFormat = mode.Format;
+		m_d3dpp.Flags = D3DPRESENTFLAG_DISCARD_DEPTHSTENCIL;
+		m_d3dpp.EnableAutoDepthStencil = TRUE;
+		m_d3dpp.AutoDepthStencilFormat = D3DFMT_D16;
 
 		if (WindowMode)
 		{
-			d3dpp.BackBufferWidth = nWidth;
-			d3dpp.BackBufferHeight = nHeight;
+			m_d3dpp.BackBufferWidth = nWidth;
+			m_d3dpp.BackBufferHeight = nHeight;
 		}
 		else												// FULL SCREEN
 		{
-			d3dpp.BackBufferWidth = mode.Width;
-			d3dpp.BackBufferHeight = mode.Height;
-			d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
-			d3dpp.FullScreen_RefreshRateInHz = mode.RefreshRate;
+			m_d3dpp.BackBufferWidth = mode.Width;
+			m_d3dpp.BackBufferHeight = mode.Height;
+			m_d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
+			m_d3dpp.FullScreen_RefreshRateInHz = mode.RefreshRate;
 		}
 
 	}

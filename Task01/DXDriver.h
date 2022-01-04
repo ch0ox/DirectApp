@@ -53,52 +53,42 @@ public:
 	BOOL Initialize(HWND);
 	BOOL Render();
 	VOID Term();
-
-public:
-	CDraw* pDraw;
-	CMouse* pMouse;
-
-protected:
-	HRESULT InitD3D();
-	HRESULT InitVB();
-	HRESULT InitGeometry();
-
-	//	virtual VOID Render();
-
-public:
 	INT ExitMessageBox();
 	VOID ChangeDisplayMode(int mode);
 	VOID DeviceLostRecovery();
 
-private:
-	VOID Drawing();
+	CDraw* pDraw;
+	CMouse* pMouse;
 
-public:
-	LPDIRECT3D9					pD3D = nullptr;
-	LPDIRECT3DDEVICE9			pd3dDevice = nullptr;
-	D3DPRESENT_PARAMETERS		d3dpp = { NULL };
+	LPDIRECT3D9					m_pD3D = nullptr;
+	LPDIRECT3DDEVICE9			m_pD3DDevice = nullptr;
+	D3DPRESENT_PARAMETERS		m_d3dpp = { NULL };
 	HWND						m_hWnd = nullptr;
+	LPD3DXFONT					m_pFont = nullptr;							// 폰트
+	D3DXFONT_DESC				m_pDesc = { NULL };
+	LPDIRECT3DVERTEXBUFFER9		m_pVB = nullptr;							// 정점 버퍼
+	LPDIRECT3DVERTEXBUFFER9		m_pVB_Btn = nullptr;						// Button 정점 버퍼
+	LPDIRECT3DVERTEXBUFFER9		m_pVB_Tri = nullptr;						// Triangle 정점 버퍼
+	LPDIRECT3DINDEXBUFFER9		m_pIB = nullptr;							// 인덱스 버퍼
+	LPDIRECT3DTEXTURE9			m_pTexture = nullptr;						// 사용할 텍스쳐
 
-public:
-	LPD3DXFONT					g_pFont = nullptr;							// 폰트
-	D3DXFONT_DESC				g_pDesc = { NULL };
-	LPDIRECT3DVERTEXBUFFER9		g_pVB = nullptr;							// 정점 버퍼
-	LPDIRECT3DVERTEXBUFFER9		g_pVB_Btn = nullptr;						// Button 정점 버퍼
-	LPDIRECT3DVERTEXBUFFER9		g_pVB_Tri = nullptr;						// Triangle 정점 버퍼
-	LPDIRECT3DINDEXBUFFER9		g_pIB = nullptr;							// 인덱스 버퍼
-	LPDIRECT3DTEXTURE9			g_pTexture = nullptr;						// 사용할 텍스쳐
 
 	BOOL						WindowMode = TRUE;
 
-	BOOL						g_bLostDevice = FALSE;
+	BOOL						m_bLostDevice = FALSE;
 
 private:
-
+	VOID						Drawing();
 	double						duringTime = 0;
 
-private:
+protected:
+	HRESULT						InitD3D();
+	HRESULT						InitVB();
+	HRESULT						InitGeometry();
 
 };
+
+
 
 
 #endif //__CHAE_DxDriver_H

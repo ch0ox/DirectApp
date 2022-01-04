@@ -40,35 +40,18 @@ typedef struct INDEX
 	DWORD _0, _1, _2;
 }index;
 
+
 class CDraw
 {
 public:
 	CDraw();
 	virtual ~CDraw();
 
-	RHWVERTEX vertices[4];
-	COLORVERTEX textureVertices[4];
-
-	RHWVERTEX rectangle[4];				// 사각형. 정점 4개
-	COLORVERTEX triangle[3];				// 삼각형. 정점 3개
-
-private:
-	CDxDriver* m_pDriver = nullptr;
-
-public:
 	HRESULT CreateTriangleBuffer();
 	HRESULT CreateRectBuffer();
 	VOID CreateButton();
 	VOID RectangleInit(CButton* pButton);
 	VOID DrawRect(CButton* pButton);
-
-
-public:
-
-	std::vector<CButton*>				m_btnVector;
-	std::vector<CButton*>::iterator		m_btnIter;
-
-public:
 	VOID LinkD3D(CDxDriver* pDriver);
 	VOID TextInit();
 	VOID TriangleInit();
@@ -81,9 +64,29 @@ public:
 	VOID SetupMatrices();
 	VOID SetupOrthogonal();
 
-private:
-	FLOAT duringTime = 0;
+	std::vector<CButton*>				m_btnVector;
+	std::vector<CButton*>::iterator		m_btnIter;
 
+	RHWVERTEX vertices[4];
+	COLORVERTEX textureVertices[4];
+
+	RHWVERTEX rectangle[4];					// 사각형. 정점 4개
+	COLORVERTEX triangle[3];				// 삼각형. 정점 3개
+
+	// Triangle
+	FLOAT m_fAngle = 0.0f;
+	FLOAT m_fScale = 1.0f;
+	D3DXMATRIXA16 m_matWorld;
+	D3DXMATRIXA16 m_matView;
+	D3DXMATRIXA16 m_matProj;
+	D3DXVECTOR3 m_eye, m_at, m_up;
+	FLOAT m_anglePitch, m_angleYaw, m_angleRoll;		// X축, Y축, Z축
+	FLOAT m_posX, m_posY, m_posZ;
+	LPDIRECT3DTEXTURE9 m_pTexture;
+
+private:
+	CDxDriver* m_pDriver = nullptr;
+	FLOAT duringTime = 0;
 
 protected:
 	UINT iVtxSize = sizeof(COLORVERTEX);										// 정점 정보 구조체 사이즈
@@ -96,17 +99,6 @@ protected:
 
 	D3DPRIMITIVETYPE primitiveType = D3DPT_TRIANGLELIST;						//Draw Type
 
-	// Triangle
-public:
-	FLOAT m_fAngle = 0.0f;
-	FLOAT m_fScale = 1.0f;
-	D3DXMATRIXA16 m_matWorld;
-	D3DXMATRIXA16 m_matView;
-	D3DXMATRIXA16 m_matProj;
-	D3DXVECTOR3 m_eye, m_at, m_up;
-	FLOAT m_anglePitch, m_angleYaw, m_angleRoll;		// X축, Y축, Z축
-	FLOAT m_posX, m_posY, m_posZ;
-	LPDIRECT3DTEXTURE9 m_pTexture;
 };
 
 

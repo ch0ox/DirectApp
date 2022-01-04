@@ -21,8 +21,8 @@ public:
 	VOID						InitializeKeyboard();
 	BOOL						KeyDown(char key);
 
-	LPDIRECTINPUTDEVICE8		m_pKeyboard = nullptr;
-	char						m_keyboardCount[256];
+	LPDIRECTINPUTDEVICE8		m_pKeyDevice = nullptr;
+	char						m_keyboardState[256];
 
 private:
 	CDxDriver*					m_pDriver = nullptr;

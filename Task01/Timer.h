@@ -1,9 +1,15 @@
 #pragma once
-#include <windows.h>
-#include <mmsystem.h>
+
+/*------------------------------------------------------------------------*/
+//								CTimer.h
+/*------------------------------------------------------------------------*/
+
 
 #ifndef __CHAE_Timer_H
 #define __CHAE_Timer_H
+
+#include <windows.h>
+#include <mmsystem.h>
 
 #define MAX_COUNT 50
 
