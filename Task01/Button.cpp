@@ -41,7 +41,7 @@ CButton::~CButton()
 
 VOID CButton::LinkD3D(CDxDriver* pDriver)
 {
-	g_pDriver = pDriver;
+	m_pDriver = pDriver;
 }
 
 VOID CButton::LoadIniFile(char* imgName_1, char* imgName_2, char* imgName_3, char* btnName)

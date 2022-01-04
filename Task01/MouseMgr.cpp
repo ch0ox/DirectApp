@@ -23,7 +23,7 @@ CMouse::~CMouse()
 
 VOID CMouse::LinkD3D(CDxDriver* pDriver)
 {
-	g_pDriver = pDriver;
+	m_pDriver = pDriver;
 }
 
 VOID CMouse::LinkButton(std::vector<CButton*>& v)
@@ -54,10 +54,10 @@ VOID CMouse::MouseManager(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, INT
 					this->btnVector[state]->m_state = click;
 
 					if (state == left)
-						g_pDriver->pDraw->m_fAngle += 0.2f;
+						m_pDriver->pDraw->m_fAngle += 0.2f;
 
 					else if (state == right)
-						g_pDriver->pDraw->m_fAngle -= 0.2f;
+						m_pDriver->pDraw->m_fAngle -= 0.2f;
 				}
 			}
 		}
@@ -76,14 +76,14 @@ VOID CMouse::MouseManager(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, INT
 
 				if (state == close)
 				{
-					if (g_pDriver->ExitMessageBox() == IDYES)
+					if (m_pDriver->ExitMessageBox() == IDYES)
 						PostMessage(hWnd, WM_DESTROY, wParam, lParam);
 				}
 				else if (state == left)
-					g_pDriver->pDraw->m_fAngle += 0.2f;
+					m_pDriver->pDraw->m_fAngle += 0.2f;
 
 				else if (state == right)
-					g_pDriver->pDraw->m_fAngle -= 0.2f;
+					m_pDriver->pDraw->m_fAngle -= 0.2f;
 			}
 		}
 
@@ -121,7 +121,7 @@ POINT CMouse::ClientCursorPos()
 {
 	POINT pt;
 	::GetCursorPos(&pt);
-	::ScreenToClient(g_pDriver->m_hWnd, &pt);
+	::ScreenToClient(m_pDriver->m_hWnd, &pt);
 
 	return pt;
 }
@@ -133,7 +133,7 @@ BOOL CMouse::InButton(HWND hWnd, CButton* pButton)
 	POINT pt;
 	pt = ClientCursorPos();
 
-	if (pButton->IsOnMe(pt.x, pt.y, g_pDriver->WindowMode))
+	if (pButton->IsOnMe(pt.x, pt.y, m_pDriver->WindowMode))
 		return TRUE;
 	else
 		return FALSE;

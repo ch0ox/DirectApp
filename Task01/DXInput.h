@@ -23,11 +23,11 @@ public:
 	VOID			Term();
 	BOOL			Render();
 
-	CMouse* GetMouseMgr() const;
-	CKeyboard* GetKeyboardMgr() const;
+	CMouse*			GetMouseMgr() const;
+	CKeyboard*		GetKeyboardMgr() const;
 
-	CMouse* pMouse;
-	CKeyboard* pKey;
+	CMouse*			pMouse;
+	CKeyboard*		pKey;
 
 private:
 	LPDIRECTINPUT8	m_inputMgr;

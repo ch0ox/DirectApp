@@ -31,7 +31,7 @@ public:
 	//	LPDIRECTINPUTDEVICE8		g_pMouse;				// 마우스 디바이스
 
 private:
-	CDxDriver* g_pDriver = nullptr;
+	CDxDriver* m_pDriver = nullptr;
 
 public:
 	VOID		LinkD3D(CDxDriver* pDriver);

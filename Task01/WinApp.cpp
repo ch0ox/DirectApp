@@ -159,6 +159,8 @@ VOID App::InitWindow()
 	int monitorX = (static_cast<int>(GetSystemMetrics(SM_CXSCREEN) / 2)) - nWidth / 2;
 	int monitorY = (static_cast<int>(GetSystemMetrics(SM_CYSCREEN) / 2)) - nHeight / 2;
 
+	// 수정 필요.
+	// Menu Bar 를 만들면서 조금 밀렸음.
 	RECT rect;
 	SetRect(&rect, 0, 0, nWidth, nHeight);
 	AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, FALSE);

@@ -53,7 +53,7 @@ public:
 	COLORVERTEX triangle[3];				// 삼각형. 정점 3개
 
 private:
-	CDxDriver* g_pDriver = nullptr;
+	CDxDriver* m_pDriver = nullptr;
 
 public:
 	HRESULT CreateTriangleBuffer();

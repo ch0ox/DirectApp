@@ -46,7 +46,7 @@ public:
 	INT	m_state = 0;
 
 private:
-	CDxDriver*			g_pDriver = nullptr;
+	CDxDriver*			m_pDriver = nullptr;
 
 public:
 	char* m_btnName;

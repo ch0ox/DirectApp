@@ -31,7 +31,7 @@ CDraw::~CDraw()
 
 VOID CDraw::LinkD3D(CDxDriver* pDriver)
 {
-	g_pDriver = pDriver;
+	m_pDriver = pDriver;
 }
 
 VOID CDraw::SetDuringTime(FLOAT time)
@@ -41,10 +41,10 @@ VOID CDraw::SetDuringTime(FLOAT time)
 
 VOID CDraw::TextInit()
 {
-	if (g_pDriver->g_pFont != NULL)
+	if (m_pDriver->g_pFont != NULL)
 	{
-		SAFE_RELEASE(g_pDriver->g_pFont);
-		g_pDriver->g_pFont = NULL;
+		SAFE_RELEASE(m_pDriver->g_pFont);
+		m_pDriver->g_pFont = NULL;
 	}
 
 	D3DXFONT_DESC desc;
@@ -60,8 +60,8 @@ VOID CDraw::TextInit()
 	desc.PitchAndFamily = DEFAULT_PITCH;
 	desc.FaceName, TEXT("돋움체");
 
-	g_pDriver->g_pDesc = desc;
-	D3DXCreateFontIndirect(g_pDriver->pd3dDevice, &(g_pDriver->g_pDesc), &(g_pDriver->g_pFont));	// 폰트 생성
+	m_pDriver->g_pDesc = desc;
+	D3DXCreateFontIndirect(m_pDriver->pd3dDevice, &(m_pDriver->g_pDesc), &(m_pDriver->g_pFont));	// 폰트 생성
 
 	return;
 }
@@ -72,18 +72,18 @@ VOID CDraw::DrawTextFPS()
 	int ScreenWidth = (static_cast<int>(GetSystemMetrics(SM_CXSCREEN)));
 	int ScreenHeight = (static_cast<int>(GetSystemMetrics(SM_CYSCREEN)));
 
-	if (g_pDriver->g_pFont == NULL) return;
+	if (m_pDriver->g_pFont == NULL) return;
 
 	RECT rect;
 	TCHAR str[1024];
-	if (g_pDriver->WindowMode)
+	if (m_pDriver->WindowMode)
 		SetRect(&rect, 0, 5, nWidth, nHeight);
 	else
 		SetRect(&rect, 0, 5, ScreenWidth, ScreenHeight);
 
 	ZeroMemory(str, sizeof(char) * MAX_PATH);
 	wsprintf(str, TEXT("FPS=%d"), static_cast<int>(duringTime));
-	g_pDriver->g_pFont->DrawTextA(NULL, (LPCSTR)str, 15, &rect, DT_TOP | DT_CENTER, D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff));
+	m_pDriver->g_pFont->DrawTextA(NULL, (LPCSTR)str, 15, &rect, DT_TOP | DT_CENTER, D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff));
 
 	return;
 }
@@ -91,16 +91,16 @@ VOID CDraw::DrawTextFPS()
 
 VOID CDraw::DrawTexture()
 {
-	g_pDriver->pd3dDevice->SetTexture(0, g_pDriver->g_pTexture);
+	m_pDriver->pd3dDevice->SetTexture(0, m_pDriver->g_pTexture);
 	/*
-		g_pDriver->pd3dDevice->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
-		g_pDriver->pd3dDevice->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
-		g_pDriver->pd3dDevice->SetTextureStageState(0, D3DTSS_COLORARG2, D3DTA_DIFFUSE);
-		g_pDriver->pd3dDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_DISABLE);*/
+		m_pDriver->pd3dDevice->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
+		m_pDriver->pd3dDevice->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
+		m_pDriver->pd3dDevice->SetTextureStageState(0, D3DTSS_COLORARG2, D3DTA_DIFFUSE);
+		m_pDriver->pd3dDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_DISABLE);*/
 
-	g_pDriver->pd3dDevice->SetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_BORDER);
-	g_pDriver->pd3dDevice->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_BORDER);
-	g_pDriver->pd3dDevice->SetSamplerState(0, D3DSAMP_BORDERCOLOR, 0xff000000);
+	m_pDriver->pd3dDevice->SetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_BORDER);
+	m_pDriver->pd3dDevice->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_BORDER);
+	m_pDriver->pd3dDevice->SetSamplerState(0, D3DSAMP_BORDERCOLOR, 0xff000000);
 
 	return;
 }
@@ -110,13 +110,13 @@ VOID CDraw::SetupMatrices()
 {
 
 	D3DXMatrixRotationY(&m_matWorld, m_fAngle);
-	g_pDriver->pd3dDevice->SetTransform(D3DTS_WORLD, &m_matWorld);
+	m_pDriver->pd3dDevice->SetTransform(D3DTS_WORLD, &m_matWorld);
 
 	D3DXMatrixLookAtLH(&m_matView, &m_eye, &m_at, &m_up);	// Camera 변환 행렬 계산
-	g_pDriver->pd3dDevice->SetTransform(D3DTS_VIEW, &m_matView);
+	m_pDriver->pd3dDevice->SetTransform(D3DTS_VIEW, &m_matView);
 
 	D3DXMatrixPerspectiveFovLH(&m_matProj, D3DX_PI / 4, 1.0f, 1.0f, 100.f);
-	g_pDriver->pd3dDevice->SetTransform(D3DTS_PROJECTION, &m_matProj);
+	m_pDriver->pd3dDevice->SetTransform(D3DTS_PROJECTION, &m_matProj);
 
 	D3DXMATRIX matTranslation, matScale, matRotation;
 	D3DXQUATERNION vQuatenion;
@@ -145,9 +145,9 @@ VOID CDraw::SetupOrthogonal()
 // Use D3DFVF_XYZ and DrawIndexedPrimitive.
 VOID CDraw::DrawTriangle()
 {
-	g_pDriver->pd3dDevice->SetStreamSource(0, g_pDriver->g_pVB_Tri, 0, sizeof(COLORVERTEX));
-	g_pDriver->pd3dDevice->SetFVF(D3DFVF_COLORVERTEX);
-	HRESULT hr = g_pDriver->pd3dDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 3, 0, 1);
+	m_pDriver->pd3dDevice->SetStreamSource(0, m_pDriver->g_pVB_Tri, 0, sizeof(COLORVERTEX));
+	m_pDriver->pd3dDevice->SetFVF(D3DFVF_COLORVERTEX);
+	HRESULT hr = m_pDriver->pd3dDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 3, 0, 1);
 	if (FAILED(hr))
 		MessageBox(NULL, TEXT("DrawIndexedPrimitive Error"), TEXT("DrawIndexedPrimitive Error"), MB_OK);
 }
@@ -155,8 +155,8 @@ VOID CDraw::DrawTriangle()
 // Use D3DFVF_XYZRHW and DrawPrimitiveUp.
 VOID CDraw::DrawRect(CButton* pButton)
 {
-	g_pDriver->pd3dDevice->SetFVF(D3DFVF_BOXVERTEX);
-	HRESULT hr = g_pDriver->pd3dDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, pButton->m_vertex, sizeof(RHWVERTEX));
+	m_pDriver->pd3dDevice->SetFVF(D3DFVF_BOXVERTEX);
+	HRESULT hr = m_pDriver->pd3dDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, pButton->m_vertex, sizeof(RHWVERTEX));
 
 	if (FAILED(hr))
 		MessageBox(NULL, TEXT("DrawPrimitiveUp Error"), TEXT("DrawPrimitiveUp Error"), MB_OK);
@@ -189,16 +189,16 @@ VOID CDraw::TriangleInit()
 HRESULT CDraw::CreateTriangleBuffer()
 {
 	// Culling OFF.
-	g_pDriver->pd3dDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
-	g_pDriver->pd3dDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
+	m_pDriver->pd3dDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+	m_pDriver->pd3dDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
 
-	if (FAILED(g_pDriver->pd3dDevice->CreateVertexBuffer(iVtxNum * iVtxSize, 0, dwFVF, D3DPOOL_MANAGED, &(g_pDriver->g_pVB_Tri), NULL)))
+	if (FAILED(m_pDriver->pd3dDevice->CreateVertexBuffer(iVtxNum * iVtxSize, 0, dwFVF, D3DPOOL_MANAGED, &(m_pDriver->g_pVB_Tri), NULL)))
 	{
 		MessageBox(NULL, TEXT("Vertex Buffer Error"), TEXT("Vertex Buffer Error"), MB_OK);
 		return E_FAIL;
 	}
 
-	if (FAILED(g_pDriver->pd3dDevice->CreateIndexBuffer(iTriNum * iTriSize, 0, vFormat, D3DPOOL_MANAGED, &(g_pDriver->g_pIB), NULL)))
+	if (FAILED(m_pDriver->pd3dDevice->CreateIndexBuffer(iTriNum * iTriSize, 0, vFormat, D3DPOOL_MANAGED, &(m_pDriver->g_pIB), NULL)))
 	{
 		MessageBox(NULL, TEXT("Index Buffer Error"), TEXT("Index Buffer Error"), MB_OK);
 		return E_FAIL;
@@ -218,20 +218,20 @@ HRESULT CDraw::CreateTriangleBuffer()
 
 	// Triangle
 	VOID* pVertices;
-	g_pDriver->g_pVB_Tri->Lock(0, sizeof(triangle), &pVertices, 0);
+	m_pDriver->g_pVB_Tri->Lock(0, sizeof(triangle), &pVertices, 0);
 	memcpy(pVertices, triangle, sizeof(triangle));
-	g_pDriver->g_pVB_Tri->Unlock();
+	m_pDriver->g_pVB_Tri->Unlock();
 
 	VOID* pIndices;
-	g_pDriver->g_pIB->Lock(0, sizeof(triangleIndex), &pIndices, 0);
+	m_pDriver->g_pIB->Lock(0, sizeof(triangleIndex), &pIndices, 0);
 	memcpy(pIndices, triangleIndex, sizeof(triangleIndex));
-	g_pDriver->g_pIB->Unlock();
+	m_pDriver->g_pIB->Unlock();
 
 	// SetIndices
-	g_pDriver->pd3dDevice->SetIndices(g_pDriver->g_pIB);
+	m_pDriver->pd3dDevice->SetIndices(m_pDriver->g_pIB);
 
 
-	D3DXCreateTextureFromFile(g_pDriver->pd3dDevice, TEXT("tree2.png"), &m_pTexture);
+	D3DXCreateTextureFromFile(m_pDriver->pd3dDevice, TEXT("tree2.png"), &m_pTexture);
 
 	return S_OK;
 
@@ -259,7 +259,7 @@ VOID CDraw::RectangleInit(CButton* pButton)
 
 	// 버튼의 정보 가져오기
 
-	if (g_pDriver->WindowMode)
+	if (m_pDriver->WindowMode)
 	{
 		AnchorPoint = { nWidth / 2, nHeight / 2 };
 		pButton->m_vertex[0] = { pButton->m_posX, pButton->m_posY, 1.0f, 1.0f, 0xffffffff, 0.0f, 0.0f };
