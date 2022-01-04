@@ -15,6 +15,8 @@
 #include "MouseMgr.h"
 #include "Draw.h"
 #include "Menu.h"
+#include "Button.h"
+#include "Timer.h"
 
 
 /*------------------------------------------------------------------------*/
@@ -39,16 +41,25 @@ BOOL App::Initialize()
 {
 	InitWindow();									// Window »ý¼º ÃÊ±âÈ­
 
-	pDxInput = new CDxInput;						// Input °´Ã¼
-	if (!pDxInput)
+	m_pDxInput = new CDxInput;						// Input °´Ã¼
+	if (!m_pDxInput)
 		return FALSE;
 
-	pDXDriver = new CDxDriver;						// Driver °´Ã¼
-	if (!pDXDriver)
+	m_pDXDriver = new CDxDriver;						// Driver °´Ã¼
+	if (!m_pDXDriver)
 		return FALSE;
 
-	pDxInput->Initialize(g_hInstance, g_hWnd);
-	if (!pDXDriver->Initialize(g_hWnd))
+	m_pButton = new CButton;
+	if (!m_pButton)
+		return FALSE;
+
+	m_pTimer = new CTimer;
+	if (!m_pTimer)
+		return FALSE;
+
+
+	m_pDxInput->Initialize(g_hInstance, g_hWnd);
+	if (!m_pDXDriver->Initialize(g_hWnd))
 	{
 		MessageBox(NULL, TEXT("DX Initialize Error"), TEXT("DX Initialize Error"), MB_OK);
 		return FALSE;
@@ -59,16 +70,16 @@ BOOL App::Initialize()
 
 VOID App::Term()
 {
-	if (pDXDriver)
+	if (m_pDXDriver)
 	{
-		delete pDXDriver;							// Driver °´Ã¼ ¹ÝÈ¯
-		pDXDriver = nullptr;
+		delete m_pDXDriver;							// Driver °´Ã¼ ¹ÝÈ¯
+		m_pDXDriver = nullptr;
 	}
 
-	if (pDxInput)
+	if (m_pDxInput)
 	{
-		delete pDxInput;							// Input °´Ã¼ ¹ÝÈ¯
-		pDxInput = nullptr;
+		delete m_pDxInput;							// Input °´Ã¼ ¹ÝÈ¯
+		m_pDxInput = nullptr;
 	}
 
 	ShutDownWindow();								// Window Á¾·á
@@ -107,9 +118,9 @@ VOID App::Run()
 
 			duringTime = clocks / (double)m_frequency.QuadPart * 1000.0;
 			//		duringTime = clocks / (m_fps) * 1000.0;											// ÃÊ ´ÜÀ§ ¼öÇà½Ã°£ * FPS
-			if (pDXDriver != nullptr)
+			if (m_pDXDriver != nullptr)
 			{
-				pDXDriver->pDraw->SetDuringTime(static_cast<float>(duringTime));
+				m_pDXDriver->pDraw->SetDuringTime(static_cast<float>(duringTime));
 			}
 			m_lastTime = m_currentTime;
 		}
@@ -163,12 +174,12 @@ BOOL App::Render()
 {
 	// Input °´Ã¼, Driver °´Ã¼
 	// Render();
-	if (pDxInput->Render())
+	if (m_pDxInput->Render())
 	{
 
 	}
 
-	return pDXDriver->Render();
+	return m_pDXDriver->Render();
 }
 
 LRESULT CALLBACK App::MsgHandelr(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IParam)
@@ -196,27 +207,27 @@ LRESULT CALLBACK App::MsgHandelr(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IPar
 
 		break;
 	case WM_KEYDOWN:
-		//pDXDriver->pKey->KeyManager(hWnd, msg, wParam, IParam);
-		pDxInput->pKey->KeyManager(hWnd, msg, wParam, IParam, pDXDriver);
+		//m_pDXDriver->pKey->KeyManager(hWnd, msg, wParam, IParam);
+		m_pDxInput->pKey->KeyManager(hWnd, msg, wParam, IParam, m_pDXDriver);
 		break;
 
 	case WM_LBUTTONDOWN:
-		pDXDriver->pMouse->MouseManager(hWnd, msg, wParam, IParam, down);
+		m_pDXDriver->pMouse->MouseManager(hWnd, msg, wParam, IParam, down);
 		break;
 
 	case WM_LBUTTONUP:
-		pDXDriver->pMouse->MouseManager(hWnd, msg, wParam, IParam, up);
+		m_pDXDriver->pMouse->MouseManager(hWnd, msg, wParam, IParam, up);
 		break;
 
 	case WM_MOUSEMOVE:
-		pDXDriver->pMouse->MouseManager(hWnd, msg, wParam, IParam, move);
+		m_pDXDriver->pMouse->MouseManager(hWnd, msg, wParam, IParam, move);
 		break;
 
 	case WM_COMMAND:
 		switch (LOWORD(wParam))
 		{
 		case ID_FILE_EXIT:
-			if (pDXDriver->ExitMessageBox() == IDYES)
+			if (m_pDXDriver->ExitMessageBox() == IDYES)
 				PostMessage(hWnd, WM_DESTROY, wParam, IParam);
 			else
 				return 0;
@@ -244,7 +255,7 @@ LRESULT CALLBACK App::MsgHandelr(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IPar
 		}
 		break;
 	case WM_CLOSE:							// Á¾·á(X) Å¬¸¯
-		if (pDXDriver->ExitMessageBox() == IDNO)
+		if (m_pDXDriver->ExitMessageBox() == IDNO)
 			return 0;
 
 	case WM_DESTROY:

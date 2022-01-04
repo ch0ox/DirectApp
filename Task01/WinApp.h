@@ -49,6 +49,8 @@
 
 class CDxDriver;
 class CDxInput;
+class CButton;
+class CTimer;
 
 /*------------------------------------------------------------------------*/
 //								
@@ -61,31 +63,27 @@ public:
 	virtual ~App();
 
 	BOOL Initialize();
-	VOID InitWindow();
 	VOID Run();
+	VOID InitWindow();
 	LRESULT CALLBACK MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IParam);
 	LRESULT CALLBACK MsgHandelr(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IParam);
 	VOID Term();
 	BOOL Render();
 
-private:
-	VOID ShutDownWindow();
-
-private:
-	CDxDriver* pDXDriver = nullptr;
-	CDxInput* pDxInput = nullptr;
-
-public:
 	BOOL WindowMode = TRUE;
 	HWND g_hWnd = nullptr;
 
-private:
-	HINSTANCE g_hInstance = nullptr;
+	CButton* GetButton() const { return m_pButton; }
+	CTimer* GetTimer() const { return m_pTimer; }
 
 private:
-	INT m_fps = 0;
+	VOID ShutDownWindow();
+
+	HINSTANCE		g_hInstance = nullptr;
 
 	// fps
+	// 삭제 예정
+	INT	m_fps = 0;
 	int	FPS = 60;
 	double clocks = 1;
 	double duringTime = 0;
@@ -93,6 +91,12 @@ private:
 	LARGE_INTEGER m_lastTime = { 0 };
 	LARGE_INTEGER m_currentTime = { 0 };
 	LARGE_INTEGER m_frequency = { 0 };
+
+protected:
+	CDxDriver* m_pDXDriver = nullptr;
+	CDxInput* m_pDxInput = nullptr;
+	CButton* m_pButton = nullptr;
+	CTimer* m_pTimer = nullptr;
 };
 
 
