@@ -39,8 +39,11 @@ BOOL CDxInput::Render()
 
 VOID CDxInput::Term()
 {
-	if (inputMgr != nullptr)
+	if (inputMgr)
+	{
 		inputMgr->Release();
+		inputMgr = nullptr;
+	}
 
 	if (pKey)
 	{

@@ -270,7 +270,7 @@ VOID CDraw::RectangleInit(CButton* pButton)
 		pButton->SetScale(1.0f, 1.0f);
 	}
 	else
-	{	// 수정 필요
+	{	
 		AnchorPoint = { static_cast<int>(GetSystemMetrics(SM_CXSCREEN) / 2), static_cast<int>(GetSystemMetrics(SM_CYSCREEN) / 2) };
 		float ratioX = static_cast<float>(GetSystemMetrics(SM_CXSCREEN) / nWidth);
 		float ratioY = static_cast<float>(GetSystemMetrics(SM_CYSCREEN) / nHeight);

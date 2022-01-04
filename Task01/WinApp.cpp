@@ -62,13 +62,13 @@ VOID App::Term()
 	if (pDXDriver)
 	{
 		delete pDXDriver;							// Driver °´Ã¼ ¹ÝÈ¯
-		pDXDriver = 0;
+		pDXDriver = nullptr;
 	}
 
 	if (pDxInput)
 	{
 		delete pDxInput;							// Input °´Ã¼ ¹ÝÈ¯
-		pDxInput = 0;
+		pDxInput = nullptr;
 	}
 
 	ShutDownWindow();								// Window Á¾·á
@@ -216,7 +216,9 @@ LRESULT CALLBACK App::MsgHandelr(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IPar
 		switch (LOWORD(wParam))
 		{
 		case ID_FILE_EXIT:
-			if (pDXDriver->ExitMessageBox() == IDNO)
+			if (pDXDriver->ExitMessageBox() == IDYES)
+				PostMessage(hWnd, WM_DESTROY, wParam, IParam);
+			else
 				return 0;
 			break;
 
