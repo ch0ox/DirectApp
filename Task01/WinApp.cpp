@@ -16,6 +16,7 @@
 #include "Draw.h"
 #include "Menu.h"
 
+
 /*------------------------------------------------------------------------*/
 //								GLOBALS
 /*------------------------------------------------------------------------*/
@@ -173,6 +174,9 @@ BOOL App::Render()
 LRESULT CALLBACK App::MsgHandelr(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IParam)
 {
 	HMENU hMenu, hSubMenu;
+	OPENFILENAME ofn;
+	char str[300] = { 0, };
+	char lpstrFile[MAX_PATH] = "";
 
 	switch (msg)
 	{
@@ -185,8 +189,8 @@ LRESULT CALLBACK App::MsgHandelr(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IPar
 		AppendMenuW(hMenu, MF_STRING | MF_POPUP, (UINT)hSubMenu,TEXT("&File"));
 
 		hSubMenu = CreatePopupMenu();
-		AppendMenuW(hSubMenu, MF_STRING, ID_ABOUT, TEXT("&Help"));
-		AppendMenuW(hMenu, MF_STRING | MF_POPUP, (UINT)hSubMenu, TEXT("&About"));
+		AppendMenuW(hSubMenu, MF_STRING, ID_ABOUT, TEXT("&About"));
+		AppendMenuW(hMenu, MF_STRING | MF_POPUP, (UINT)hSubMenu, TEXT("&Help"));
 
 		SetMenu(hWnd, hMenu);
 
@@ -215,10 +219,23 @@ LRESULT CALLBACK App::MsgHandelr(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IPar
 			if (pDXDriver->ExitMessageBox() == IDNO)
 				return 0;
 			break;
+
 		case ID_FILE_LOAD:
 			// Menu Load Click ?
 			// Load Action Code
+			memset(&ofn, 0, sizeof(OPENFILENAME));
+			ofn.lStructSize = sizeof(OPENFILENAME);
+			ofn.hwndOwner = hWnd;
+			ofn.lpstrFilter = TEXT("Every File(*.*)\0Text File\0*.txt\0*.obj\0");
+			ofn.lpstrFile = (LPWSTR)lpstrFile;
+			ofn.nMaxFile = 256;
+			ofn.lpstrInitialDir = TEXT("c:\\");
+			if (GetOpenFileName(&ofn) != 0)
+			{
+				MessageBox(hWnd, (LPWSTR)(LPCTSTR)str, TEXT("파일 열기 성공"), MB_OK);
+			}
 			break;
+
 		case ID_ABOUT:
 			MessageBox(NULL, TEXT("과제입니당!"), TEXT("About"), MB_OK);
 			break;

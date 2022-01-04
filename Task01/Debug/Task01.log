@@ -1,3 +1,9 @@
-﻿  WinApp.cpp
-  C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+﻿  ObjParser.cpp
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjParser.cpp(29,6): warning C4189: 'faceNum': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjParser.cpp(28,6): warning C4189: 'vertexTextureNum': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjParser.cpp(25,7): warning C4101: 'count' :참조되지 않은 지역 변수입니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjParser.cpp(31,8): warning C4101: 'fileObj' :참조되지 않은 지역 변수입니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjParser.cpp(26,6): warning C4189: 'vertexNum': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjParser.cpp(32,8): warning C4189: 'objFileName': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjParser.cpp(27,6): warning C4189: 'vertexNormalNum': 지역 변수가 초기화되었으나 참조되지 않았습니다.
   Task01.vcxproj -> \\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Debug\Task01.exe
