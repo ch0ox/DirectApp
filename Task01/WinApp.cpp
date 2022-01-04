@@ -45,7 +45,7 @@ BOOL App::Initialize()
 	if (!m_pDxInput)
 		return FALSE;
 
-	m_pDXDriver = new CDxDriver;						// Driver 객체
+	m_pDXDriver = new CDxDriver;					// Driver 객체
 	if (!m_pDXDriver)
 		return FALSE;
 
@@ -58,8 +58,8 @@ BOOL App::Initialize()
 		return FALSE;
 
 
-	m_pDxInput->Initialize(g_hInstance, g_hWnd);
-	if (!m_pDXDriver->Initialize(g_hWnd))
+	m_pDxInput->Initialize(g_hInstance, m_hWnd);
+	if (!m_pDXDriver->Initialize(m_hWnd))
 	{
 		MessageBox(NULL, TEXT("DX Initialize Error"), TEXT("DX Initialize Error"), MB_OK);
 		return FALSE;
@@ -70,6 +70,18 @@ BOOL App::Initialize()
 
 VOID App::Term()
 {
+	if (m_pTimer)
+	{
+		delete m_pTimer;
+		m_pTimer = nullptr;
+	}
+
+	if (m_pButton)
+	{
+		delete m_pButton;
+		m_pButton = nullptr;
+	}
+
 	if (m_pDXDriver)
 	{
 		delete m_pDXDriver;							// Driver 객체 반환
@@ -92,9 +104,9 @@ VOID App::Run()
 
 	while (msg.message != WM_QUIT)
 	{
-		ShowWindow(g_hWnd, SW_SHOWDEFAULT);								// SW_SHOWMAXIMIZED  SW_SHOWMINIMIZED
-		UpdateWindow(g_hWnd);
-		//SetFocus(g_hWnd);
+		ShowWindow(m_hWnd, SW_SHOWDEFAULT);								// SW_SHOWMAXIMIZED  SW_SHOWMINIMIZED
+		UpdateWindow(m_hWnd);
+		//SetFocus(m_hWnd);
 
 		QueryPerformanceFrequency(&m_frequency);							// CPU 주파수에 따른 1초당 진행되는 틱 수 (10000000)
 	//	m_fps = (double)m_frequency.QuadPart / FPS;						// 초당 frame 간격 설정
@@ -147,24 +159,19 @@ VOID App::InitWindow()
 	int monitorX = (static_cast<int>(GetSystemMetrics(SM_CXSCREEN) / 2)) - nWidth / 2;
 	int monitorY = (static_cast<int>(GetSystemMetrics(SM_CYSCREEN) / 2)) - nHeight / 2;
 
-
 	RECT rect;
 	SetRect(&rect, 0, 0, nWidth, nHeight);
 	AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, FALSE);
 
-	g_hWnd = ::CreateWindowEx(0, TEXT("Task"), TEXT("Task"), WS_OVERLAPPEDWINDOW, monitorX, monitorY, rect.right - rect.left, rect.bottom - rect.top, NULL, NULL, ::GetModuleHandle(NULL), NULL);
-
-
-	//	DWORD d = GetLastError();
-
-
+	m_hWnd = ::CreateWindowEx(0, TEXT("Task"), TEXT("Task"), WS_OVERLAPPEDWINDOW, monitorX, monitorY, rect.right - rect.left, rect.bottom - rect.top, NULL, NULL, ::GetModuleHandle(NULL), NULL);
+	DWORD d = GetLastError();
 
 	return;
 }
 
 VOID App::ShutDownWindow()
 {
-	g_hWnd = NULL;
+	m_hWnd = NULL;
 
 	UnregisterClass(L"Task", g_hInstance);
 	g_hInstance = NULL;
@@ -173,7 +180,7 @@ VOID App::ShutDownWindow()
 BOOL App::Render()
 {
 	// Input 객체, Driver 객체
-	// Render();
+	// Render.
 	if (m_pDxInput->Render())
 	{
 
@@ -182,7 +189,7 @@ BOOL App::Render()
 	return m_pDXDriver->Render();
 }
 
-LRESULT CALLBACK App::MsgHandelr(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IParam)
+LRESULT CALLBACK App::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IParam)
 {
 	HMENU hMenu, hSubMenu;
 	OPENFILENAME ofn;
@@ -272,5 +279,5 @@ LRESULT CALLBACK App::MsgHandelr(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IPar
 
 LRESULT CALLBACK App::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IParam)
 {
-	return MsgHandelr(hWnd, msg, wParam, IParam);
+	return MsgHandler(hWnd, msg, wParam, IParam);
 }

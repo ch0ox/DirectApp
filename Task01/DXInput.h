@@ -19,22 +19,21 @@ public:
 	CDxInput();
 	virtual ~CDxInput();
 
+	BOOL			Initialize(HINSTANCE hInstance, HWND hwnd);
+	VOID			Term();
+	BOOL			Render();
+
+	CMouse* GetMouseMgr() const;
+	CKeyboard* GetKeyboardMgr() const;
+
 	CMouse* pMouse;
 	CKeyboard* pKey;
 
 private:
-	LPDIRECTINPUT8 inputMgr;
-	HWND	g_hWnd = nullptr;
-
-public:
-	BOOL Initialize(HINSTANCE hInstance, HWND hwnd);
-	VOID Term();
-	BOOL Render();
+	LPDIRECTINPUT8	m_inputMgr;
+	HWND			m_hWnd = nullptr;
 
 
-private:
-	CMouse* GetMouseMgr() const;
-	CKeyboard* GetKeyboardMgr() const;
 
 };	
 

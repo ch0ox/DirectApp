@@ -121,7 +121,7 @@ POINT CMouse::ClientCursorPos()
 {
 	POINT pt;
 	::GetCursorPos(&pt);
-	::ScreenToClient(g_pDriver->g_hWnd, &pt);
+	::ScreenToClient(g_pDriver->m_hWnd, &pt);
 
 	return pt;
 }

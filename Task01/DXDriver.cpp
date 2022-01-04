@@ -33,7 +33,7 @@ CDxDriver::~CDxDriver()
 
 BOOL CDxDriver::Initialize(HWND hWnd)												// App 의 HWND 받아 옴.
 {
-	g_hWnd = hWnd;
+	m_hWnd = hWnd;
 
 	if (SUCCEEDED(InitD3D()))
 	{
@@ -63,7 +63,7 @@ HRESULT CDxDriver::InitD3D()
 	d3dpp.Windowed = WindowMode;
 	d3dpp.BackBufferCount = 1;
 	d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;		// SWAP 할 때 효율적.
-	d3dpp.hDeviceWindow = g_hWnd;
+	d3dpp.hDeviceWindow = m_hWnd;
 
 	d3dpp.BackBufferFormat = mode.Format;
 
@@ -85,16 +85,16 @@ HRESULT CDxDriver::InitD3D()
 	d3dpp.AutoDepthStencilFormat = D3DFMT_D16;
 
 	// HAL 퓨어 하드웨어 디바이스 시도
-	if (FAILED(pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, g_hWnd,
+	if (FAILED(pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, m_hWnd,
 		D3DCREATE_HARDWARE_VERTEXPROCESSING | D3DCREATE_PUREDEVICE
 		, &d3dpp, &pd3dDevice)))
 	{
 		// 하드웨어 랑 T&L 시도
-		if (FAILED(pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, g_hWnd,
+		if (FAILED(pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, m_hWnd,
 			D3DCREATE_HARDWARE_VERTEXPROCESSING, &d3dpp, &pd3dDevice)))
 		{
 			// 소프트웨어 정점
-			if (FAILED(pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, g_hWnd,
+			if (FAILED(pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, m_hWnd,
 				D3DCREATE_SOFTWARE_VERTEXPROCESSING, &d3dpp, &pd3dDevice)))
 			{
 				return E_FAIL;
@@ -267,16 +267,16 @@ VOID CDxDriver::ChangeDisplayMode(int mode)
 		SetRect(&rect, 0, 0, nWidth, nHeight);
 		AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, FALSE);
 
-		SetWindowLong(g_hWnd, GWL_STYLE, WS_OVERLAPPEDWINDOW);
-		SetWindowPos(g_hWnd, HWND_NOTOPMOST, monitorX, monitorY, rect.right - rect.left, rect.bottom - rect.top, SWP_NOACTIVATE | SWP_SHOWWINDOW);
+		SetWindowLong(m_hWnd, GWL_STYLE, WS_OVERLAPPEDWINDOW);
+		SetWindowPos(m_hWnd, HWND_NOTOPMOST, monitorX, monitorY, rect.right - rect.left, rect.bottom - rect.top, SWP_NOACTIVATE | SWP_SHOWWINDOW);
 		break;
 
 	case fullScreenMode:
 		SetRect(&rect, 0, 0, dmode.Width, dmode.Height);
 		AdjustWindowRect(&rect, WS_VISIBLE | WS_POPUP, FALSE);
 
-		SetWindowLong(g_hWnd, GWL_STYLE, WS_VISIBLE | WS_POPUP);
-		SetWindowPos(g_hWnd, NULL, 0, 0, rect.right - rect.left, rect.bottom - rect.top, SWP_NOZORDER);
+		SetWindowLong(m_hWnd, GWL_STYLE, WS_VISIBLE | WS_POPUP);
+		SetWindowPos(m_hWnd, NULL, 0, 0, rect.right - rect.left, rect.bottom - rect.top, SWP_NOZORDER);
 		break;
 	}
 	return;
@@ -292,7 +292,7 @@ VOID CDxDriver::DeviceLostRecovery()
 		d3dpp.Windowed = WindowMode;
 		d3dpp.BackBufferCount = 1;
 		d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
-		d3dpp.hDeviceWindow = g_hWnd;
+		d3dpp.hDeviceWindow = m_hWnd;
 		d3dpp.BackBufferFormat = mode.Format;
 		d3dpp.Flags = D3DPRESENTFLAG_DISCARD_DEPTHSTENCIL;
 		d3dpp.EnableAutoDepthStencil = TRUE;

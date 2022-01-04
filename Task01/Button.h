@@ -41,37 +41,37 @@ public:
 	VOID SetWideInit() { m_widePosX = m_posX; m_widePosY = m_posY; m_wideWidth = m_width; m_wideHeight = m_height; }
 
 public:
-	LPDIRECT3DTEXTURE9* m_ppTexture;
-	LPDIRECT3DTEXTURE9  m_pTexture;
-	INT	m_state;
+	LPDIRECT3DTEXTURE9* m_ppTexture = nullptr;
+	LPDIRECT3DTEXTURE9  m_pTexture = nullptr;
+	INT	m_state = 0;
 
 private:
-	CDxDriver* g_pDriver;
+	CDxDriver*			g_pDriver = nullptr;
 
 public:
 	char* m_btnName;
 	UINT			m_action = -1;
 	FLOAT			m_scaleX = 1.0f;
 	FLOAT			m_scaleY = 1.0f;
-	FLOAT			m_posX;
-	FLOAT			m_posY;
-	UINT16			m_width;
-	UINT16			m_height;
+	FLOAT			m_posX = 0;
+	FLOAT			m_posY = 0;
+	UINT16			m_width = 0;
+	UINT16			m_height = 0;
 
-	FLOAT			m_widePosX;
-	FLOAT			m_widePosY;
-	FLOAT			m_wideWidth;
-	FLOAT			m_wideHeight;
+	FLOAT			m_widePosX = 0;
+	FLOAT			m_widePosY = 0;
+	FLOAT			m_wideWidth = 0;
+	FLOAT			m_wideHeight = 0;
 
-	char* m_normal_path;
-	char* m_over_path;
-	char* m_click_path;
+	char* m_normal_path = { 0, };
+	char* m_over_path = { 0, };
+	char* m_click_path = { 0, };
 
 	RHWVERTEX		m_vertex[4];
 
 protected:
-	char* m_path;
-	int m_textureCount;
+	char* m_path = { 0, };
+	int m_textureCount = 0;
 
 private:
 	VOID LoadIniFile(char*, char*, char*, char*);

@@ -12,30 +12,7 @@
 
 CButton::CButton()
 {
-	g_pDriver = nullptr;
-	m_state = 0;
-	m_scaleX = 1.0f;
-	m_scaleY = 1.0f;
 
-	m_posX = 0;
-	m_posY = 0;
-	m_width = 0;
-	m_height = 0;
-
-	m_widePosX = 0;
-	m_widePosY = 0;
-	m_wideWidth = 0;
-	m_wideHeight = 0;
-
-	m_btnName = { 0, };
-	m_path = { 0, };
-	m_normal_path = { 0, };
-	m_over_path = { 0, };
-	m_click_path = { 0, };
-
-	m_textureCount = 0;
-	m_pTexture = nullptr;
-	m_ppTexture = nullptr;
 }
 
 CButton::CButton(char* imgName_1, char* imgName_2, char* imgName_3, char* btnName)

@@ -66,12 +66,12 @@ public:
 	VOID Run();
 	VOID InitWindow();
 	LRESULT CALLBACK MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IParam);
-	LRESULT CALLBACK MsgHandelr(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IParam);
+	LRESULT CALLBACK MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IParam);
 	VOID Term();
 	BOOL Render();
 
 	BOOL WindowMode = TRUE;
-	HWND g_hWnd = nullptr;
+	HWND m_hWnd = nullptr;
 
 	CButton* GetButton() const { return m_pButton; }
 	CTimer* GetTimer() const { return m_pTimer; }

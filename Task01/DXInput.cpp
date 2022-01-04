@@ -5,7 +5,7 @@
 #include "stdafx.h"
 #include "DXInput.h"
 
-CDxInput::CDxInput() : inputMgr(nullptr), pMouse(nullptr), pKey(nullptr)
+CDxInput::CDxInput() : m_inputMgr(nullptr), pMouse(nullptr), pKey(nullptr)
 {
 
 }
@@ -17,9 +17,9 @@ CDxInput::~CDxInput()
 
 BOOL CDxInput::Initialize(HINSTANCE hInstance, HWND hwnd)
 {
-	g_hWnd = hwnd;
+	m_hWnd = hwnd;
 
-	if (FAILED(DirectInput8Create(hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8, reinterpret_cast<void**>(&inputMgr), nullptr)))
+	if (FAILED(DirectInput8Create(hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8, reinterpret_cast<void**>(&m_inputMgr), nullptr)))
 	{
 		return FALSE;
 	}
@@ -39,10 +39,10 @@ BOOL CDxInput::Render()
 
 VOID CDxInput::Term()
 {
-	if (inputMgr)
+	if (m_inputMgr)
 	{
-		inputMgr->Release();
-		inputMgr = nullptr;
+		m_inputMgr->Release();
+		m_inputMgr = nullptr;
 	}
 
 	if (pKey)

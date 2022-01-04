@@ -77,7 +77,7 @@ public:
 	LPDIRECT3D9					pD3D = nullptr;
 	LPDIRECT3DDEVICE9			pd3dDevice = nullptr;
 	D3DPRESENT_PARAMETERS		d3dpp = { NULL };
-	HWND						g_hWnd = nullptr;
+	HWND						m_hWnd = nullptr;
 
 public:
 	LPD3DXFONT					g_pFont = nullptr;							// ÆùÆ®
