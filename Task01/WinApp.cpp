@@ -216,8 +216,7 @@ LRESULT CALLBACK App::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IPar
 
 		break;
 	case WM_KEYDOWN:
-		//m_pDXDriver->pKey->KeyManager(hWnd, msg, wParam, IParam);
-		m_pDxInput->pKey->KeyManager(hWnd, msg, wParam, IParam, m_pDXDriver);
+		//m_pDxInput->pKey->KeyManager(hWnd, msg, wParam, IParam, m_pDXDriver);
 		break;
 
 	case WM_LBUTTONDOWN:

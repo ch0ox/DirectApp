@@ -27,6 +27,8 @@ public:
 	CMouse*			GetMouseMgr() const			{ return pMouse; }
 	CKeyboard*		GetKeyboardMgr() const		{ return pKey; }
 
+	HWND			GetHwnd() const				{ return m_hWnd; }
+
 	CMouse*			pMouse;
 	CKeyboard*		pKey;
 

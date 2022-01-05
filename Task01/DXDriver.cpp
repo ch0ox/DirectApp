@@ -156,18 +156,18 @@ VOID CDxDriver::InputRender(CDxInput* pInput)
 {
 	pInput->GetDevice();
 
+	// KeyBoard
 	if (pInput->pKey->KeyDown(DIK_ESCAPE))
 	{
-		MessageBox(NULL, TEXT("ESCAPE Key Success"), TEXT("Yeahhhh"), MB_OK);
-		//  수정수정~!~!
-//		if (ExitMessageBox() == IDYES)
-//			PostMessage(hWnd, WM_DESTROY, wParam, lParam);
-//		else
-//			return;
+		if (ExitMessageBox() == IDYES)
+			PostMessage(pInput->GetHwnd(), WM_DESTROY, 0, 0);
+		else
+			return;
 	}
 	else if (pInput->pKey->KeyDown(DIK_SPACE))
 	{
 		MessageBox(NULL, TEXT("Space Key Success"), TEXT("Yeahhhh"), MB_OK);
+		pInput->pKey->KeySpace(this);
 	}
 	else if (pInput->pKey->KeyDown(DIK_LEFT))
 	{
@@ -177,6 +177,9 @@ VOID CDxDriver::InputRender(CDxInput* pInput)
 	{
 
 	}
+
+	// 마우스
+
 }
 
 BOOL CDxDriver::Render(CDxInput* pInput)
