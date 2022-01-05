@@ -188,7 +188,7 @@ BOOL App::Render()
 
 	}
 
-	return m_pDXDriver->Render();
+	return m_pDXDriver->Render(m_pDxInput);
 }
 
 LRESULT CALLBACK App::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IParam)

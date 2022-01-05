@@ -26,6 +26,16 @@ VOID CKeyboard::InitializeKeyboard()
 
 }
 
+VOID CKeyboard::GetDevice()
+{
+	HRESULT hr = m_pKeyDevice->GetDeviceState(sizeof(m_keyboardState), (void**)&m_keyboardState);
+	if (FAILED(hr))
+	{
+		memset(&m_keyboardState, 0, sizeof(m_keyboardState));
+		hr = m_pKeyDevice->Acquire();
+	}
+}
+
 BOOL CKeyboard::KeyDown(char key)
 {
 	return (m_keyboardState[key] & 0x80) != 0;
@@ -38,10 +48,10 @@ VOID CKeyboard::KeyManager(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, CD
 	{
 	case VK_ESCAPE:
 	{
-		if (m_pDriver->ExitMessageBox() == IDYES)
-			PostMessage(hWnd, WM_DESTROY, wParam, lParam);
-		else
-			return;
+//		if (m_pDriver->ExitMessageBox() == IDYES)
+//			PostMessage(hWnd, WM_DESTROY, wParam, lParam);
+//		else
+//			return;
 	}break;
 
 	case VK_SPACE:

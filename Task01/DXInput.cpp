@@ -20,6 +20,12 @@ CDxInput::~CDxInput()
 	Term();
 }
 
+VOID CDxInput::GetDevice()
+{
+	pKey->GetDevice();
+	pMouse->GetDevice();
+}
+
 BOOL CDxInput::Initialize(HINSTANCE hInstance, HWND hwnd, DWORD keyboardFlags, DWORD mouseFlags)
 {
 	m_hWnd = hwnd;

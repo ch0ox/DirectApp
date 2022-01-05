@@ -29,6 +29,7 @@ public:
 	VOID								MouseManager(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, INT flag);
 	BOOL								InButton(HWND hWnd, CButton* pButton);
 	BOOL								MouseDown(int button);
+	VOID								GetDevice();
 	
 	INT									boxState = idle;
 	LPDIRECTINPUTDEVICE8				m_pMouseDevice = nullptr;				// 마우스 디바이스

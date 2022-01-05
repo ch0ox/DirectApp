@@ -21,6 +21,7 @@ public:
 
 	BOOL			Initialize(HINSTANCE hInstance, HWND hwnd, DWORD keyboardFlags = DISCL_NONEXCLUSIVE | DISCL_FOREGROUND, DWORD mouseFlags = DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
 	VOID			Term();
+	VOID			GetDevice();
 	BOOL			Render();
 
 	CMouse*			GetMouseMgr() const			{ return pMouse; }

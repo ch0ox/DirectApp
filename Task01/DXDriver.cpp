@@ -12,6 +12,7 @@
 #include "MouseMgr.h"
 #include "Draw.h"
 #include "Button.h"
+#include "DXInput.h"
 
 CDxDriver::CDxDriver()
 {
@@ -151,7 +152,34 @@ VOID CDxDriver::Drawing()
 
 }
 
-BOOL CDxDriver::Render()
+VOID CDxDriver::InputRender(CDxInput* pInput)
+{
+	pInput->GetDevice();
+
+	if (pInput->pKey->KeyDown(DIK_ESCAPE))
+	{
+		MessageBox(NULL, TEXT("ESCAPE Key Success"), TEXT("Yeahhhh"), MB_OK);
+		//  수정수정~!~!
+//		if (ExitMessageBox() == IDYES)
+//			PostMessage(hWnd, WM_DESTROY, wParam, lParam);
+//		else
+//			return;
+	}
+	else if (pInput->pKey->KeyDown(DIK_SPACE))
+	{
+		MessageBox(NULL, TEXT("Space Key Success"), TEXT("Yeahhhh"), MB_OK);
+	}
+	else if (pInput->pKey->KeyDown(DIK_LEFT))
+	{
+
+	}
+	else if (pInput->pKey->KeyDown(DIK_RIGHT))
+	{
+
+	}
+}
+
+BOOL CDxDriver::Render(CDxInput* pInput)
 {
 	if (m_pD3DDevice == NULL)
 		return FALSE;
@@ -181,7 +209,7 @@ BOOL CDxDriver::Render()
 	}
 
 	// DxInput here...
-
+	InputRender(pInput);
 
 
 	m_pD3DDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 255), 1.0f, 0);

@@ -35,6 +35,16 @@ VOID CMouse::LinkButton(std::vector<CButton*>& v)
 	m_btnVector = v;
 }
 
+VOID CMouse::GetDevice()
+{
+	HRESULT hr = m_pMouseDevice->GetDeviceState(sizeof(DIMOUSESTATE2), (void**)&m_mouseState);
+	if (FAILED(hr))
+	{
+		memset(&m_mouseState, 0, sizeof(m_mouseState));
+		hr = m_pMouseDevice->Acquire();
+	}
+}
+
 constexpr int close = 0;
 constexpr int left = 1;
 constexpr int right = 2;

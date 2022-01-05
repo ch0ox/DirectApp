@@ -6,6 +6,8 @@
 #ifndef __CHAE_DxDriver_H
 #define __CHAE_DxDriver_H
 
+class CDxDriver;
+class App;
 
 class CKeyboard;
 class CDraw;
@@ -45,17 +47,20 @@ class CMouse;
 #pragma warning (disable: 28251)
 
 
-class CDxDriver {
+class CDxDriver 
+{
+
 public:
 	CDxDriver();
 	virtual ~CDxDriver();
 
 	BOOL Initialize(HWND);
-	BOOL Render();
+	BOOL Render(class CDxInput* pInput);
 	VOID Term();
 	INT ExitMessageBox();
 	VOID ChangeDisplayMode(int mode);
 	VOID DeviceLostRecovery();
+	VOID InputRender(class CDxInput* pInput);
 
 	CDraw* pDraw;
 	CMouse* pMouse;
