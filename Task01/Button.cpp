@@ -139,7 +139,6 @@ BOOL CButton::OnLButtonDown(int x, int y)
 
 BOOL CButton::IsOnMe(int x, int y, bool windowmode)
 {
-	// ¸ÂÀ½!
 	if (windowmode)
 	{
 		if (x >= m_posX)
@@ -178,7 +177,6 @@ BOOL CButton::IsOnMe(int x, int y, bool windowmode)
 	}
 	return FALSE;
 }
-
 
 VOID CButton::ButtonAction()
 {

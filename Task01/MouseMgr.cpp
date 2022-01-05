@@ -136,21 +136,19 @@ BOOL CMouse::OnMouseMove(int x, int y)
 	return FALSE;
 }
 
-POINT CMouse::ClientCursorPos()
+POINT CMouse::ClientCursorPos(HWND hWnd)
 {
 	POINT pt;
 	::GetCursorPos(&pt);
-	::ScreenToClient(m_pDriver->m_hWnd, &pt);
+	::ScreenToClient(hWnd, &pt);
 
 	return pt;
 }
 
-
-
 BOOL CMouse::InButton(HWND hWnd, CButton* pButton)
 {
 	POINT pt;
-	pt = ClientCursorPos();
+	pt = ClientCursorPos(hWnd);
 
 	if (pButton->IsOnMe(pt.x, pt.y, m_pDriver->WindowMode))
 		return TRUE;

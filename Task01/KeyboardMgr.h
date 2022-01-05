@@ -20,7 +20,7 @@ public:
 	VOID KeyManager(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, CDxDriver* pDriver);
 	VOID						InitializeKeyboard();
 	BOOL						KeyDown(char key);
-	VOID						KeySpace(CDxDriver* pDriver);
+	VOID						Toggle(CDxDriver* pDriver);
 	VOID						GetDevice();
 
 	LPDIRECTINPUTDEVICE8		m_pKeyDevice = nullptr;

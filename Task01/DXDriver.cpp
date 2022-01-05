@@ -149,7 +149,6 @@ VOID CDxDriver::Drawing()
 		pDraw->m_btnVector[i]->SetTexture();
 		pDraw->DrawRect(pDraw->m_btnVector[i]);
 	}
-
 }
 
 VOID CDxDriver::InputRender(CDxInput* pInput)
@@ -167,7 +166,7 @@ VOID CDxDriver::InputRender(CDxInput* pInput)
 	else if (pInput->pKey->KeyDown(DIK_SPACE))
 	{
 		MessageBox(NULL, TEXT("Space Key Success"), TEXT("Yeahhhh"), MB_OK);
-		pInput->pKey->KeySpace(this);
+		pInput->pKey->Toggle(this);
 	}
 	else if (pInput->pKey->KeyDown(DIK_LEFT))
 	{
@@ -178,8 +177,9 @@ VOID CDxDriver::InputRender(CDxInput* pInput)
 
 	}
 
-	// ¸¶¿ì½º
-
+	// Mouse
+	POINT pt;
+	pt = pInput->pMouse->ClientCursorPos(m_hWnd);
 }
 
 BOOL CDxDriver::Render(CDxInput* pInput)
@@ -220,11 +220,7 @@ BOOL CDxDriver::Render(CDxInput* pInput)
 	// Rendering Start 
 	if (SUCCEEDED(m_pD3DDevice->BeginScene()))
 	{
-
-
 		Drawing();
-
-
 
 		m_pD3DDevice->EndScene();
 	}

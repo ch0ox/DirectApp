@@ -43,35 +43,35 @@ public:
 public:
 	LPDIRECT3DTEXTURE9* m_ppTexture = nullptr;
 	LPDIRECT3DTEXTURE9  m_pTexture = nullptr;
-	INT	m_state = 0;
+	INT					m_state = 0;
 
 private:
 	CDxDriver*			m_pDriver = nullptr;
 
 public:
-	char* m_btnName;
-	UINT			m_action = -1;
-	FLOAT			m_scaleX = 1.0f;
-	FLOAT			m_scaleY = 1.0f;
-	FLOAT			m_posX = 0;
-	FLOAT			m_posY = 0;
-	UINT16			m_width = 0;
-	UINT16			m_height = 0;
+	char*				m_btnName = { 0, };
+	UINT				m_action = -1;
+	FLOAT				m_scaleX = 1.0f;
+	FLOAT				m_scaleY = 1.0f;
+	FLOAT				m_posX = 0;
+	FLOAT				m_posY = 0;
+	UINT16				m_width = 0;
+	UINT16				m_height = 0;
 
-	FLOAT			m_widePosX = 0;
-	FLOAT			m_widePosY = 0;
-	FLOAT			m_wideWidth = 0;
-	FLOAT			m_wideHeight = 0;
+	FLOAT				m_widePosX = 0;
+	FLOAT				m_widePosY = 0;
+	FLOAT				m_wideWidth = 0;
+	FLOAT				m_wideHeight = 0;
 
-	char* m_normal_path = { 0, };
-	char* m_over_path = { 0, };
-	char* m_click_path = { 0, };
+	char*				m_normal_path = { 0, };
+	char*				m_over_path = { 0, };
+	char*				m_click_path = { 0, };
 
-	RHWVERTEX		m_vertex[4];
+	RHWVERTEX			m_vertex[4];
 
 protected:
-	char* m_path = { 0, };
-	int m_textureCount = 0;
+	char*				m_path = { 0, };
+	int					m_textureCount = 0;
 
 private:
 	VOID LoadIniFile(char*, char*, char*, char*);

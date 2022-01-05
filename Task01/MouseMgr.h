@@ -25,7 +25,7 @@ public:
 
 	VOID								LinkD3D(CDxDriver* pDriver);
 	VOID								LinkButton(std::vector<CButton*>& v);
-	POINT								ClientCursorPos();
+	POINT								ClientCursorPos(HWND hWnd);
 	VOID								MouseManager(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, INT flag);
 	BOOL								InButton(HWND hWnd, CButton* pButton);
 	BOOL								MouseDown(int button);

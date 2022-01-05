@@ -41,7 +41,7 @@ BOOL CKeyboard::KeyDown(char key)
 	return (m_keyboardState[key] & 0x80) != 0;
 }
 
-VOID CKeyboard::KeySpace(CDxDriver* pDriver)
+VOID CKeyboard::Toggle(CDxDriver* pDriver)
 {
 	pDriver->m_d3dpp.Windowed = pDriver->WindowMode;
 
