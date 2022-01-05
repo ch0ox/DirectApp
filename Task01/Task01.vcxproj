@@ -28,7 +28,7 @@
     <ClCompile Include="DXInput.cpp" />
     <ClCompile Include="KeyboardMgr.cpp" />
     <ClCompile Include="MouseMgr.cpp" />
-    <ClCompile Include="ObjParser.cpp" />
+    <ClCompile Include="ObjMgr.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
@@ -48,7 +48,7 @@
     <ClInclude Include="DXInput.h" />
     <ClInclude Include="KeyboardMgr.h" />
     <ClInclude Include="MouseMgr.h" />
-    <ClInclude Include="ObjParser.h" />
+    <ClInclude Include="ObjMgr.h" />
     <ClInclude Include="stdafx.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClInclude>
@@ -126,7 +126,7 @@
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CRT_NONSTDC_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>Default</ConformanceMode>
       <AdditionalIncludeDirectories>..\..\..\DXUT\Core;..\..\..\DXUT\Optional;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <IntrinsicFunctions>true</IntrinsicFunctions>
