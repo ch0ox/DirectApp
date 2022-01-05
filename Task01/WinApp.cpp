@@ -17,6 +17,8 @@
 #include "Menu.h"
 #include "Button.h"
 #include "Timer.h"
+#include "ObjMgr.h"
+#include <fstream>
 
 
 /*------------------------------------------------------------------------*/
@@ -191,12 +193,17 @@ BOOL App::Render()
 	return m_pDXDriver->Render(m_pDxInput);
 }
 
+CObjMgr obj;
+
 LRESULT CALLBACK App::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IParam)
 {
 	HMENU hMenu, hSubMenu;
 	OPENFILENAME ofn;
 	char str[300] = { 0, };
 	char lpstrFile[MAX_PATH] = "";
+
+	std::string filepath;
+	std::ifstream file(filepath);
 
 	switch (msg)
 	{
@@ -253,8 +260,10 @@ LRESULT CALLBACK App::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IPar
 			ofn.lpstrInitialDir = TEXT("c:\\");
 			if (GetOpenFileName(&ofn) != 0)
 			{
+				obj.ObjLoad(file);
 				MessageBox(hWnd, (LPWSTR)(LPCTSTR)str, TEXT("파일 열기 성공"), MB_OK);
 			}
+			file.close();
 			break;
 
 		case ID_ABOUT:

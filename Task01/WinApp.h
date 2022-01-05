@@ -51,6 +51,7 @@ class CDxDriver;
 class CDxInput;
 class CButton;
 class CTimer;
+class CObjMgr;
 
 /*------------------------------------------------------------------------*/
 //								

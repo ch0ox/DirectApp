@@ -6,6 +6,9 @@
 #include <windows.h>
 #include <string>
 #include <vector>
+#include <fstream>
+#define START_CONTEXT 2
+#define START_CONTEXT_else 3
 
 class CPoint2f
 {
@@ -51,9 +54,9 @@ public:
 	CObjMgr();
 	virtual ~CObjMgr();
 
-	BOOL ObjLoad(char*);
+	BOOL ObjLoad(std::ifstream&);
 
-	std::vector <CObj> objs;
+	std::vector <CObj> objs;								// Objects Vector
 
 	std::vector <FLOAT> StrtokFloat(char*, char*);
 	std::vector <std::string> StrtokString(char*, char*);
