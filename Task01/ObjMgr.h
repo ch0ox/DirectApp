@@ -57,7 +57,7 @@ public:
 	virtual ~CObjMgr();
 
 	BOOL ObjLoad(std::ifstream&);
-	VOID ObjDraw(CObjMgr obj);
+	VOID ObjData(CObjMgr obj);
 
 	std::vector <CObj> objs;								// Objects Vector
 	std::vector <FLOAT> StrtokFloat(char*, char*);
@@ -73,14 +73,14 @@ private:
 
 
 /*------------------------------------------------------------------------*/
-//								CObjData.h
+//								CObjModel.h
 /*------------------------------------------------------------------------*/
 
-class CObjData
+class CObjModel
 {
 public:
-	CObjData();
-	virtual ~CObjData();
+	CObjModel();
+	virtual ~CObjModel();
 
 private:
 

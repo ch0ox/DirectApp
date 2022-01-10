@@ -132,7 +132,6 @@ VOID App::Run()
 			if (m_pDXDriver != nullptr)
 			{
 				//m_pDXDriver->m_pDraw->SetDuringTime(static_cast<float>(m_duringTime));
-				//m_pDXDriver->m_pDraw->SetDuringTime(static_cast<float>(GetTimer()->GetFPS()));
 			}
 			//m_lastTime = m_currentTime;
 		}
@@ -159,7 +158,7 @@ VOID App::InitWindow()
 	int monitorX = (static_cast<int>(GetSystemMetrics(SM_CXSCREEN) / 2)) - nWidth / 2;
 	int monitorY = (static_cast<int>(GetSystemMetrics(SM_CYSCREEN) / 2)) - nHeight / 2;
 
-	// 수정 필요.
+	// TO DO : 수정 필요.
 	// Menu Bar 를 만들면서 조금 밀렸음.
 	RECT rect;
 	SetRect(&rect, 0, 0, nWidth, nHeight);
@@ -193,7 +192,7 @@ BOOL App::Render()
 
 LRESULT CALLBACK App::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IParam)
 {
-	HMENU hMenu, hSubMenu;
+	HMENU hMenu, hSubMenu; 
 	OPENFILENAME ofn;
 	char str[300] = { 0, };
 	char lpstrFile[MAX_PATH] = "";

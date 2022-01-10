@@ -107,8 +107,13 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file)
 			}
 			objs[objCnt - 1].f.push_back(tmpFace);
 		}
-	}
 
+		vf.clear();
+		vi.clear();
+		str.clear();
+	}
+	
+	
 
 	return TRUE;
 }
@@ -117,7 +122,7 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file)
 // Save Obj File Data.
 VOID CObjMgr::ObjData(CObjMgr obj)
 {
-	float x, y, z, nx, ny, nz;
+	float x, y, z, nx, ny, nz, u, v;
 	int v_id, vt_id, vn_id;
 
 	// num : obj number
@@ -134,15 +139,35 @@ VOID CObjMgr::ObjData(CObjMgr obj)
 				vt_id = obj.objs[num].f[i].v_pairs[j].d[1];
 				vn_id = obj.objs[num].f[i].v_pairs[j].d[2];
 
-				// 좌표
+				// 정점 좌표 (v)
 				x = obj.objs[num].v[v_id - 1].d[0];
 				y = obj.objs[num].v[v_id - 1].d[1];
 				z = obj.objs[num].v[v_id - 1].d[2];
 
-				// 법선 벡터 좌표
+				// 법선 벡터 좌표 (vn)
 				nx = obj.objs[num].v[vn_id - 1].d[0];
 				ny = obj.objs[num].v[vn_id - 1].d[1];
 				nz = obj.objs[num].v[vn_id - 1].d[2];
+
+				// TO DO : 좌표에 맞게 그려주기.
+
+
+
+				// 텍스쳐 좌표 (vt)
+						
+				if (vt_id != NULL)							// If it has Textures ?
+				{
+					u = obj.objs[num].v[vt_id - 1].d[0];
+					v = obj.objs[num].v[vt_id - 1].d[1];
+
+					// TO DO : 좌표에 맞게 텍스쳐 입히기.
+				}
+				else										// If it doesn't have Textures ?
+				{
+					// TO DO : 회색으로 채우기.
+				}
+
+
 			}
 		}
 	}
