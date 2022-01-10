@@ -2,7 +2,7 @@
 //								CDraw.cpp
 /*------------------------------------------------------------------------*/
 
-#include "stdafx.h"
+
 #include <windows.h>
 #include "Draw.h"
 #include "MouseMgr.h"
@@ -36,7 +36,7 @@ VOID CDraw::LinkD3D(CDxDriver* pDriver)
 
 VOID CDraw::SetDuringTime(FLOAT time)
 {
-	duringTime = time;
+	m_duringTime = time;
 }
 
 VOID CDraw::TextInit()
@@ -82,7 +82,7 @@ VOID CDraw::DrawTextFPS()
 		SetRect(&rect, 0, 5, ScreenWidth, ScreenHeight);
 
 	ZeroMemory(str, sizeof(char) * MAX_PATH);
-	wsprintf(str, TEXT("FPS=%d"), static_cast<int>(duringTime));
+	wsprintf(str, TEXT("FPS=%d"), static_cast<int>(m_duringTime));
 	m_pDriver->m_pFont->DrawTextA(NULL, (LPCSTR)str, 15, &rect, DT_TOP | DT_CENTER, D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff));
 
 	return;

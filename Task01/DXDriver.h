@@ -7,8 +7,8 @@
 #define __CHAE_DxDriver_H
 
 class CDxDriver;
-class App;
 
+class App;
 class CKeyboard;
 class CDraw;
 class CMouse;
@@ -51,7 +51,7 @@ class CDxDriver
 {
 
 public:
-	CDxDriver();
+	explicit CDxDriver(App* app);
 	virtual ~CDxDriver();
 
 	BOOL Initialize(HWND);
@@ -62,8 +62,9 @@ public:
 	VOID DeviceLostRecovery();
 	VOID InputRender(class CDxInput* pInput);
 
-	CDraw* pDraw;
-	CMouse* pMouse;
+	CDraw* m_pDraw;
+	CMouse* m_pMouse;
+	App* m_pApp;
 
 	LPDIRECT3D9					m_pD3D = nullptr;
 	LPDIRECT3DDEVICE9			m_pD3DDevice = nullptr;
@@ -79,12 +80,13 @@ public:
 
 
 	BOOL						WindowMode = TRUE;
-
 	BOOL						m_bLostDevice = FALSE;
 
 private:
 	VOID						Drawing();
-	double						duringTime = 0;
+	double						m_duringTime = 0;
+
+	
 
 protected:
 	HRESULT						InitD3D();

@@ -1,14 +1,16 @@
 /*------------------------------------------------------------------------*/
 //								CTimer.cpp
 /*------------------------------------------------------------------------*/
-#include "stdafx.h"
+
 #include "WinApp.h"
 #include "Timer.h"
 #include "main.h"
 #include "windows.h"
 #include <Windows.h>
 #include <Winnt.h>
+#include "DXDriver.h"
 
+#pragma comment(lib, "winmm.lib")
 #pragma warning(disable : 4996)
 
 CTimer::CTimer()

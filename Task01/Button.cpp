@@ -2,7 +2,7 @@
 //								CButton.cpp
 /*------------------------------------------------------------------------*/
 
-#include "stdafx.h"
+
 #include "WinApp.h"
 #include "Button.h"
 #include "MouseMgr.h"

@@ -24,12 +24,12 @@ public:
 	VOID			GetDevice();
 	BOOL			Render();
 
-	CMouse*			GetMouseMgr() const			{ return pMouse; }
+	CMouse*			GetMouseMgr() const			{ return m_pMouse; }
 	CKeyboard*		GetKeyboardMgr() const		{ return pKey; }
 
 	HWND			GetHwnd() const				{ return m_hWnd; }
 
-	CMouse*			pMouse;
+	CMouse*			m_pMouse;
 	CKeyboard*		pKey;
 
 private:

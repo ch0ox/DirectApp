@@ -22,6 +22,7 @@ public:
 	BOOL						KeyDown(char key);
 	VOID						Toggle(CDxDriver* pDriver);
 	VOID						GetDevice();
+	VOID						ShutDown();
 
 	LPDIRECTINPUTDEVICE8		m_pKeyDevice = nullptr;
 	char						m_keyboardState[256];

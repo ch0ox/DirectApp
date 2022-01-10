@@ -87,7 +87,7 @@ private:
 	INT	m_fps = 0;
 	int	FPS = 60;
 	double clocks = 1;
-	double duringTime = 0;
+	double m_duringTime = 0;
 	LARGE_INTEGER m_nowframe = { 0 };
 	LARGE_INTEGER m_lastTime = { 0 };
 	LARGE_INTEGER m_currentTime = { 0 };

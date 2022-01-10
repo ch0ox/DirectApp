@@ -86,7 +86,7 @@ public:
 
 private:
 	CDxDriver* m_pDriver = nullptr;
-	FLOAT duringTime = 0;
+	FLOAT m_duringTime = 0;
 
 protected:
 	UINT iVtxSize = sizeof(COLORVERTEX);										// 정점 정보 구조체 사이즈

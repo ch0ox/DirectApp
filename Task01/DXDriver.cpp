@@ -2,28 +2,27 @@
 //								CDxDriver.cpp
 /*------------------------------------------------------------------------*/
 
-#include "stdafx.h"
+
 #include "DXDriver.h"
 
-#include "stdafx.h"
-#include "WinApp.h"
 #include "main.h"
+#include "WinApp.h"
 #include "KeyboardMgr.h"
 #include "MouseMgr.h"
 #include "Draw.h"
 #include "Button.h"
+#include "Timer.h"
 #include "DXInput.h"
 
-CDxDriver::CDxDriver()
+CDxDriver::CDxDriver(App* app)	:	m_pApp(app)
 {
-	pDraw = nullptr;
-	pDraw = new CDraw();
-	pDraw->LinkD3D(this);
+	m_pDraw = nullptr;
+	m_pDraw = new CDraw();
+	m_pDraw->LinkD3D(this);
 
-	pMouse = nullptr;
-	pMouse = new CMouse();
-	pMouse->LinkD3D(this);
-
+	m_pMouse = nullptr;
+	m_pMouse = new CMouse();
+	m_pMouse->LinkD3D(this);
 }
 
 CDxDriver::~CDxDriver()
@@ -108,8 +107,8 @@ HRESULT CDxDriver::InitD3D()
 
 HRESULT CDxDriver::InitVB()
 {
-	pDraw->CreateTriangleBuffer();
-	pDraw->TextInit();
+	m_pDraw->CreateTriangleBuffer();
+	m_pDraw->TextInit();
 
 	return S_OK;
 }
@@ -119,15 +118,15 @@ HRESULT CDxDriver::InitVB()
 HRESULT CDxDriver::InitGeometry()
 {
 
-	pDraw->CreateButton();
-	pDraw->TriangleInit();
+	m_pDraw->CreateButton();
+	m_pDraw->TriangleInit();
 
-	for (int i = 0; i < static_cast<int>(pDraw->m_btnVector.size()); i++)
+	for (int i = 0; i < static_cast<int>(m_pDraw->m_btnVector.size()); i++)
 	{
-		pDraw->m_btnVector[i]->CreateTexture(m_pD3DDevice);
+		m_pDraw->m_btnVector[i]->CreateTexture(m_pD3DDevice);
 	}
 
-	pMouse->LinkButton(pDraw->m_btnVector);
+	m_pMouse->LinkButton(m_pDraw->m_btnVector);
 
 	return S_OK;
 }
@@ -135,19 +134,20 @@ HRESULT CDxDriver::InitGeometry()
 VOID CDxDriver::Drawing()
 {
 	// Text
-	pDraw->DrawTextFPS();
+	m_pDraw->SetDuringTime(static_cast<float>(m_pApp->GetTimer()->GetFPS()));
+	m_pDraw->DrawTextFPS();
 
 	// Triangle
-	m_pD3DDevice->SetTexture(0, pDraw->m_pTexture);
-	pDraw->SetupMatrices();
-	pDraw->DrawTriangle();
+	m_pD3DDevice->SetTexture(0, m_pDraw->m_pTexture);
+	m_pDraw->SetupMatrices();
+	m_pDraw->DrawTriangle();
 
 	// Button
-	for (int i = 0; i < static_cast<int>(pDraw->m_btnVector.size()); i++)
+	for (int i = 0; i < static_cast<int>(m_pDraw->m_btnVector.size()); i++)
 	{
-		m_pD3DDevice->SetTexture(0, pDraw->m_btnVector[i]->m_pTexture);
-		pDraw->m_btnVector[i]->SetTexture();
-		pDraw->DrawRect(pDraw->m_btnVector[i]);
+		m_pD3DDevice->SetTexture(0, m_pDraw->m_btnVector[i]->m_pTexture);
+		m_pDraw->m_btnVector[i]->SetTexture();
+		m_pDraw->DrawRect(m_pDraw->m_btnVector[i]);
 	}
 }
 
@@ -179,13 +179,16 @@ VOID CDxDriver::InputRender(CDxInput* pInput)
 
 	// Mouse
 	POINT pt;
-	pt = pInput->pMouse->ClientCursorPos(m_hWnd);
+	pt = pInput->m_pMouse->ClientCursorPos(m_hWnd);
 }
 
 BOOL CDxDriver::Render(CDxInput* pInput)
 {
 	if (m_pD3DDevice == NULL)
 		return FALSE;
+
+	// Timer
+	m_pApp->GetTimer()->Tick(60.0f);
 
 	if (m_bLostDevice)
 	{
@@ -195,7 +198,7 @@ BOOL CDxDriver::Render(CDxInput* pInput)
 		{
 			return FALSE;
 		}
-		if (hr == D3DERR_DEVICENOTRESET)						// Device Lost + 복구 가능
+		else if (hr == D3DERR_DEVICENOTRESET)						// Device Lost + 복구 가능
 		{
 			// Reset
 			HRESULT hr = m_pD3DDevice->Reset(&m_d3dpp);
@@ -211,9 +214,7 @@ BOOL CDxDriver::Render(CDxInput* pInput)
 		}
 	}
 
-	// DxInput here...
 	InputRender(pInput);
-
 
 	m_pD3DDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 255), 1.0f, 0);
 
@@ -235,16 +236,22 @@ BOOL CDxDriver::Render(CDxInput* pInput)
 
 VOID CDxDriver::Term()
 {
-	if (pMouse)
+// 	if (m_pApp)
+// 	{
+// 		delete m_pApp;
+// 		m_pApp = nullptr;
+// 	}
+
+	if (m_pMouse)
 	{
-		delete pMouse;
-		pMouse = nullptr;
+		delete m_pMouse;
+		m_pMouse = nullptr;
 	}
 
-	if (pDraw)
+	if (m_pDraw)
 	{
-		delete pDraw;
-		pDraw = nullptr;
+		delete m_pDraw;
+		m_pDraw = nullptr;
 	}
 
 	if (m_pTexture != NULL)

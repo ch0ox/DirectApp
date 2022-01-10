@@ -3,7 +3,7 @@
 //								CObjMgr.cpp
 /*------------------------------------------------------------------------*/
 #define _CRT_SECURE_NO_WARNINGS
-#include "stdafx.h"
+
 #include "ObjMgr.h"
 #include "DXDriver.h"
 #include "WinApp.h"
@@ -118,10 +118,8 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file)
 	return TRUE;
 }
 
-// юс╫ц
-CObjMgr obj;
 
-VOID CObjMgr::ObjDraw()
+VOID CObjMgr::ObjDraw(CObjMgr obj)
 {
 	float x, y, z, nx, ny, nz;
 	int v_id, vt_id, vn_id;

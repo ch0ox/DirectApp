@@ -8,7 +8,7 @@
 //								INCLUDES
 /*------------------------------------------------------------------------*/
 
-#include "stdafx.h"
+
 #include "WinApp.h"
 #include "main.h"
 #include "KeyboardMgr.h"
@@ -47,7 +47,7 @@ BOOL App::Initialize()
 	if (!m_pDxInput)
 		return FALSE;
 
-	m_pDXDriver = new CDxDriver;					// Driver 객체
+	m_pDXDriver = new CDxDriver(this);					// Driver 객체
 	if (!m_pDXDriver)
 		return FALSE;
 
@@ -108,12 +108,9 @@ VOID App::Run()
 	{
 		ShowWindow(m_hWnd, SW_SHOWDEFAULT);								// SW_SHOWMAXIMIZED  SW_SHOWMINIMIZED
 		UpdateWindow(m_hWnd);
-		//SetFocus(m_hWnd);
 
-		QueryPerformanceFrequency(&m_frequency);							// CPU 주파수에 따른 1초당 진행되는 틱 수 (10000000)
-	//	m_fps = (double)m_frequency.QuadPart / FPS;						// 초당 frame 간격 설정
-
-		QueryPerformanceCounter(&m_lastTime);								// 시작 시점
+		//QueryPerformanceFrequency(&m_frequency);							// CPU 주파수에 따른 1초당 진행되는 틱 수 (10000000)
+		//QueryPerformanceCounter(&m_lastTime);								// 시작 시점
 
 
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
@@ -124,19 +121,19 @@ VOID App::Run()
 		else
 		{
 			Render();
-			if (duringTime > (double)FPS)
+			if (m_duringTime > (double)FPS)
 				Sleep(1);
 
-			QueryPerformanceCounter(&m_currentTime);											// 끝 시점 (현재)
-			clocks = static_cast<double>(m_currentTime.QuadPart - m_lastTime.QuadPart);			// 클럭 수
+			//QueryPerformanceCounter(&m_currentTime);											// 끝 시점 (현재)
+			//clocks = static_cast<double>(m_currentTime.QuadPart - m_lastTime.QuadPart);			// 클럭 수
 
-			duringTime = clocks / (double)m_frequency.QuadPart * 1000.0;
-			//		duringTime = clocks / (m_fps) * 1000.0;											// 초 단위 수행시간 * FPS
+			//m_duringTime = clocks / (double)m_frequency.QuadPart * 1000.0;
+			//		m_duringTime = clocks / (m_fps) * 1000.0;											// 초 단위 수행시간 * FPS
 			if (m_pDXDriver != nullptr)
 			{
-				m_pDXDriver->pDraw->SetDuringTime(static_cast<float>(duringTime));
+				//m_pDXDriver->m_pDraw->SetDuringTime(static_cast<float>(m_duringTime));
 			}
-			m_lastTime = m_currentTime;
+			//m_lastTime = m_currentTime;
 		}
 	}
 }
@@ -222,15 +219,15 @@ LRESULT CALLBACK App::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IPar
 		break;
 
 	case WM_LBUTTONDOWN:
-		m_pDXDriver->pMouse->MouseManager(hWnd, msg, wParam, IParam, down);
+		m_pDXDriver->m_pMouse->MouseManager(hWnd, msg, wParam, IParam, down);
 		break;
 
 	case WM_LBUTTONUP:
-		m_pDXDriver->pMouse->MouseManager(hWnd, msg, wParam, IParam, up);
+		m_pDXDriver->m_pMouse->MouseManager(hWnd, msg, wParam, IParam, up);
 		break;
 
 	case WM_MOUSEMOVE:
-		m_pDXDriver->pMouse->MouseManager(hWnd, msg, wParam, IParam, move);
+		m_pDXDriver->m_pMouse->MouseManager(hWnd, msg, wParam, IParam, move);
 		break;
 
 	case WM_COMMAND:

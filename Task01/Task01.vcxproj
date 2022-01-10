@@ -29,10 +29,6 @@
     <ClCompile Include="KeyboardMgr.cpp" />
     <ClCompile Include="MouseMgr.cpp" />
     <ClCompile Include="ObjMgr.cpp" />
-    <ClCompile Include="stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="WinApp.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -41,7 +37,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="Menu.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Draw.h" />
     <ClInclude Include="DXDriver.h" />
@@ -49,9 +44,6 @@
     <ClInclude Include="KeyboardMgr.h" />
     <ClInclude Include="MouseMgr.h" />
     <ClInclude Include="ObjMgr.h" />
-    <ClInclude Include="stdafx.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="WinApp.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>
@@ -135,8 +127,9 @@
       <FloatingPointModel>Fast</FloatingPointModel>
       <OpenMPSupport>false</OpenMPSupport>
       <Optimization>Disabled</Optimization>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

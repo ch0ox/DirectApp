@@ -30,6 +30,7 @@ public:
 	BOOL								InButton(HWND hWnd, CButton* pButton);
 	BOOL								MouseDown(int button);
 	VOID								GetDevice();
+	VOID								ShutDown();
 	
 	INT									boxState = idle;
 	LPDIRECTINPUTDEVICE8				m_pMouseDevice = nullptr;				// 마우스 디바이스

@@ -2,7 +2,7 @@
 //								WinMain.cpp
 /*------------------------------------------------------------------------*/
 
-#include "stdafx.h"
+
 #include <windows.h>
 #include "main.h"
 #include "WinApp.h"

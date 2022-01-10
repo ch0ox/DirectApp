@@ -11,6 +11,8 @@
 #include <windows.h>
 #include <mmsystem.h>
 
+class DxDriver;
+
 #define MAX_COUNT 50
 
 class CTimer
@@ -22,6 +24,7 @@ public:
 	VOID			Tick(float fLockFPS = 0.0f);
 	FLOAT			GetTimeElapsed() const;
 	ULONG			GetFrameRate(LPTSTR lpszString = NULL) const;
+	ULONG			GetFPS() const { return m_frameRate; };
 
 
 private:

@@ -2,7 +2,7 @@
 //								KeyboardMgr.cpp
 /*------------------------------------------------------------------------*/
 
-#include "stdafx.h"
+
 #include <windows.h>
 #include "KeyboardMgr.h"
 #include "WinApp.h"
@@ -33,6 +33,16 @@ VOID CKeyboard::GetDevice()
 	{
 		memset(&m_keyboardState, 0, sizeof(m_keyboardState));
 		hr = m_pKeyDevice->Acquire();
+	}
+}
+
+VOID CKeyboard::ShutDown()
+{
+	if (m_pKeyDevice)
+	{
+		m_pKeyDevice->Unacquire();
+		m_pKeyDevice->Release();
+		m_pKeyDevice = nullptr;
 	}
 }
 
@@ -68,11 +78,11 @@ VOID CKeyboard::KeyManager(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, CD
 	{
 	case VK_LEFT:
 	{
-		m_pDriver->pDraw->m_fAngle += 0.2f;
+		m_pDriver->m_pDraw->m_fAngle += 0.2f;
 	}break;
 	case VK_RIGHT:
 	{
-		m_pDriver->pDraw->m_fAngle -= 0.2f;
+		m_pDriver->m_pDraw->m_fAngle -= 0.2f;
 	}break;
 	}
 }

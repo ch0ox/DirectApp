@@ -2,7 +2,7 @@
 //								MouseMgr.cpp
 /*------------------------------------------------------------------------*/
 
-#include "stdafx.h"
+
 #include <windows.h>
 #include "MouseMgr.h"
 #include "WinApp.h"
@@ -45,6 +45,16 @@ VOID CMouse::GetDevice()
 	}
 }
 
+VOID CMouse::ShutDown()
+{
+	if (m_pMouseDevice)
+	{
+		m_pMouseDevice->Unacquire();
+		m_pMouseDevice->Release();
+		m_pMouseDevice = nullptr;
+	}
+}
+
 constexpr int close = 0;
 constexpr int left = 1;
 constexpr int right = 2;
@@ -73,10 +83,10 @@ VOID CMouse::MouseManager(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, INT
 					this->m_btnVector[state]->m_state = click;
 
 					if (state == left)
-						m_pDriver->pDraw->m_fAngle += 0.2f;
+						m_pDriver->m_pDraw->m_fAngle += 0.2f;
 
 					else if (state == right)
-						m_pDriver->pDraw->m_fAngle -= 0.2f;
+						m_pDriver->m_pDraw->m_fAngle -= 0.2f;
 				}
 			}
 		}
@@ -99,10 +109,10 @@ VOID CMouse::MouseManager(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, INT
 						PostMessage(hWnd, WM_DESTROY, wParam, lParam);
 				}
 				else if (state == left)
-					m_pDriver->pDraw->m_fAngle += 0.2f;
+					m_pDriver->m_pDraw->m_fAngle += 0.2f;
 
 				else if (state == right)
-					m_pDriver->pDraw->m_fAngle -= 0.2f;
+					m_pDriver->m_pDraw->m_fAngle -= 0.2f;
 			}
 		}
 
