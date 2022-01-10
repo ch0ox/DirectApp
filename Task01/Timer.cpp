@@ -27,6 +27,11 @@ CTimer::CTimer()
 		m_lastTime = timeGetTime();
 		m_timeScale = 0.001f;
 	}
+	m_frameRate = 0;
+	m_sampleCount = 0;
+	m_fpsFrameCount = 0;
+	m_fpsTimeElapsed = 0.0f;
+	m_timeElapsed = 0.0f;
 }
 
 CTimer::~CTimer()
@@ -85,12 +90,14 @@ VOID CTimer::Tick(float fLockFPS)
 
 	m_fpsTimeElapsed += m_timeElapsed;
 	
+// TO DO : if 문 안에 들어오지를 않음
 	if (m_timeElapsed > 1.0f)
 	{
-		// Reset m_fpsFrameCount and m_fpsTimeElapsed to zero.
+		// Save.
 		m_frameRate = m_fpsFrameCount;
+		// Reset m_fpsFrameCount and m_fpsTimeElapsed to zero.
 		m_fpsFrameCount = 0;
-		m_fpsTimeElapsed = 0;
+		m_fpsTimeElapsed = 0.0f;
 	}
 
 	m_timeElapsed = 0.0f;
@@ -118,3 +125,20 @@ ULONG CTimer::GetFrameRate(LPTSTR lpszString) const
 	}
 	return m_frameRate;
 }
+
+/*
+BOOL CTimer::InitFont(CDxDriver* pDriver)
+{
+	m_font = pDriver->CreateFont(22, 0, FW_NORMAL, 1, false,
+								DEFAULT_CHARSET,
+								OUT_DEFAULT_PRECIS,
+								ANTIALIASED_QUALITY,
+								DEFAULT_PITCH | FF_DONTCARE,
+								TEXT("Arial"));
+}
+VOID CTimer::DrawFPS(CDxDriver* pDriver)
+{
+	RECT rect{ 400, 100, 100, 100 };
+	GetFrameRate();
+	pDriver->DrawText();
+}*/

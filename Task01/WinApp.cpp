@@ -132,6 +132,7 @@ VOID App::Run()
 			if (m_pDXDriver != nullptr)
 			{
 				//m_pDXDriver->m_pDraw->SetDuringTime(static_cast<float>(m_duringTime));
+				//m_pDXDriver->m_pDraw->SetDuringTime(static_cast<float>(GetTimer()->GetFPS()));
 			}
 			//m_lastTime = m_currentTime;
 		}
@@ -184,7 +185,7 @@ BOOL App::Render()
 	// Render.
 	if (m_pDxInput->Render())
 	{
-
+		// 현재 기능이 없음.
 	}
 
 	return m_pDXDriver->Render(m_pDxInput);

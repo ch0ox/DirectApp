@@ -26,9 +26,6 @@ CObjMgr::~CObjMgr()
 
 BOOL CObjMgr::ObjLoad(std::ifstream& file)
 {
-	int vertexNum = 0;						// v - vertex
-	int faceNum = 0;						// f - face
-
 	std::string line = "";
 	CObj tmpObj;
 	int objCnt = 0;
@@ -70,7 +67,6 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file)
 			vf = StrtokFloat((char*)line.substr(START_CONTEXT, len - START_CONTEXT).c_str(), (char*)" ");
 			p3f.d = { vf[0], vf[1], vf[2] };
 			objs[objCnt - 1].v.push_back(p3f);
-			vertexNum += 1;
 		}
 
 		// vt
@@ -92,7 +88,6 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file)
 		//f
 		else if (line[0] == 'f' && line[1] == ' ')						// face ?
 		{
-			faceNum += 1;
 			str = StrtokString((char*)line.substr(START_CONTEXT, len - START_CONTEXT).c_str(), (char*)" ");
 			int vertices = str.size();
 			CFace tmpFace;
@@ -119,7 +114,8 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file)
 }
 
 
-VOID CObjMgr::ObjDraw(CObjMgr obj)
+// Save Obj File Data.
+VOID CObjMgr::ObjData(CObjMgr obj)
 {
 	float x, y, z, nx, ny, nz;
 	int v_id, vt_id, vn_id;
@@ -200,14 +196,14 @@ std::vector <INT> CObjMgr::StrtokInt(char* str, char* delimeter)
 
 // To Save Object Data.
 /*------------------------------------------------------------------------*/
-//								CObjData.cpp
+//								CObjModel.cpp
 /*------------------------------------------------------------------------*/
-CObjData::CObjData()
+CObjModel::CObjModel()
 {
 
 }
 
-CObjData::~CObjData()
+CObjModel::~CObjModel()
 {
 
 }
