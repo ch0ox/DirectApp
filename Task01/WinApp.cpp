@@ -193,17 +193,12 @@ BOOL App::Render()
 	return m_pDXDriver->Render(m_pDxInput);
 }
 
-CObjMgr obj;
-
 LRESULT CALLBACK App::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IParam)
 {
 	HMENU hMenu, hSubMenu;
 	OPENFILENAME ofn;
 	char str[300] = { 0, };
 	char lpstrFile[MAX_PATH] = "";
-
-	std::string filepath;
-	std::ifstream file(filepath);
 
 	switch (msg)
 	{
@@ -254,16 +249,30 @@ LRESULT CALLBACK App::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IPar
 			memset(&ofn, 0, sizeof(OPENFILENAME));
 			ofn.lStructSize = sizeof(OPENFILENAME);
 			ofn.hwndOwner = hWnd;
-			ofn.lpstrFilter = TEXT("Every File(*.*)\0Text File\0*.txt\0*.obj\0");
+			ofn.lpstrFilter = L"All File(*.*)\0*.*\0Text File(.txt)\0*.txt\0Obj File(.obj)\0*.obj\0";
 			ofn.lpstrFile = (LPWSTR)lpstrFile;
 			ofn.nMaxFile = 256;
 			ofn.lpstrInitialDir = TEXT("c:\\");
+
+
 			if (GetOpenFileName(&ofn) != 0)
 			{
-				obj.ObjLoad(file);
-				MessageBox(hWnd, (LPWSTR)(LPCTSTR)str, TEXT("파일 열기 성공"), MB_OK);
+				std::string str;
+				std::wstring value = ofn.lpstrFile;
+				str.assign(value.begin(), value.end());
+
+				std::string filepath = str;
+				std::ifstream file(filepath);
+				MessageBox(hWnd, ofn.lpstrFile, TEXT("파일 열기 성공"), MB_OK);
+
+				// TO DO : CObjMgr 클래스 위치 수정
+				CObjMgr obj;
+				if (!obj.ObjLoad(file))
+				{
+					MessageBox(hWnd, TEXT("Obj Load Failed!"), TEXT("Error"), MB_OK);
+				}
+				file.close();
 			}
-			file.close();
 			break;
 
 		case ID_ABOUT:

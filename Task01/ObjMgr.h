@@ -55,9 +55,9 @@ public:
 	virtual ~CObjMgr();
 
 	BOOL ObjLoad(std::ifstream&);
+	VOID ObjDraw();
 
 	std::vector <CObj> objs;								// Objects Vector
-
 	std::vector <FLOAT> StrtokFloat(char*, char*);
 	std::vector <std::string> StrtokString(char*, char*);
 	std::vector <INT> StrtokInt(char*, char*);

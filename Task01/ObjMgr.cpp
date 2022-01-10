@@ -6,6 +6,7 @@
 #include "stdafx.h"
 #include "ObjMgr.h"
 #include "DXDriver.h"
+#include "WinApp.h"
 #include <iostream>
 #include <fstream>
 #include <stdio.h>
@@ -25,51 +26,17 @@ CObjMgr::~CObjMgr()
 
 BOOL CObjMgr::ObjLoad(std::ifstream& file)
 {
-	BOOL bRet = FALSE;
-
-
-	// Read 1
-/*
-	FILE* objFile;
-	if (fopen_s(&objFile, objFileName, "rt") != 0)				// Read Text mode
-	{
-		MessageBox(NULL, TEXT("File Open Failed! -_-"), TEXT("Oooooops"), MB_OK);
-		return FALSE;
-	}
-
-	if (objFile == NULL)	return FALSE;
-
-
-	// To Count v, f num. And To Store obj name.
-
-	CHAR line[256];
-	while (fscanf_s(objFile, "%s", line, sizeof(line)) > 0)
-	{
-		if (line[0] == 'o' && line[1] == '\0')				// new Obj name
-		{
-			tmpObj.name;
-		}
-
-		if (line[0] == 'v' && line[1] == '\0')				// vertex ?
-		{
-			vertexNum += 1;
-		}
-		else if (line[0] == 'f' && line[1] == '\0')			// face ?
-		{
-			faceNum += 1;
-		}
-
-		memset(line, '\0', sizeof(line));
-	}
-*/
-	//std::ifstream file;
-
-	INT vertexNum = 0;						// v - vertex
-	INT faceNum = 0;						// f - face
+	int vertexNum = 0;						// v - vertex
+	int faceNum = 0;						// f - face
 
 	std::string line = "";
 	CObj tmpObj;
-	INT objCnt = 0;
+	int objCnt = 0;
+
+	// prev vertex count
+	int prev_v = 0;
+	int prev_vt = 0;
+	int prev_vn = 0;
 
 	// One by One Line
 	while (std::getline(file, line))
@@ -85,9 +52,16 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file)
 		// o
 		if (line[0] == 'o' && line[1] == ' ')
 		{
-			objCnt += 1;
 			tmpObj.name = line.substr(START_CONTEXT, len - START_CONTEXT);
 			objs.push_back(tmpObj);
+
+			if (objCnt > 0)
+			{
+				prev_v += objs[objCnt - 1].v.size();
+				prev_vt += objs[objCnt - 1].vt.size();
+				prev_vn += objs[objCnt - 1].vn.size();
+			}
+			objCnt += 1;
 		}
 
 		// v
@@ -125,18 +99,61 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file)
 			for (int i = 0; i < vertices; i++)
 			{
 				vi = StrtokInt((char*)str[i].c_str(), (char*)"/");
-				p3i.d = { vi[0], vi[1], vi[2] };
-				tmpFace.v_pairs.push_back(p3i);
+				if (vi.size() == 3)
+				{
+					p3i.d = { vi[0] - prev_v, vi[1] - prev_vt, vi[2] - prev_vn };
+					tmpFace.v_pairs.push_back(p3i);
+				}
+				else		// If it doesn't have vt. 'No Texture Vector'
+				{
+					p3i.d = { vi[0] - prev_v, NULL , vi[1] - prev_vn };
+					tmpFace.v_pairs.push_back(p3i);
+				}
 			}
 			objs[objCnt - 1].f.push_back(tmpFace);
 		}
-
 	}
-	
 
-	return bRet;
+
+	return TRUE;
 }
 
+// ÀÓ½Ã
+CObjMgr obj;
+
+VOID CObjMgr::ObjDraw()
+{
+	float x, y, z, nx, ny, nz;
+	int v_id, vt_id, vn_id;
+
+	// num : obj number
+	for (int num = 0; num < obj.objs.size(); num++)
+	{
+		int f = obj.objs[num].f.size();
+
+		for (int i = 0; i < f; i++)
+		{
+			int points = obj.objs[num].f[i].v_pairs.size();
+			for (int j = 0; j < points; j++)
+			{
+				v_id = obj.objs[num].f[i].v_pairs[j].d[0];
+				vt_id = obj.objs[num].f[i].v_pairs[j].d[1];
+				vn_id = obj.objs[num].f[i].v_pairs[j].d[2];
+
+				// ÁÂÇ¥
+				x = obj.objs[num].v[v_id - 1].d[0];
+				y = obj.objs[num].v[v_id - 1].d[1];
+				z = obj.objs[num].v[v_id - 1].d[2];
+
+				// ¹ý¼± º¤ÅÍ ÁÂÇ¥
+				nx = obj.objs[num].v[vn_id - 1].d[0];
+				ny = obj.objs[num].v[vn_id - 1].d[1];
+				nz = obj.objs[num].v[vn_id - 1].d[2];
+			}
+		}
+	}
+
+}
 
 std::vector <FLOAT> CObjMgr::StrtokFloat(char* str, char* delimeter)
 {
