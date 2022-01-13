@@ -260,6 +260,24 @@ VOID CDxDriver::Term()
 		m_pDraw = nullptr;
 	}
 
+	for (int i = 0; i < m_pTextureList.size(); i++)
+	{
+		SAFE_RELEASE(m_pTextureList[i]);
+	}
+	m_pTextureList.clear();
+
+	for (int i = 0; i < m_pIndexBufferList.size(); i++)
+	{
+		SAFE_RELEASE(m_pIndexBufferList[i]);
+	}
+	m_pIndexBufferList.clear();
+
+	for (int i = 0; i < m_pVertexBufferList.size(); i++)
+	{
+		SAFE_RELEASE(m_pVertexBufferList[i]);
+	}
+	m_pVertexBufferList.clear();
+
 	if (m_pTexture != NULL)
 		SAFE_RELEASE(m_pTexture);
 
@@ -283,12 +301,6 @@ VOID CDxDriver::Term()
 
 	if (m_pD3D != NULL)
 		SAFE_RELEASE(m_pD3D);
-
-// 	if (m_pApp)
-// 	{
-// 		delete m_pApp;
-// 		m_pApp = nullptr;
-// 	}
 }
 
 

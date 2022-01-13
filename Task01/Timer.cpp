@@ -5,6 +5,7 @@
 #include "WinApp.h"
 #include "Timer.h"
 #include "main.h"
+#include "tchar.h"
 #include "windows.h"
 #include <Windows.h>
 #include <Winnt.h>
@@ -90,8 +91,7 @@ VOID CTimer::Tick(float fLockFPS)
 
 	m_fpsTimeElapsed += m_timeElapsed;
 	
-// TO DO : if 문 안에 들어오지를 않음
-	if (m_timeElapsed > 1.0f)
+	if (m_fpsTimeElapsed > 1.0f)
 	{
 		// Save.
 		m_frameRate = m_fpsFrameCount;
@@ -126,19 +126,3 @@ ULONG CTimer::GetFrameRate(LPTSTR lpszString) const
 	return m_frameRate;
 }
 
-/*
-BOOL CTimer::InitFont(CDxDriver* pDriver)
-{
-	m_font = pDriver->CreateFont(22, 0, FW_NORMAL, 1, false,
-								DEFAULT_CHARSET,
-								OUT_DEFAULT_PRECIS,
-								ANTIALIASED_QUALITY,
-								DEFAULT_PITCH | FF_DONTCARE,
-								TEXT("Arial"));
-}
-VOID CTimer::DrawFPS(CDxDriver* pDriver)
-{
-	RECT rect{ 400, 100, 100, 100 };
-	GetFrameRate();
-	pDriver->DrawText();
-}*/

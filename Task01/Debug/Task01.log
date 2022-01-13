@@ -1,16 +1,4 @@
-﻿  Button.cpp
-  C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\Draw.h(80,26): warning C4324: 'CDraw': 맞춤 지정자 때문에 구조체가 채워졌습니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.h(124,23): warning C4324: 'CObjMgr': 맞춤 지정자 때문에 구조체가 채워졌습니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\Button.h(53,19): warning C4245: '초기화 중': 'int'에서 'UINT'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\Button.cpp(57,19): warning C4245: '초기화 중': 'int'에서 'UINT'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\Button.cpp(62,33): warning C4244: '=': 'UINT'에서 'UINT16'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\Button.cpp(63,34): warning C4244: '=': 'UINT'에서 'UINT16'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\Button.cpp(56,28): warning C4101: 'height' :참조되지 않은 지역 변수입니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\Button.cpp(56,21): warning C4101: 'width' :참조되지 않은 지역 변수입니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\Button.cpp(56,15): warning C4101: 'posY' :참조되지 않은 지역 변수입니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\Button.cpp(56,9): warning C4101: 'posX' :참조되지 않은 지역 변수입니다.
-  DXDriver.cpp
+﻿  DXDriver.cpp
   C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
 \\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\Draw.h(80,26): warning C4324: 'CDraw': 맞춤 지정자 때문에 구조체가 채워졌습니다.
 \\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.h(124,23): warning C4324: 'CObjMgr': 맞춤 지정자 때문에 구조체가 채워졌습니다.
@@ -20,48 +8,6 @@
 \\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\DXDriver.cpp(175,33): warning C4309: '인수': 상수 값이 잘립니다.
 \\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\DXDriver.cpp(204,17): warning C4456: 'hr' 선언은 이전 로컬 선언을 숨깁니다.
 \\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\DXDriver.cpp(195,11): message : 'hr' 선언을 참조하십시오.
-  Draw.cpp
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\Draw.h(80,26): warning C4324: 'CDraw': 맞춤 지정자 때문에 구조체가 채워졌습니다.
-  C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.h(124,23): warning C4324: 'CObjMgr': 맞춤 지정자 때문에 구조체가 채워졌습니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\Button.h(53,19): warning C4245: '초기화 중': 'int'에서 'UINT'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\Draw.cpp(207,14): warning C4458: 'triangle' 선언은 클래스 멤버를 숨깁니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\Draw.h(75,14): message : 'CDraw::triangle' 선언을 참조하십시오.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\Draw.cpp(242,12): warning C4458: 'rectangle' 선언은 클래스 멤버를 숨깁니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\Draw.h(74,12): message : 'CDraw::rectangle' 선언을 참조하십시오.
-  KeyboardMgr.cpp
-  C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\Draw.h(80,26): warning C4324: 'CDraw': 맞춤 지정자 때문에 구조체가 채워졌습니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.h(124,23): warning C4324: 'CObjMgr': 맞춤 지정자 때문에 구조체가 채워졌습니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\KeyboardMgr.cpp(74,71): warning C4100: 'lParam': 참조되지 않은 정식 매개 변수입니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\KeyboardMgr.cpp(74,44): warning C4100: 'msg': 참조되지 않은 정식 매개 변수입니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\KeyboardMgr.cpp(74,33): warning C4100: 'hWnd': 참조되지 않은 정식 매개 변수입니다.
-  MouseMgr.cpp
-  C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\Draw.h(80,26): warning C4324: 'CDraw': 맞춤 지정자 때문에 구조체가 채워졌습니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.h(124,23): warning C4324: 'CObjMgr': 맞춤 지정자 때문에 구조체가 채워졌습니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\Button.h(53,19): warning C4245: '초기화 중': 'int'에서 'UINT'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\MouseMgr.cpp(67,43): warning C4100: 'msg': 참조되지 않은 정식 매개 변수입니다.
-  ObjMgr.cpp
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\Draw.h(80,26): warning C4324: 'CDraw': 맞춤 지정자 때문에 구조체가 채워졌습니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.h(124,23): warning C4324: 'CObjMgr': 맞춤 지정자 때문에 구조체가 채워졌습니다.
-  C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(146,41): warning C4458: 'objs' 선언은 클래스 멤버를 숨깁니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.h(110,21): message : 'CObjMgr::objs' 선언을 참조하십시오.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(152,24): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(148,14): warning C4101: 'z' :참조되지 않은 지역 변수입니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(148,17): warning C4101: 'nx' :참조되지 않은 지역 변수입니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(148,32): warning C4101: 'v' :참조되지 않은 지역 변수입니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(148,21): warning C4101: 'ny' :참조되지 않은 지역 변수입니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(148,11): warning C4101: 'y' :참조되지 않은 지역 변수입니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(148,25): warning C4101: 'nz' :참조되지 않은 지역 변수입니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(148,8): warning C4101: 'x' :참조되지 않은 지역 변수입니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(148,29): warning C4101: 'u' :참조되지 않은 지역 변수입니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(379,21): warning C4244: '인수': 'double'에서 '_Ty'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-          with
-          [
-              _Ty=FLOAT
-          ]
   Timer.cpp
   C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
 \\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\Draw.h(80,26): warning C4324: 'CDraw': 맞춤 지정자 때문에 구조체가 채워졌습니다.
@@ -71,10 +17,10 @@
 \\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\Draw.h(80,26): warning C4324: 'CDraw': 맞춤 지정자 때문에 구조체가 채워졌습니다.
 \\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.h(124,23): warning C4324: 'CObjMgr': 맞춤 지정자 때문에 구조체가 채워졌습니다.
 \\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\Button.h(53,19): warning C4245: '초기화 중': 'int'에서 'UINT'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.cpp(168,8): warning C4189: 'd': 지역 변수가 초기화되었으나 참조되지 않았습니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.cpp(258,20): warning C4456: 'str' 선언은 이전 로컬 선언을 숨깁니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.cpp(197,7): message : 'str' 선언을 참조하십시오.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.cpp(197,7): warning C4189: 'str': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.cpp(151,8): warning C4189: 'd': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.cpp(237,20): warning C4456: 'str' 선언은 이전 로컬 선언을 숨깁니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.cpp(176,7): message : 'str' 선언을 참조하십시오.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.cpp(176,7): warning C4189: 'str': 지역 변수가 초기화되었으나 참조되지 않았습니다.
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\xstring(2575,23): warning C4244: '인수': '_Elem'에서 'const _Elem'(으)로 변환하면서 데이터가 손실될 수 있습니다.
           with
           [
@@ -116,26 +62,18 @@ C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.2
               _Iter=wchar_t *,
               _Alloc=std::allocator<char>
           ]
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.cpp(260): message : 컴파일되는 함수 템플릿 인스턴스화 'std::basic_string<char,std::char_traits<char>,std::allocator<char>> &std::basic_string<char,std::char_traits<char>,std::allocator<char>>::assign<std::_String_iterator<std::_String_val<std::_Simple_types<_Elem>>>,0>(const _Iter,const _Iter)'에 대한 참조를 확인하세요.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.cpp(239): message : 컴파일되는 함수 템플릿 인스턴스화 'std::basic_string<char,std::char_traits<char>,std::allocator<char>> &std::basic_string<char,std::char_traits<char>,std::allocator<char>>::assign<std::_String_iterator<std::_String_val<std::_Simple_types<_Elem>>>,0>(const _Iter,const _Iter)'에 대한 참조를 확인하세요.
           with
           [
               _Elem=wchar_t,
               _Iter=std::_String_iterator<std::_String_val<std::_Simple_types<wchar_t>>>
           ]
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.cpp(260): message : 컴파일되는 함수 템플릿 인스턴스화 'std::basic_string<char,std::char_traits<char>,std::allocator<char>> &std::basic_string<char,std::char_traits<char>,std::allocator<char>>::assign<std::_String_iterator<std::_String_val<std::_Simple_types<_Elem>>>,0>(const _Iter,const _Iter)'에 대한 참조를 확인하세요.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.cpp(239): message : 컴파일되는 함수 템플릿 인스턴스화 'std::basic_string<char,std::char_traits<char>,std::allocator<char>> &std::basic_string<char,std::char_traits<char>,std::allocator<char>>::assign<std::_String_iterator<std::_String_val<std::_Simple_types<_Elem>>>,0>(const _Iter,const _Iter)'에 대한 참조를 확인하세요.
           with
           [
               _Elem=wchar_t,
               _Iter=std::_String_iterator<std::_String_val<std::_Simple_types<wchar_t>>>
           ]
-  main.cpp
-  C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\Draw.h(80,26): warning C4324: 'CDraw': 맞춤 지정자 때문에 구조체가 채워졌습니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.h(124,23): warning C4324: 'CObjMgr': 맞춤 지정자 때문에 구조체가 채워졌습니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\main.cpp(24,113): warning C4100: 'nShowCmd': 참조되지 않은 정식 매개 변수입니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\main.cpp(24,93): warning C4100: 'lpCmdLine': 참조되지 않은 정식 매개 변수입니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\main.cpp(24,66): warning C4100: 'hPrevInstance': 참조되지 않은 정식 매개 변수입니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\main.cpp(24,36): warning C4100: 'hInstance': 참조되지 않은 정식 매개 변수입니다.
   코드를 생성하고 있습니다...
-DXInput.obj : warning LNK4099: 'vc142.pdb' PDB를 'DXInput.obj' 또는 '\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Debug\vc142.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.cpp(170): warning C4715: 'App::Render': 모든 제어 경로에서 값을 반환하지는 않습니다.
   Task01.vcxproj -> \\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Debug\Task01.exe

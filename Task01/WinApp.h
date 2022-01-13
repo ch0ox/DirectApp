@@ -37,7 +37,7 @@
 #define nHeight		600
 
 // DirectX 관련 객체들을 해제하는 매크로 함수
-#define SAFE_RELEASE(p)	{if(p) {(p)->Release();	(p)= NULL;}}
+#define SAFE_RELEASE(p)	{if(p) {(p)->Release();	(p)= nullptr;}}
 
 // WinMain 주석 일치하지 않은 오류
 #pragma warning (disable: 28251)

@@ -109,10 +109,6 @@ VOID App::Run()
 		ShowWindow(m_hWnd, SW_SHOWDEFAULT);								// SW_SHOWMAXIMIZED  SW_SHOWMINIMIZED
 		UpdateWindow(m_hWnd);
 
-		//QueryPerformanceFrequency(&m_frequency);							// CPU 주파수에 따른 1초당 진행되는 틱 수 (10000000)
-		//QueryPerformanceCounter(&m_lastTime);								// 시작 시점
-
-
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
 			TranslateMessage(&msg);
@@ -121,19 +117,6 @@ VOID App::Run()
 		else
 		{
 			Render();
-			if (m_duringTime > (double)FPS)
-				Sleep(1);
-
-			//QueryPerformanceCounter(&m_currentTime);											// 끝 시점 (현재)
-			//clocks = static_cast<double>(m_currentTime.QuadPart - m_lastTime.QuadPart);			// 클럭 수
-
-			//m_duringTime = clocks / (double)m_frequency.QuadPart * 1000.0;
-			//		m_duringTime = clocks / (m_fps) * 1000.0;											// 초 단위 수행시간 * FPS
-			if (m_pDXDriver != nullptr)
-			{
-				//m_pDXDriver->m_pDraw->SetDuringTime(static_cast<float>(m_duringTime));
-			}
-			//m_lastTime = m_currentTime;
 		}
 	}
 }
@@ -180,14 +163,10 @@ VOID App::ShutDownWindow()
 
 BOOL App::Render()
 {
-	// Input 객체, Driver 객체
-	// Render.
-	if (m_pDxInput->Render())
+	if (m_pDXDriver)
 	{
-		// 현재 기능이 없음.
+		return m_pDXDriver->Render(m_pDxInput);
 	}
-
-	return m_pDXDriver->Render(m_pDxInput);
 }
 
 LRESULT CALLBACK App::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IParam)
