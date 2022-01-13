@@ -311,6 +311,7 @@ VOID CObjMgr::CreateObjBuffer(CObj obj,CDxDriver* pDriver)
 			MessageBox(NULL, TEXT("Obj Index Buffer Error"), TEXT("Error"), MB_OK);
 		}
 
+		// TO DO : VB, IB 위치 수정 ( 현재는 obj 마다 obj class 에 멤버변수로 들어가 있음 )
 
 		VOID* pVertices;
 		obj.m_pVB->Lock(0, m_vtxNum, &pVertices, 0);
@@ -338,10 +339,14 @@ VOID CObjMgr::ObjDraw(CObjMgr objMgr, CDxDriver* pDriver)
 	if (m_bIsTexturing)
 	{
 		// TO DO : 좌표에 맞게 텍스쳐 입히기.
+		//pDriver->m_pD3DDevice->SetTexture(0, texture...);
 	}
 	else
 	{
+		// No Texturing.
+		pDriver->SetTexture(NO_TEXTURE);
 		// TO DO : 회색으로 Shading.
+
 	}
 
 	// TO DO : Set Matrices

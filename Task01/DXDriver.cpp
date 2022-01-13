@@ -237,6 +237,15 @@ BOOL CDxDriver::Render(CDxInput* pInput)
 	return TRUE;
 }
 
+HRESULT CDxDriver::SetTexture(UINT texture)
+{
+	if (texture == 0)
+	{
+		return m_pD3DDevice->SetTexture(0, nullptr);
+	}
+	return m_pD3DDevice->SetTexture(0, m_pTextureList[texture]);
+}
+
 VOID CDxDriver::Term()
 {
 	if (m_pMouse)

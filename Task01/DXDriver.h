@@ -61,6 +61,7 @@ public:
 	VOID ChangeDisplayMode(int mode);
 	VOID DeviceLostRecovery();
 	VOID InputRender(class CDxInput* pInput);
+	HRESULT SetTexture(UINT texture);
 
 	CDraw* m_pDraw;
 	CMouse* m_pMouse;
@@ -92,9 +93,10 @@ private:
 	VOID						Drawing();
 	double						m_duringTime = 0;
 
-	VERTEXBUFFERLIST			m_vertexBufferList;
-	INDEXBUFFERLIST				m_indexBufferList;
-	
+	VERTEXBUFFERLIST			m_pVertexBufferList;
+	INDEXBUFFERLIST				m_pIndexBufferList;
+	TEXTURELIST					m_pTextureList;
+
 
 protected:
 	HRESULT						InitD3D();
