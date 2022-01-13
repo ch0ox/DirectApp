@@ -11,6 +11,7 @@
 #include "MouseMgr.h"
 #include "Draw.h"
 #include "Button.h"
+#include "ObjMgr.h"
 #include "Timer.h"
 #include "DXInput.h"
 
@@ -372,4 +373,12 @@ VOID CDxDriver::DeviceLostRecovery()
 		}
 
 	}
+}
+
+// TO DO : Obj Model Draw
+VOID CDxDriver::DrawObjModel(CObjMgr* p_ObjMgr)
+{
+	m_pD3DDevice->SetFVF(p_ObjMgr->GetFVF());
+	m_pD3DDevice->SetStreamSource(0, m_pVertexBufferList[0] // VB
+								, 0, sizeof(OBJVERTEX));
 }

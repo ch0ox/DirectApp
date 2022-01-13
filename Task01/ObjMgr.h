@@ -107,19 +107,20 @@ public:
 	VOID ObjDraw(CObjMgr obj, CDxDriver* pDriver);
 	VOID Render(CObjMgr obj, CDxDriver* pDriver);
 
+	DWORD GetFVF() { return m_dwFVF; }
+
 	std::vector <CObj> objs;								// Objects Vector
 	std::vector <FLOAT> StrtokFloat(char*, char*);
 	std::vector <std::string> StrtokString(char*, char*);
 	std::vector <INT> StrtokInt(char*, char*);
 	std::wstring StringToLPCWSTR(const std::string& str);
 
-private:
-	DWORD AddVertex(UINT, OBJVERTEX* pVtx);
-
 	CArray <Node*>		m_nodes;
 	CArray <OBJVERTEX>	m_vertices;
-//	CArray <DWORD>		m_indices;
 	std::vector<DWORD>	m_indices;
+
+private:
+	DWORD AddVertex(UINT, OBJVERTEX* pVtx);
 
 	D3DXMATRIXA16 m_world;
 	bool m_bIsTexturing = FALSE;

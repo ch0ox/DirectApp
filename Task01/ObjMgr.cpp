@@ -330,6 +330,8 @@ VOID CObjMgr::CreateObjBuffer(CObj obj,CDxDriver* pDriver)
 	// SetIndices
 	pDriver->m_pD3DDevice->SetIndices(obj.m_pIB);
 
+	pDriver->m_pVertexBufferList.push_back(obj.m_pVB);
+	pDriver->m_pIndexBufferList.push_back(obj.m_pIB);
 }
 
 VOID CObjMgr::ObjDraw(CObjMgr objMgr, CDxDriver* pDriver)
@@ -339,7 +341,7 @@ VOID CObjMgr::ObjDraw(CObjMgr objMgr, CDxDriver* pDriver)
 	if (m_bIsTexturing)
 	{
 		// TO DO : 좌표에 맞게 텍스쳐 입히기.
-		//pDriver->m_pD3DDevice->SetTexture(0, texture...);
+		//pDriver->SetTexture(texture...);
 	}
 	else
 	{

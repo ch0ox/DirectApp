@@ -169,6 +169,8 @@ BOOL App::Render()
 	}
 }
 
+//CObjMgr* g_pObjMgr = nullptr;
+
 LRESULT CALLBACK App::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IParam)
 {
 	HMENU hMenu, hSubMenu; 
@@ -244,6 +246,7 @@ LRESULT CALLBACK App::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IPar
 
 				// TO DO : CObjMgr 클래스 위치 수정
 				
+//				if(g_pObjMgr->ObjLoad(file))
 				if (!m_objMgr.ObjLoad(file))
 				{
 					MessageBox(hWnd, TEXT("Obj Load Failed!"), TEXT("Error"), MB_OK);
