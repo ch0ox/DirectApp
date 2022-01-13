@@ -35,6 +35,7 @@ typedef struct RHWVERTEX
 	FLOAT u, v;				// TEXTURE ÁÂÇ¥
 }rhwVertex;
 
+
 typedef struct INDEX
 {
 	DWORD _0, _1, _2;

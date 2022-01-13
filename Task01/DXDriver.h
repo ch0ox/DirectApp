@@ -14,6 +14,7 @@ class CDraw;
 class CMouse;
 
 #include <windows.h>
+#include <vector>
 #include <iostream>
 #include <d3d9.h>
 #include <dinput.h>
@@ -49,7 +50,6 @@ class CMouse;
 
 class CDxDriver 
 {
-
 public:
 	explicit CDxDriver(App* app);
 	virtual ~CDxDriver();
@@ -78,6 +78,12 @@ public:
 	LPDIRECT3DINDEXBUFFER9		m_pIB = nullptr;							// 인덱스 버퍼
 	LPDIRECT3DTEXTURE9			m_pTexture = nullptr;						// 사용할 텍스쳐
 
+	typedef std::vector<LPDIRECT3DVERTEXBUFFER9>			VERTEXBUFFERLIST;
+	typedef std::vector<LPDIRECT3DVERTEXBUFFER9>::iterator	VERTEXBUFFERLISTItr;
+	typedef std::vector<LPDIRECT3DINDEXBUFFER9>				INDEXBUFFERLIST;
+	typedef std::vector<LPDIRECT3DINDEXBUFFER9>::iterator	INDEXBUFFERLISTItr;
+	typedef std::vector<LPDIRECT3DTEXTURE9>					TEXTURELIST;
+	typedef std::vector<LPDIRECT3DTEXTURE9>::iterator		TEXTURELISTItr;
 
 	BOOL						WindowMode = TRUE;
 	BOOL						m_bLostDevice = FALSE;
@@ -86,6 +92,8 @@ private:
 	VOID						Drawing();
 	double						m_duringTime = 0;
 
+	VERTEXBUFFERLIST			m_vertexBufferList;
+	INDEXBUFFERLIST				m_indexBufferList;
 	
 
 protected:

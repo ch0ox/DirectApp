@@ -1,2 +1,37 @@
-              _Alloc=std::allocator<char>
-﻿  Task01.vcxproj -> \\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Debug\Task01.exe
+﻿  ObjMgr.cpp
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\Draw.h(80,26): warning C4324: 'CDraw': 맞춤 지정자 때문에 구조체가 채워졌습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.h(51,2): warning C4091: 'typedef ': 변수를 선언하지 않으면 'Node' 왼쪽은 무시됩니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.h(114,9): error C2143: 구문 오류: ';'이(가) '<' 앞에 없습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.h(114,9): error C4430: 형식 지정자가 없습니다. int로 가정합니다. 참고: C++에서는 기본 int를 지원하지 않습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.h(114,25): error C2238: ';' 앞에 예기치 않은 토큰이 있습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.h(115,9): error C2143: 구문 오류: ';'이(가) '<' 앞에 없습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.h(115,9): error C4430: 형식 지정자가 없습니다. int로 가정합니다. 참고: C++에서는 기본 int를 지원하지 않습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.h(115,31): error C2238: ';' 앞에 예기치 않은 토큰이 있습니다.
+  C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(133,41): warning C4458: 'objs' 선언은 클래스 멤버를 숨깁니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.h(104,21): message : 'CObjMgr::objs' 선언을 참조하십시오.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(139,24): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(213,6): error C2065: 'm_vertices': 선언되지 않은 식별자입니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(241,12): error C2065: 'm_nodes': 선언되지 않은 식별자입니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(243,18): error C2065: 'm_nodes': 선언되지 않은 식별자입니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(247,3): error C2059: 구문 오류: '}'
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(247,3): error C2143: 구문 오류: ';'이(가) '}' 앞에 없습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(342,21): warning C4244: '인수': 'double'에서 '_Ty'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Ty=FLOAT
+          ]
+  WinApp.cpp
+  C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\Draw.h(80,26): warning C4324: 'CDraw': 맞춤 지정자 때문에 구조체가 채워졌습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\Button.h(53,19): warning C4245: '초기화 중': 'int'에서 'UINT'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.h(51,2): warning C4091: 'typedef ': 변수를 선언하지 않으면 'Node' 왼쪽은 무시됩니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.h(114,9): error C2143: 구문 오류: ';'이(가) '<' 앞에 없습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.h(114,9): error C4430: 형식 지정자가 없습니다. int로 가정합니다. 참고: C++에서는 기본 int를 지원하지 않습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.h(114,25): error C2238: ';' 앞에 예기치 않은 토큰이 있습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.h(115,9): error C2143: 구문 오류: ';'이(가) '<' 앞에 없습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.h(115,9): error C4430: 형식 지정자가 없습니다. int로 가정합니다. 참고: C++에서는 기본 int를 지원하지 않습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.h(115,31): error C2238: ';' 앞에 예기치 않은 토큰이 있습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.cpp(257,20): warning C4456: 'str' 선언은 이전 로컬 선언을 숨깁니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.cpp(197,7): message : 'str' 선언을 참조하십시오.
+  코드를 생성하고 있습니다...

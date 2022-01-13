@@ -10,6 +10,8 @@
 #include <iostream>
 #include <fstream>
 #include <stdio.h>
+#include <algorithm>
+#include <map>
 
 #pragma comment(lib, "d3d9.lib")
 #pragma comment(lib, "d3dx9.lib")
@@ -21,7 +23,7 @@ CObjMgr::CObjMgr()
 
 CObjMgr::~CObjMgr()
 {
-
+	
 }
 
 BOOL CObjMgr::ObjLoad(std::ifstream& file)
@@ -47,7 +49,7 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file)
 		CPoint3i p3i;
 
 		// o
-		if (line[0] == 'o' && line[1] == ' ')
+		if ((line[0] == 'o' && line[1] == ' ') || (line[0] == 'g'  && line[1] == ' '))
 		{
 			tmpObj.name = line.substr(START_CONTEXT, len - START_CONTEXT);
 			objs.push_back(tmpObj);
@@ -62,7 +64,7 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file)
 		}
 
 		// v
-		if (line[0] == 'v' && line[1] == ' ')							// vertex ?
+		else if (line[0] == 'v' && line[1] == ' ')							// vertex ?
 		{
 			vf = StrtokFloat((char*)line.substr(START_CONTEXT, len - START_CONTEXT).c_str(), (char*)" ");
 			p3f.d = { vf[0], vf[1], vf[2] };
@@ -107,72 +109,254 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file)
 			}
 			objs[objCnt - 1].f.push_back(tmpFace);
 		}
-
+		else
+		{
+			std::wstring tmp = StringToLPCWSTR(line);
+			LPCWSTR elseLine = tmp.c_str();
+			
+			// TO DO : 몇 줄이 예외 인지만 나오게 수정ㄱ
+			MessageBox(NULL, elseLine, TEXT("예외 라인"), MB_OK);
+		}
 		vf.clear();
 		vi.clear();
 		str.clear();
 	}
-	
-	
 
 	return TRUE;
 }
 
 
+
+
 // Save Obj File Data.
-VOID CObjMgr::ObjData(CObjMgr obj)
+/* 이 함수에서 Buffer 생성 까지만.*/
+VOID CObjMgr::ObjData(std::vector<CObj> objs, CDxDriver* pDriver)
 {
 	float x, y, z, nx, ny, nz, u, v;
 	int v_id, vt_id, vn_id;
 
 	// num : obj number
-	for (int num = 0; num < obj.objs.size(); num++)
+	for (int num = 0; num < objs.size(); num++)
 	{
-		int f = obj.objs[num].f.size();
+		int f = objs[num].f.size();
+//		std::vector<OBJVERTEX> vtx;
+		std::vector<DWORD> idx;
+		OBJVERTEX tmpVtx;
+		
+		/*삭제 예정*/
+		std::vector<FACEVERTEX> fvtx;
+		FACEVERTEX tmpFVtx;
+		std::map<DWORD, OBJVERTEX> vMap;
+		/*삭제 예정*/
 
 		for (int i = 0; i < f; i++)
 		{
-			int points = obj.objs[num].f[i].v_pairs.size();
+			int points = objs[num].f[i].v_pairs.size();
 			for (int j = 0; j < points; j++)
 			{
-				v_id = obj.objs[num].f[i].v_pairs[j].d[0];
-				vt_id = obj.objs[num].f[i].v_pairs[j].d[1];
-				vn_id = obj.objs[num].f[i].v_pairs[j].d[2];
+				v_id = objs[num].f[i].v_pairs[j].d[0];
+				vt_id = objs[num].f[i].v_pairs[j].d[1];
+				vn_id = objs[num].f[i].v_pairs[j].d[2];
+
+
+
+				/*확인중*/
+				// f 저장
+// 				tmpFVtx.v = v_id;
+// 				tmpFVtx.vt = vt_id;
+// 				tmpFVtx.vn = vn_id;
+// 
+// 				bool b = Check(fvtx, &tmpFVtx);
+// 				if (!b)	// 안겹침
+// 				{
+// 					fvtx.push_back(tmpFVtx);
+// 				}
+				
+				/*확인중*/
+
+
 
 				// 정점 좌표 (v)
-				x = obj.objs[num].v[v_id - 1].d[0];
-				y = obj.objs[num].v[v_id - 1].d[1];
-				z = obj.objs[num].v[v_id - 1].d[2];
+				tmpVtx.x = objs[num].v[v_id - 1].d[0];
+				tmpVtx.y = objs[num].v[v_id - 1].d[1];
+				tmpVtx.z = objs[num].v[v_id - 1].d[2];
 
 				// 법선 벡터 좌표 (vn)
-				nx = obj.objs[num].v[vn_id - 1].d[0];
-				ny = obj.objs[num].v[vn_id - 1].d[1];
-				nz = obj.objs[num].v[vn_id - 1].d[2];
-
-				// TO DO : 좌표에 맞게 그려주기.
-
-
+				tmpVtx.nx = objs[num].vn[vn_id - 1].d[0];
+				tmpVtx.ny = objs[num].vn[vn_id - 1].d[1];
+				tmpVtx.nz = objs[num].vn[vn_id - 1].d[2];
 
 				// 텍스쳐 좌표 (vt)
-						
 				if (vt_id != NULL)							// If it has Textures ?
 				{
-					u = obj.objs[num].v[vt_id - 1].d[0];
-					v = obj.objs[num].v[vt_id - 1].d[1];
+					m_bIsTexturing = TRUE;
 
-					// TO DO : 좌표에 맞게 텍스쳐 입히기.
+					tmpVtx.u = objs[num].vt[vt_id - 1].d[0];
+					tmpVtx.v = objs[num].vt[vt_id - 1].d[1];
+					objs[num].fvf = D3DFVF_TEXTUREVERTEX;			// Texture 있을 경우, FVF 를 텍스쳐 용으로 설정.
 				}
-				else										// If it doesn't have Textures ?
+				else
 				{
-					// TO DO : 회색으로 채우기.
+					m_bIsTexturing = FALSE;
+
+					tmpVtx.u = NULL;
+					tmpVtx.v = NULL;	
+					objs[num].fvf = D3DFVF_NOTEXTUREVERTEX;			// Texture 없을 경우, FVF 를 컬러용(D3DFVF_DIFFUSE)으로 설정.
 				}
 
-
+				// TO DO : vtx 겹치는지 확인 후 넣기......
+				DWORD index = AddVertex((UINT)j+1, &tmpVtx);		// 몇번째 vtx 인지, 해당 tmp 를 추가할 수 있는지(이전 vtx 와 안겹치는지) 확인.
+																	// 추가할 수 있으면 AddVertex 함수 안에서 vtx 추가.
+				// 겹치지 않는 경우
+				if (index == (DWORD)-1)								
+				{
+					// 수정
+					index = m_vertices.GetSize();
+					idx.push_back(index);
+				}
+				
 			}
 		}
+
+		// TO DO : Create Buffer
+		// obj 하나만 넘겨서 obj 하나에 대한 버퍼 생성.
+		// 해당 obj 에 대한 vertex 벡터 (vec[0], vec[1], ... )			-> TO DO : 벡터 사용에서 해쉬테이블 사용으로 바꿔서 CreateObjBuffer 수정해야함.
+		// 각각의 vec 에는 v,vt,vn 정보가 들어있음.
+		CreateObjBuffer(objs[num], idx, pDriver);
+//		vtx.clear();
+		idx.clear();
+		fvtx.clear();
 	}
 
 }
+
+
+
+DWORD CObjMgr::AddVertex(UINT hash, OBJVERTEX* pVtx)
+{
+	DWORD index = (DWORD)-1;
+	BOOL bIsExist = FALSE;
+
+	// TO DO : Is Exist ?
+	if ((UINT)m_nodes.GetSize() > hash)
+	{
+		Node* pNode = m_nodes.Get(hash);
+		// Node Loop
+		while (pNode != NULL)
+		{
+			OBJVERTEX* pSrc = m_vertices.GetData() + pNode->index;
+
+			// Vertices 에 해당 pVtx 가 있다면
+			// pSrc == pVtx
+			if (memcmp(pVtx, pSrc, sizeof(OBJVERTEX)) == 0)
+			{
+				bIsExist = TRUE;
+				index = pNode->index;
+				break;
+			}
+			pNode = pNode->pNext;
+		}
+	}
+
+
+	// Not Exist
+	if (!bIsExist)
+	{
+		// Last location index ?
+		index = m_vertices.GetSize();
+		// 해당 vtx 추가
+		m_vertices.Add(*pVtx);
+
+		Node* pNewNode = new Node;
+		if (pNewNode == nullptr)
+		{
+			return (DWORD)-1;
+		}
+
+		// New node 에 index 추가
+		pNewNode->index = index;
+		pNewNode->pNext = nullptr;
+
+
+		delete pNewNode;
+	}
+	// Exist
+	else
+	{
+		// 원래 있는 index 찾아서 넣기
+		index;
+	}
+
+
+	return index;
+}
+
+// To Create Obj Buffer. each obj.
+VOID CObjMgr::CreateObjBuffer(CObj obj, std::vector<DWORD> idxVec ,CDxDriver* pDriver)
+{
+//	if (!vtxVec.empty())
+	{
+		m_dwFVF = obj.fvf;
+
+		if (FAILED(pDriver->m_pD3DDevice->CreateVertexBuffer(m_vertices.GetSize() * m_vtxSize, 0, m_dwFVF, D3DPOOL_MANAGED, &(obj.m_pVB), NULL)))
+		{
+			MessageBox(NULL, TEXT("Obj Vertex Buffer Error"), TEXT("Error"), MB_OK);
+		}
+
+		if (FAILED(pDriver->m_pD3DDevice->CreateIndexBuffer(idxVec.size() * m_indexSize, 0, m_vFormat, D3DPOOL_MANAGED, &(obj.m_pIB), NULL)))
+		{
+			MessageBox(NULL, TEXT("Obj Index Buffer Error"), TEXT("Error"), MB_OK);
+		}
+
+
+		VOID* pVertices;
+		obj.m_pVB->Lock(0, m_vtxNum, &pVertices, 0);
+		memcpy(pVertices, m_vertices.GetData(), m_vertices.GetSize() * m_vtxSize);
+		obj.m_pVB->Unlock();
+
+		VOID* pIndices;
+		obj.m_pIB->Lock(0, m_indexNum, &pIndices, 0);
+		// TO DO : 수정
+		memcpy(pIndices, &idxVec[0], idxVec.size() * m_indexSize);
+		obj.m_pIB->Unlock();
+
+	}
+	// SetIndices
+	pDriver->m_pD3DDevice->SetIndices(obj.m_pIB);
+
+}
+
+VOID CObjMgr::ObjDraw(CObjMgr objMgr, CDxDriver* pDriver)
+{
+
+/* Draw 부분 */
+	if (m_bIsTexturing)
+	{
+		// TO DO : 좌표에 맞게 텍스쳐 입히기.
+	}
+	else
+	{
+		// TO DO : 회색으로 Shading.
+	}
+
+	// TO DO : Set Matrices
+
+	// TO DO : 좌표에 맞게 그려주기.
+	Render(objMgr, pDriver);
+}
+
+VOID CObjMgr::Render(CObjMgr obj, CDxDriver* pDriver)
+{
+	pDriver->m_pD3DDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+	pDriver->m_pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+	pDriver->m_pD3DDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	pDriver->m_pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+
+	pDriver->m_pD3DDevice->SetFVF(D3DFVF_TEXTUREVERTEX);
+	pDriver->m_pD3DDevice->SetTransform(D3DTS_WORLD, &m_world);
+}
+
+
 
 std::vector <FLOAT> CObjMgr::StrtokFloat(char* str, char* delimeter)
 {
@@ -217,6 +401,18 @@ std::vector <INT> CObjMgr::StrtokInt(char* str, char* delimeter)
 }
 
 
+std::wstring CObjMgr::StringToLPCWSTR(const std::string& str)
+{
+	int length = (int)str.length() + 1;
+	int len = MultiByteToWideChar(CP_ACP, 0, str.c_str(), length, 0, 0);
+	wchar_t* buf = new wchar_t[len];
+	MultiByteToWideChar(CP_ACP, 0, str.c_str(), length, buf, len);
+	std::wstring r(buf);
+	delete[] buf;
+
+	return r;
+}
+
 
 
 // To Save Object Data.
@@ -231,4 +427,51 @@ CObjModel::CObjModel()
 CObjModel::~CObjModel()
 {
 
+}
+
+
+
+
+
+template<typename TYPE> HRESULT CArray<TYPE>::Add(const TYPE& value)
+{
+	HRESULT hr;
+	if (FAILED(hr = SetSize(m_size + 1)))
+		return hr;
+	
+	assert(m_pData != NULL);
+
+	::new (&m_pData[m_size]) TYPE;
+
+	m_pData[m_size] = value;
+	++m_size;
+
+	return S_OK;
+}
+
+template<typename TYPE> HRESULT CArray<TYPE>::SetSize(int size)
+{
+	if (size < 0)
+	{
+		assert(FALSE);
+		return E_INVALIDARG;
+	}
+
+	// init
+	if (size == 0)
+	{
+		if (m_pData)
+		{
+			free(m_pData);
+			m_pData = nullptr;
+		}
+		m_size = 0;
+		m_maxSize = 0;
+	}
+	else if (m_pData == nullptr || size > m_maxSize)
+	{
+
+	}
+
+	return S_OK;
 }

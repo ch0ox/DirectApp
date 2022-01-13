@@ -138,9 +138,9 @@ VOID CDxDriver::Drawing()
 	m_pDraw->DrawTextFPS();
 
 	// Triangle
-	m_pD3DDevice->SetTexture(0, m_pDraw->m_pTexture);
-	m_pDraw->SetupMatrices();
-	m_pDraw->DrawTriangle();
+// 	m_pD3DDevice->SetTexture(0, m_pDraw->m_pTexture);
+// 	m_pDraw->SetupMatrices();
+// 	m_pDraw->DrawTriangle();
 
 	// Button
 	for (int i = 0; i < static_cast<int>(m_pDraw->m_btnVector.size()); i++)
@@ -222,6 +222,9 @@ BOOL CDxDriver::Render(CDxInput* pInput)
 	if (SUCCEEDED(m_pD3DDevice->BeginScene()))
 	{
 		Drawing();
+		// TO DO : obj 파일이 있다면 draw 해주기
+		// obj drawing
+
 
 		m_pD3DDevice->EndScene();
 	}
@@ -236,12 +239,6 @@ BOOL CDxDriver::Render(CDxInput* pInput)
 
 VOID CDxDriver::Term()
 {
-// 	if (m_pApp)
-// 	{
-// 		delete m_pApp;
-// 		m_pApp = nullptr;
-// 	}
-
 	if (m_pMouse)
 	{
 		delete m_pMouse;
@@ -278,6 +275,11 @@ VOID CDxDriver::Term()
 	if (m_pD3D != NULL)
 		SAFE_RELEASE(m_pD3D);
 
+// 	if (m_pApp)
+// 	{
+// 		delete m_pApp;
+// 		m_pApp = nullptr;
+// 	}
 }
 
 
