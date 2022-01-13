@@ -7,6 +7,7 @@
 #include "ObjMgr.h"
 #include "DXDriver.h"
 #include "WinApp.h"
+#include "Array.h"
 #include <iostream>
 #include <fstream>
 #include <stdio.h>
@@ -29,8 +30,10 @@ CObjMgr::~CObjMgr()
 BOOL CObjMgr::ObjLoad(std::ifstream& file)
 {
 	std::string line = "";
+	std::string anotherLine = "";
 	CObj tmpObj;
 	int objCnt = 0;
+	int lineNum = 1;
 
 	// prev vertex count
 	int prev_v = 0;
@@ -109,18 +112,26 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file)
 			}
 			objs[objCnt - 1].f.push_back(tmpFace);
 		}
+		// o, v, vt, vn, f 이외의 Line
 		else
 		{
-			std::wstring tmp = StringToLPCWSTR(line);
-			LPCWSTR elseLine = tmp.c_str();
-			
-			// TO DO : 몇 줄이 예외 인지만 나오게 수정ㄱ
-			MessageBox(NULL, elseLine, TEXT("예외 라인"), MB_OK);
+			anotherLine += std::to_string(lineNum);
+			anotherLine += " ";
 		}
+
+		lineNum++;
 		vf.clear();
 		vi.clear();
 		str.clear();
 	}
+
+	std::wstring tmp = StringToLPCWSTR(anotherLine);
+	LPCWSTR elseLine = tmp.c_str();
+	if (elseLine != NULL)
+	{
+		MessageBox(NULL, elseLine, TEXT("예외 라인"), MB_OK);
+	}
+	
 
 	return TRUE;
 }
@@ -165,7 +176,7 @@ VOID CObjMgr::ObjData(std::vector<CObj> objs, CDxDriver* pDriver)
 				tmpVtx.nz = objs[num].vn[vn_id - 1].d[2];
 
 				// 텍스쳐 좌표 (vt)
-				if (vt_id != NULL)							// If it has Textures ?
+				if (vt_id != NULL)									// If it has Textures ?
 				{
 					m_bIsTexturing = TRUE;
 
@@ -423,88 +434,3 @@ CObjModel::~CObjModel()
 
 
 
-template<typename TYPE> HRESULT CArray<TYPE>::Add(const TYPE& value)
-{
-	HRESULT hr;
-	// hash table resize
-	if (FAILED(hr = SetResize(m_size + 1)))
-	{
-		MessageBox(NULL, TEXT("Resize Failed!"), TEXT("Error"), MB_OK);
-		return hr;
-	}
-	
-	assert(m_pData != NULL);
-
-	::new (&m_pData[m_size]) TYPE;
-
-	m_pData[m_size] = value;
-	++m_size;
-
-	return S_OK;
-}
-
-template<typename TYPE> HRESULT CArray<TYPE>::Set(int index, const TYPE& value)
-{
-	if (index < 0 || index >= m_size)
-	{
-		MessageBox(NULL, TEXT("Set Value Error. Wrong index!"), TEXT("Error"), MB_OK);
-		assert(FALSE);
-		return E_INVALIDARG;
-	}
-
-	// Set Data
-	m_pData[index] = value;
-	return S_OK;
-}
-
-template<typename TYPE> HRESULT CArray<TYPE>::SetResize(int newSize)
-{
-	// Error
-	if (newSize < 0)
-	{
-		MessageBox(NULL, TEXT("Resize Error. Wrong newSize!"), TEXT("Error"), MB_OK);
-		assert(FALSE);
-		return E_INVALIDARG;
-	}
-
-	// Init
-	if (newSize == 0)
-	{
-		if (m_pData)
-		{
-			free(m_pData);
-			m_pData = nullptr;
-		}
-		m_size = 0;
-		m_maxSize = 0;
-	}
-	// Resize
-	else if (m_pData == nullptr || newSize > m_maxSize)
-	{
-		int initSize = 16;
-		int growBy = (m_maxSize == 0) ? initSize : m_maxSize;
-
-		if ((UINT)m_maxSize + (UINT)growBy > (UINT)INT_MAX)
-			growBy = INT_MAX - m_maxSize;
-
-		// more bigger ?
-		newSize = __max(newSize, m_maxSize + growBy);
-
-		if (sizeof(TYPE) > UINT_MAX / (UINT)newSize)
-			return E_INVALIDARG;
-
-		TYPE* pDataNew = (TYPE*)realloc(m_pData, newSize * sizeof(TYPE));
-
-		if (pDataNew == nullptr)
-		{
-			MessageBox(NULL, TEXT("Resize Error. New data is Nullptr"), TEXT("Error"), MB_OK);
-			return E_INVALIDARG;
-		}
-
-		// change
-		m_pData = pDataNew;
-		m_maxSize = newSize;
-	}
-
-	return S_OK;
-}

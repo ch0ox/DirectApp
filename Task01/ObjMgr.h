@@ -4,6 +4,7 @@
 #define __CHAE_ObjMgr_H
 
 #include "Draw.h"
+#include "Array.h"
 #include <windows.h>
 #include <D3dx9tex.h>
 #include <string>
@@ -48,7 +49,7 @@ typedef struct Node
 {
 	UINT index;
 	Node* pNext;
-};
+}node;
 
 typedef struct OBJVERTEX
 {
@@ -82,6 +83,9 @@ public:
 	LPDIRECT3DTEXTURE9			m_pTexture = nullptr;						// 사용할 텍스쳐
 
 };
+
+
+
 
 
 
@@ -153,30 +157,7 @@ private:
 
 
 
-template<typename TYPE> class CArray
-{
-public:
-	CArray() { m_pData = nullptr; }
 
-	TYPE* GetData() { return m_pData; }
-	TYPE& Get(int index) const
-	{
-		assert(index >= 0 && index < m_size);		// index 가 말이 안되면 중단시켜버리기~
-		return m_pData[index];
-	}
-	int GetSize() const { return m_size; }
-	
-	HRESULT Add(const TYPE& value);
-	HRESULT SetResize(int size);
-	HRESULT Set(int index, const TYPE& value);
-
-private:
-
-protected:
-	TYPE* m_pData = nullptr;
-	int m_size = 0;
-	int m_maxSize = 0;
-};
 
 
 
