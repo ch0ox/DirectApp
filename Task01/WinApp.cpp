@@ -193,7 +193,7 @@ BOOL App::Render()
 LRESULT CALLBACK App::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IParam)
 {
 	HMENU hMenu, hSubMenu; 
-	OPENFILENAME ofn;
+	
 	char str[300] = { 0, };
 	char lpstrFile[MAX_PATH] = "";
 
@@ -243,6 +243,7 @@ LRESULT CALLBACK App::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IPar
 		case ID_FILE_LOAD:
 			// Menu Load Click ?
 			// Load Action Code
+			OPENFILENAME ofn;
 			memset(&ofn, 0, sizeof(OPENFILENAME));
 			ofn.lStructSize = sizeof(OPENFILENAME);
 			ofn.hwndOwner = hWnd;
@@ -263,8 +264,8 @@ LRESULT CALLBACK App::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IPar
 				MessageBox(hWnd, ofn.lpstrFile, TEXT("파일 열기 성공"), MB_OK);
 
 				// TO DO : CObjMgr 클래스 위치 수정
-				CObjMgr obj;
-				if (!obj.ObjLoad(file))
+				
+				if (!m_objMgr.ObjLoad(file))
 				{
 					MessageBox(hWnd, TEXT("Obj Load Failed!"), TEXT("Error"), MB_OK);
 				}
@@ -273,7 +274,7 @@ LRESULT CALLBACK App::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IPar
 			break;
 
 		case ID_ABOUT:
-			MessageBox(NULL, TEXT("과제입니당!"), TEXT("About"), MB_OK);
+			MessageBox(NULL, TEXT("김채원\n과제입니당!"), TEXT("About"), MB_OK);
 			break;
 		}
 		break;

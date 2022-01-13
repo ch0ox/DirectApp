@@ -17,7 +17,8 @@ public:
 	//~CArray();
 
 	int GetSize() const { return m_size; }
-	T* GetData() { return m_pData; }
+	void Remove()		{ SetSize(0); }
+	T* GetData()		{ return m_pData; }
 	T& Get(int index) const
 	{
 		assert(index >= 0 && index < m_size);		// index 가 말이 안되면 중단시켜버리기~
@@ -25,6 +26,7 @@ public:
 	}
 
 	HRESULT Add(const T& value);
+	HRESULT SetSize(int size);
 	HRESULT SetResize(int size);
 	HRESULT Set(int index, const T& value);
 
@@ -71,6 +73,38 @@ HRESULT CArray<T>::Set(int index, const T& value)
 	// Set Data
 	m_pData[index] = value;
 	return S_OK;
+}
+
+template<typename T>
+HRESULT CArray<T>::SetSize(int newSize)
+{
+	int preSize = m_size;
+
+	// 새로 지정할 크기보다 이전 크기가 더 클 경우 
+	if (preSize > newSize)
+	{
+		for (int i = newSize; i < preSize; ++i)
+		{
+			m_pData[i].~T();
+		}
+	}
+
+	HRESULT hr = SetResize(newSize);
+
+	// 새로 지정할 크기가 더 클 경우 공간을 더 생성
+	if (preSize < newSize)
+	{
+		assert(m_pData);
+		if (m_pData)
+		{
+			for (int i = preSize; i < newSize; ++i)
+			{
+				::new (&m_pData[i]) T;
+			}
+		}
+	}
+
+	return hr;
 }
 
 template<typename T> 

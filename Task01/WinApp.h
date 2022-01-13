@@ -46,6 +46,7 @@
 
 #include "DXDriver.h"
 #include "DXInput.h"
+#include "ObjMgr.h"
 
 class CDxDriver;
 class CDxInput;
@@ -76,6 +77,8 @@ public:
 
 	CButton* GetButton() const { return m_pButton; }
 	CTimer* GetTimer() const { return m_pTimer; }
+
+	CObjMgr m_objMgr;
 
 private:
 	VOID ShutDownWindow();

@@ -117,6 +117,8 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file)
 		{
 			anotherLine += std::to_string(lineNum);
 			anotherLine += " ";
+			anotherLine += line;
+			anotherLine += "\n";
 		}
 
 		lineNum++;
@@ -315,12 +317,14 @@ VOID CObjMgr::CreateObjBuffer(CObj obj,CDxDriver* pDriver)
 		memcpy(pVertices, m_vertices.GetData(), m_vertices.GetSize() * m_vtxSize);
 		obj.m_pVB->Unlock();
 
+		m_vertices.Remove();
+
 		VOID* pIndices;
 		obj.m_pIB->Lock(0, m_indexNum, &pIndices, 0);
-		// TO DO : ¼öÁ¤
 		memcpy(pIndices, &m_indices[0], m_indices.size() * m_indexSize);
 		obj.m_pIB->Unlock();
-
+		
+		m_indices.clear();
 	}
 	// SetIndices
 	pDriver->m_pD3DDevice->SetIndices(obj.m_pIB);
