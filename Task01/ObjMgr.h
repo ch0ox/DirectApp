@@ -97,7 +97,7 @@ public:
 
 	BOOL ObjLoad(std::ifstream&);
 	VOID ObjData(std::vector<CObj> objs, class CDxDriver* pDriver);
-	VOID CreateObjBuffer(CObj obj, std::vector<DWORD> idxVec, CDxDriver* pDriver);
+	VOID CreateObjBuffer(CObj obj,CDxDriver* pDriver);
 	VOID ObjDraw(CObjMgr obj, CDxDriver* pDriver);
 	VOID Render(CObjMgr obj, CDxDriver* pDriver);
 
@@ -109,11 +109,11 @@ public:
 
 private:
 	DWORD AddVertex(UINT, OBJVERTEX* pVtx);
-//	bool Check(std::vector<faceVertex>, FACEVERTEX*);
 
 	CArray <Node*>		m_nodes;
 	CArray <OBJVERTEX>	m_vertices;
-	CArray <DWORD>		m_indices;
+//	CArray <DWORD>		m_indices;
+	std::vector<DWORD>	m_indices;
 
 	D3DXMATRIXA16 m_world;
 	bool m_bIsTexturing = FALSE;

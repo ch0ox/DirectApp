@@ -140,14 +140,9 @@ VOID CObjMgr::ObjData(std::vector<CObj> objs, CDxDriver* pDriver)
 	{
 		int f = objs[num].f.size();
 //		std::vector<OBJVERTEX> vtx;
-		std::vector<DWORD> idx;
+//		std::vector<DWORD> idx;
 		OBJVERTEX tmpVtx;
-		
-		/*삭제 예정*/
-		std::vector<FACEVERTEX> fvtx;
-		FACEVERTEX tmpFVtx;
-		std::map<DWORD, OBJVERTEX> vMap;
-		/*삭제 예정*/
+
 
 		for (int i = 0; i < f; i++)
 		{
@@ -157,23 +152,6 @@ VOID CObjMgr::ObjData(std::vector<CObj> objs, CDxDriver* pDriver)
 				v_id = objs[num].f[i].v_pairs[j].d[0];
 				vt_id = objs[num].f[i].v_pairs[j].d[1];
 				vn_id = objs[num].f[i].v_pairs[j].d[2];
-
-
-
-				/*확인중*/
-				// f 저장
-// 				tmpFVtx.v = v_id;
-// 				tmpFVtx.vt = vt_id;
-// 				tmpFVtx.vn = vn_id;
-// 
-// 				bool b = Check(fvtx, &tmpFVtx);
-// 				if (!b)	// 안겹침
-// 				{
-// 					fvtx.push_back(tmpFVtx);
-// 				}
-				
-				/*확인중*/
-
 
 
 				// 정점 좌표 (v)
@@ -212,7 +190,7 @@ VOID CObjMgr::ObjData(std::vector<CObj> objs, CDxDriver* pDriver)
 				{
 					MessageBox(NULL, TEXT("[ index = AddVertex() ] Function Error"), TEXT("Error"), MB_OK);
 				}
-				idx.push_back(index);
+				m_indices.push_back(index);
 				
 			}
 		}
@@ -221,10 +199,9 @@ VOID CObjMgr::ObjData(std::vector<CObj> objs, CDxDriver* pDriver)
 		// obj 하나만 넘겨서 obj 하나에 대한 버퍼 생성.
 		// 해당 obj 에 대한 vertex 벡터 (vec[0], vec[1], ... )			-> 벡터 사용에서 해쉬테이블 사용으로 바꿔서 CreateObjBuffer 수정함.
 		// 각각의 vec 에는 v,vt,vn 정보가 들어있음.
-		CreateObjBuffer(objs[num], idx, pDriver);
+		CreateObjBuffer(objs[num], pDriver);
 //		vtx.clear();
-		idx.clear();
-		fvtx.clear();
+//		idx.clear();
 	}
 
 }
@@ -305,7 +282,7 @@ DWORD CObjMgr::AddVertex(UINT hash, OBJVERTEX* pVtx)
 }
 
 // To Create Obj Buffer. each obj.
-VOID CObjMgr::CreateObjBuffer(CObj obj, std::vector<DWORD> idxVec ,CDxDriver* pDriver)
+VOID CObjMgr::CreateObjBuffer(CObj obj,CDxDriver* pDriver)
 {
 //	if (!vtxVec.empty())
 	{
@@ -316,7 +293,7 @@ VOID CObjMgr::CreateObjBuffer(CObj obj, std::vector<DWORD> idxVec ,CDxDriver* pD
 			MessageBox(NULL, TEXT("Obj Vertex Buffer Error"), TEXT("Error"), MB_OK);
 		}
 
-		if (FAILED(pDriver->m_pD3DDevice->CreateIndexBuffer(idxVec.size() * m_indexSize, 0, m_vFormat, D3DPOOL_MANAGED, &(obj.m_pIB), NULL)))
+		if (FAILED(pDriver->m_pD3DDevice->CreateIndexBuffer(m_indices.size() * m_indexSize, 0, m_vFormat, D3DPOOL_MANAGED, &(obj.m_pIB), NULL)))
 		{
 			MessageBox(NULL, TEXT("Obj Index Buffer Error"), TEXT("Error"), MB_OK);
 		}
@@ -330,7 +307,7 @@ VOID CObjMgr::CreateObjBuffer(CObj obj, std::vector<DWORD> idxVec ,CDxDriver* pD
 		VOID* pIndices;
 		obj.m_pIB->Lock(0, m_indexNum, &pIndices, 0);
 		// TO DO : 수정
-		memcpy(pIndices, &idxVec[0], idxVec.size() * m_indexSize);
+		memcpy(pIndices, &m_indices[0], m_indices.size() * m_indexSize);
 		obj.m_pIB->Unlock();
 
 	}
