@@ -207,20 +207,19 @@ VOID CObjMgr::ObjData(std::vector<CObj> objs, CDxDriver* pDriver)
 				// TO DO : vtx 겹치는지 확인 후 넣기......
 				DWORD index = AddVertex((UINT)j+1, &tmpVtx);		// 몇번째 vtx 인지, 해당 tmp 를 추가할 수 있는지(이전 vtx 와 안겹치는지) 확인.
 																	// 추가할 수 있으면 AddVertex 함수 안에서 vtx 추가.
-				// 겹치지 않는 경우
+				// -1 이 나오면 if 문 다 통과되버림.
 				if (index == (DWORD)-1)								
 				{
-					// 수정
-					index = m_vertices.GetSize();
-					idx.push_back(index);
+					MessageBox(NULL, TEXT("[ index = AddVertex() ] Function Error"), TEXT("Error"), MB_OK);
 				}
+				idx.push_back(index);
 				
 			}
 		}
 
 		// TO DO : Create Buffer
 		// obj 하나만 넘겨서 obj 하나에 대한 버퍼 생성.
-		// 해당 obj 에 대한 vertex 벡터 (vec[0], vec[1], ... )			-> TO DO : 벡터 사용에서 해쉬테이블 사용으로 바꿔서 CreateObjBuffer 수정해야함.
+		// 해당 obj 에 대한 vertex 벡터 (vec[0], vec[1], ... )			-> 벡터 사용에서 해쉬테이블 사용으로 바꿔서 CreateObjBuffer 수정함.
 		// 각각의 vec 에는 v,vt,vn 정보가 들어있음.
 		CreateObjBuffer(objs[num], idx, pDriver);
 //		vtx.clear();
@@ -247,11 +246,12 @@ DWORD CObjMgr::AddVertex(UINT hash, OBJVERTEX* pVtx)
 			OBJVERTEX* pSrc = m_vertices.GetData() + pNode->index;
 
 			// Vertices 에 해당 pVtx 가 있다면
-			// pSrc == pVtx
+			// pSrc == pVtx 같은거 발견!
+			// Exist
 			if (memcmp(pVtx, pSrc, sizeof(OBJVERTEX)) == 0)
 			{
 				bIsExist = TRUE;
-				index = pNode->index;
+				index = pNode->index;	// 원래 있는 index 찾아서 넣기
 				break;
 			}
 			pNode = pNode->pNext;
@@ -277,16 +277,29 @@ DWORD CObjMgr::AddVertex(UINT hash, OBJVERTEX* pVtx)
 		pNewNode->index = index;
 		pNewNode->pNext = nullptr;
 
+		while ((UINT)m_nodes.GetSize() <= hash)
+		{
+			m_nodes.Add(nullptr);
+		}
 
-		delete pNewNode;
-	}
-	// Exist
-	else
-	{
-		// 원래 있는 index 찾아서 넣기
-		index;
-	}
+		Node* pCurNode = m_nodes.Get(hash);
+		if (pCurNode == nullptr)
+		{
+			m_nodes.Set(hash, pNewNode);
+		}
+		else
+		{
+			while (pCurNode->pNext != nullptr)
+			{
+				pCurNode = pCurNode->pNext;
+			}
 
+			// 새 공간 찾았다~
+			pCurNode->pNext = pNewNode;
+		}
+
+		//delete pNewNode;
+	}
 
 	return index;
 }
@@ -436,8 +449,12 @@ CObjModel::~CObjModel()
 template<typename TYPE> HRESULT CArray<TYPE>::Add(const TYPE& value)
 {
 	HRESULT hr;
-	if (FAILED(hr = SetSize(m_size + 1)))
+	// hash table resize
+	if (FAILED(hr = SetResize(m_size + 1)))
+	{
+		MessageBox(NULL, TEXT("Resize Failed!"), TEXT("Error"), MB_OK);
 		return hr;
+	}
 	
 	assert(m_pData != NULL);
 
@@ -449,16 +466,32 @@ template<typename TYPE> HRESULT CArray<TYPE>::Add(const TYPE& value)
 	return S_OK;
 }
 
-template<typename TYPE> HRESULT CArray<TYPE>::SetSize(int size)
+template<typename TYPE> HRESULT CArray<TYPE>::Set(int index, const TYPE& value)
 {
-	if (size < 0)
+	if (index < 0 || index >= m_size)
 	{
+		MessageBox(NULL, TEXT("Set Value Error. Wrong index!"), TEXT("Error"), MB_OK);
 		assert(FALSE);
 		return E_INVALIDARG;
 	}
 
-	// init
-	if (size == 0)
+	// Set Data
+	m_pData[index] = value;
+	return S_OK;
+}
+
+template<typename TYPE> HRESULT CArray<TYPE>::SetResize(int newSize)
+{
+	// Error
+	if (newSize < 0)
+	{
+		MessageBox(NULL, TEXT("Resize Error. Wrong newSize!"), TEXT("Error"), MB_OK);
+		assert(FALSE);
+		return E_INVALIDARG;
+	}
+
+	// Init
+	if (newSize == 0)
 	{
 		if (m_pData)
 		{
@@ -468,9 +501,32 @@ template<typename TYPE> HRESULT CArray<TYPE>::SetSize(int size)
 		m_size = 0;
 		m_maxSize = 0;
 	}
-	else if (m_pData == nullptr || size > m_maxSize)
+	// Resize
+	else if (m_pData == nullptr || newSize > m_maxSize)
 	{
+		int initSize = 16;
+		int growBy = (m_maxSize == 0) ? initSize : m_maxSize;
 
+		if ((UINT)m_maxSize + (UINT)growBy > (UINT)INT_MAX)
+			growBy = INT_MAX - m_maxSize;
+
+		// more bigger ?
+		newSize = __max(newSize, m_maxSize + growBy);
+
+		if (sizeof(TYPE) > UINT_MAX / (UINT)newSize)
+			return E_INVALIDARG;
+
+		TYPE* pDataNew = (TYPE*)realloc(m_pData, newSize * sizeof(TYPE));
+
+		if (pDataNew == nullptr)
+		{
+			MessageBox(NULL, TEXT("Resize Error. New data is Nullptr"), TEXT("Error"), MB_OK);
+			return E_INVALIDARG;
+		}
+
+		// change
+		m_pData = pDataNew;
+		m_maxSize = newSize;
 	}
 
 	return S_OK;

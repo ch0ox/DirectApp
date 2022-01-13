@@ -97,7 +97,7 @@ public:
 
 	BOOL ObjLoad(std::ifstream&);
 	VOID ObjData(std::vector<CObj> objs, class CDxDriver* pDriver);
-	VOID CreateObjBuffer(CObj obj, std::vector<OBJVERTEX> vec, std::vector<DWORD> idxVec, CDxDriver* pDriver);
+	VOID CreateObjBuffer(CObj obj, std::vector<DWORD> idxVec, CDxDriver* pDriver);
 	VOID ObjDraw(CObjMgr obj, CDxDriver* pDriver);
 	VOID Render(CObjMgr obj, CDxDriver* pDriver);
 
@@ -167,7 +167,8 @@ public:
 	int GetSize() const { return m_size; }
 	
 	HRESULT Add(const TYPE& value);
-	HRESULT SetSize(int size);
+	HRESULT SetResize(int size);
+	HRESULT Set(int index, const TYPE& value);
 
 private:
 
