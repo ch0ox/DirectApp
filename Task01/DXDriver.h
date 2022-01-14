@@ -73,9 +73,9 @@ public:
 	HRESULT SetTexture(UINT texture);
 
 	UINT CreateObjVertexBuffer(UINT length, DWORD usage, DWORD fvf, D3DPOOL pool);
-	UINT CreateObjIndexBuffer();
-	HRESULT CopyObjVertexBuffer();
-	HRESULT CopyObjIndexBuffer();
+	UINT CreateObjIndexBuffer(UINT length, DWORD usage, D3DFORMAT format, D3DPOOL pool);
+	HRESULT CopyObjVertexBuffer(UINT index, const void* p_src, int size);
+	HRESULT CopyObjIndexBuffer(UINT index, const void* p_src, int p_size);
 
 	CDraw* m_pDraw;
 	CMouse* m_pMouse;

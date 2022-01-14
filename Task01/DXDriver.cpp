@@ -127,7 +127,6 @@ HRESULT CDxDriver::InitVB()
 
 HRESULT CDxDriver::InitGeometry()
 {
-
 	m_pDraw->CreateButton();
 	m_pDraw->TriangleInit();
 
@@ -232,9 +231,12 @@ BOOL CDxDriver::Render(CDxInput* pInput)
 	if (SUCCEEDED(m_pD3DDevice->BeginScene()))
 	{
 		Drawing();
-		// TO DO : obj 파일이 있다면 draw 해주기
-		// obj drawing
 
+		// TO DO : obj 파일이 있다면 draw 해주기
+		if (m_pObjMgr)
+		{
+			// obj drawing Rendering
+		}
 
 		m_pD3DDevice->EndScene();
 	}
@@ -414,21 +416,61 @@ UINT CDxDriver::CreateObjVertexBuffer(UINT length, DWORD usage,DWORD fvf, D3DPOO
 	return index;
 }
 
-HRESULT CDxDriver::CopyObjVertexBuffer()
-{
-	return S_OK;
-}
-
-UINT CDxDriver::CreateObjIndexBuffer()
+UINT CDxDriver::CreateObjIndexBuffer(UINT length, DWORD usage, D3DFORMAT format, D3DPOOL pool)
 {
 	UINT index = -1;
+	if (m_pD3DDevice == nullptr)
+	{
+		MessageBox(NULL, TEXT("There's no d3ddevice."), TEXT("Error"), MB_OK);
+		return index;
+	}
 
+	LPDIRECT3DINDEXBUFFER9 buffer = nullptr;
+	if (FAILED(m_pD3DDevice->CreateIndexBuffer(length, usage, format, pool, &buffer, nullptr)))
+		return index;
+
+	index = (UINT)m_pIndexBufferList.size();
+	m_pIndexBufferList.push_back(buffer);
 
 	return index;
 }
 
-HRESULT CDxDriver::CopyObjIndexBuffer()
+HRESULT CDxDriver::CopyObjVertexBuffer(UINT index, const void* p_src, int p_size)
 {
+	if (m_pD3DDevice == nullptr)
+	{
+		MessageBox(NULL, TEXT("There's no d3ddevice."), TEXT("Error"), MB_OK);
+		return E_FAIL;
+	}
+
+	if (index == -1 || index >= m_pVertexBufferList.size())
+		return E_FAIL;
+
+	VOID* pVertices;
+	m_pVertexBufferList[index]->Lock(0, 0, &pVertices, 0);
+	memcpy(pVertices, p_src, p_size);
+	m_pVertexBufferList[index]->Unlock();
+
+	return S_OK;
+}
+
+
+HRESULT CDxDriver::CopyObjIndexBuffer(UINT index, const void* p_src, int p_size)
+{
+	if (m_pD3DDevice == nullptr)
+	{
+		MessageBox(NULL, TEXT("There's no d3ddevice."), TEXT("Error"), MB_OK);
+		return E_FAIL;
+	}
+
+	if (index == -1 || index >= m_pVertexBufferList.size())
+		return E_FAIL;
+
+	VOID* pIndices;
+	m_pIndexBufferList[index]->Lock(0, 0, &pIndices, 0);
+	memcpy(pIndices, p_src, p_size);
+	m_pIndexBufferList[index]->Unlock();
+
 	return S_OK;
 }
 

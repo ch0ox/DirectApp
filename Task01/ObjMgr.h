@@ -11,6 +11,7 @@
 #include <vector>
 #include <fstream>
 #include <map>
+
 #define START_CONTEXT 2
 #define START_CONTEXT_else 3
 
@@ -108,6 +109,8 @@ public:
 	VOID Render(CObjMgr obj, CDxDriver* pDriver);
 
 	DWORD GetFVF() { return m_dwFVF; }
+	DWORD AddVertex(UINT, OBJVERTEX* pVtx);
+	VOID DeleteNode();
 
 	std::vector <CObj> m_objs;								// Objects Vector
 	std::vector <FLOAT> StrtokFloat(char*, char*);
@@ -120,7 +123,7 @@ public:
 	std::vector<DWORD>	m_indices;
 
 private:
-	DWORD AddVertex(UINT, OBJVERTEX* pVtx);
+	
 
 	D3DXMATRIXA16 m_world;
 	bool m_bIsTexturing = FALSE;

@@ -206,9 +206,9 @@ VOID CObjMgr::ObjData(CDxDriver* pDriver)
 				}
 
 				// TO DO : vtx 겹치는지 확인 후 넣기......
-				DWORD index = AddVertex((UINT)j+1, &tmpVtx);		// 몇번째 vtx 인지, 해당 tmp 를 추가할 수 있는지(이전 vtx 와 안겹치는지) 확인.
+				DWORD index = AddVertex((UINT)j, &tmpVtx);		// 몇번째 vtx 인지, 해당 tmp 를 추가할 수 있는지(이전 vtx 와 안겹치는지) 확인.
 																	// 추가할 수 있으면 AddVertex 함수 안에서 vtx 추가.
-				// -1 이 나오면 if 문 다 통과되버림.
+
 				if (index == (DWORD)-1)								
 				{
 					MessageBox(NULL, TEXT("[ index = AddVertex() ] Function Error"), TEXT("Error"), MB_OK);
@@ -222,9 +222,11 @@ VOID CObjMgr::ObjData(CDxDriver* pDriver)
 		// obj 하나만 넘겨서 obj 하나에 대한 버퍼 생성.
 		// 해당 obj 에 대한 vertex 벡터 (vec[0], vec[1], ... )			-> 벡터 사용에서 해쉬테이블 사용으로 바꿔서 CreateObjBuffer 수정함.
 		// 각각의 vec 에는 v,vt,vn 정보가 들어있음.
-		//CreateObjBuffer(m_objs[num], pDriver);
+		
 //		vtx.clear();
 //		idx.clear();
+
+		CreateObjBuffer(m_objs[num], pDriver);
 	}
 	
 
@@ -242,7 +244,8 @@ DWORD CObjMgr::AddVertex(UINT hash, OBJVERTEX* pVtx)
 	{
 		Node* pNode = m_nodes.Get(hash);
 		// Node Loop
-		while (pNode != NULL)
+		// TO DO : 수정 - while 문에 두번째부터 안들어옴 (pNode->pNext 가 nullptr이 나옴)
+		while (pNode != nullptr)
 		{
 			OBJVERTEX* pSrc = m_vertices.GetData() + pNode->index;
 
@@ -284,6 +287,7 @@ DWORD CObjMgr::AddVertex(UINT hash, OBJVERTEX* pVtx)
 		}
 
 		Node* pCurNode = m_nodes.Get(hash);
+
 		if (pCurNode == nullptr)
 		{
 			m_nodes.Set(hash, pNewNode);
@@ -295,14 +299,28 @@ DWORD CObjMgr::AddVertex(UINT hash, OBJVERTEX* pVtx)
 				pCurNode = pCurNode->pNext;
 			}
 
-			// 새 공간 찾았다~
+			// 새 공간 찾았다~ 연결
 			pCurNode->pNext = pNewNode;
 		}
-
-		//delete pNewNode;
 	}
 
 	return index;
+}
+
+VOID CObjMgr::DeleteNode()
+{
+	for (int i = 0; i < m_nodes.GetSize(); i++)
+	{
+		Node* pNode = m_nodes.Get(i);
+		while (pNode != nullptr)
+		{
+			Node* pNext = pNode->pNext;
+			delete pNode;
+			pNode = nullptr;
+
+			pNode = pNext;
+		}
+	}
 }
 
 // To Create Obj Buffer. each obj.
@@ -317,43 +335,45 @@ VOID CObjMgr::CreateObjBuffer(CObj obj,CDxDriver* pDriver)
 // 		{
 // 			MessageBox(NULL, TEXT("Obj Vertex Buffer Error"), TEXT("Error"), MB_OK);
 // 		}
+// 		VOID* pVertices;
+// 		obj.m_pVB->Lock(0, m_vtxNum, &pVertices, 0);
+// 		memcpy(pVertices, m_vertices.GetData(), m_vertices.GetSize() * m_vtxSize);
+// 		obj.m_pVB->Unlock();
+
+// 		if (FAILED(pDriver->m_pD3DDevice->CreateIndexBuffer(m_indices.size() * m_indexSize, 0, m_vFormat, D3DPOOL_MANAGED, &(obj.m_pIB), nullptr)))
+// 		{
+// 			MessageBox(NULL, TEXT("Obj Index Buffer Error"), TEXT("Error"), MB_OK);
+// 		}
+// 		VOID* pIndices;
+// 		obj.m_pIB->Lock(0, m_indexNum, &pIndices, 0);
+// 		memcpy(pIndices, &m_indices[0], m_indices.size() * m_indexSize);
+// 		obj.m_pIB->Unlock();
+
+
 		UINT index = pDriver->CreateObjVertexBuffer(m_vertices.GetSize() * m_vtxSize, 0, m_dwFVF, D3DPOOL_MANAGED);
 		if (index == (UINT)-1)
 			return;
 
-		HRESULT hr = pDriver->CopyObjVertexBuffer();
+		HRESULT hr = pDriver->CopyObjVertexBuffer(index, m_vertices.GetData(), sizeof(m_vertices));
+		if (FAILED(hr))
+			return;
 
+		index = pDriver->CreateObjIndexBuffer(m_indices.size() * m_indexSize, 0, m_vFormat, D3DPOOL_MANAGED);
+		if (index == (UINT)-1)
+			return;
 
+		hr = pDriver->CopyObjIndexBuffer(index, &m_indices[0], sizeof(m_indices));
 
-		if (FAILED(pDriver->m_pD3DDevice->CreateIndexBuffer(m_indices.size() * m_indexSize, 0, m_vFormat, D3DPOOL_MANAGED, &(obj.m_pIB), nullptr)))
-		{
-			MessageBox(NULL, TEXT("Obj Index Buffer Error"), TEXT("Error"), MB_OK);
-		}
-
-		/*///////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
-
-		// TO DO : VB, IB 위치 수정 ( 현재는 obj 마다 obj class 에 멤버변수로 들어가 있음 )  -> DxDriver CopyBuffer 로 수정
-
-		VOID* pVertices;
-		obj.m_pVB->Lock(0, m_vtxNum, &pVertices, 0);
-		memcpy(pVertices, m_vertices.GetData(), m_vertices.GetSize() * m_vtxSize);
-		obj.m_pVB->Unlock();
 
 		m_vertices.Remove();
-
-		VOID* pIndices;
-		obj.m_pIB->Lock(0, m_indexNum, &pIndices, 0);
-		memcpy(pIndices, &m_indices[0], m_indices.size() * m_indexSize);
-		obj.m_pIB->Unlock();
-		
 		m_indices.clear();
 	}
 	// SetIndices
 	pDriver->m_pD3DDevice->SetIndices(obj.m_pIB);
 
 	// 만들고 넣을지, 만들면서 넣을지..
-	pDriver->m_pVertexBufferList.push_back(obj.m_pVB);
-	pDriver->m_pIndexBufferList.push_back(obj.m_pIB);
+// 	pDriver->m_pVertexBufferList.push_back(obj.m_pVB);
+// 	pDriver->m_pIndexBufferList.push_back(obj.m_pIB);
 }
 
 VOID CObjMgr::ObjDraw(CObjMgr objMgr, CDxDriver* pDriver)
