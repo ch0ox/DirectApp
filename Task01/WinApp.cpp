@@ -169,7 +169,6 @@ BOOL App::Render()
 	}
 }
 
-//CObjMgr* g_pObjMgr = nullptr;
 
 LRESULT CALLBACK App::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IParam)
 {
@@ -194,9 +193,6 @@ LRESULT CALLBACK App::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IPar
 
 		SetMenu(hWnd, hMenu);
 
-		break;
-	case WM_KEYDOWN:
-		//m_pDxInput->pKey->KeyManager(hWnd, msg, wParam, IParam, m_pDXDriver);
 		break;
 
 	case WM_LBUTTONDOWN:
@@ -244,13 +240,11 @@ LRESULT CALLBACK App::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IPar
 				std::ifstream file(filepath);
 				MessageBox(hWnd, ofn.lpstrFile, TEXT("파일 열기 성공"), MB_OK);
 
-				// TO DO : CObjMgr 클래스 위치 수정
-				
-//				if(g_pObjMgr->ObjLoad(file))
-				if (!m_objMgr.ObjLoad(file))
+				if (!m_pDXDriver->m_pObjMgr->ObjLoad(file))
 				{
 					MessageBox(hWnd, TEXT("Obj Load Failed!"), TEXT("Error"), MB_OK);
 				}
+				m_pDXDriver->m_pObjMgr->ObjData(m_pDXDriver);
 				file.close();
 			}
 			break;

@@ -102,14 +102,14 @@ public:
 	virtual ~CObjMgr();
 
 	BOOL ObjLoad(std::ifstream&);
-	VOID ObjData(std::vector<CObj> objs, class CDxDriver* pDriver);
+	VOID ObjData(class CDxDriver* pDriver);
 	VOID CreateObjBuffer(CObj obj,CDxDriver* pDriver);
 	VOID ObjDraw(CObjMgr obj, CDxDriver* pDriver);
 	VOID Render(CObjMgr obj, CDxDriver* pDriver);
 
 	DWORD GetFVF() { return m_dwFVF; }
 
-	std::vector <CObj> objs;								// Objects Vector
+	std::vector <CObj> m_objs;								// Objects Vector
 	std::vector <FLOAT> StrtokFloat(char*, char*);
 	std::vector <std::string> StrtokString(char*, char*);
 	std::vector <INT> StrtokInt(char*, char*);

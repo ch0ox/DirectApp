@@ -121,21 +121,6 @@ HRESULT CButton::CreateTexture(LPDIRECT3DDEVICE9 m_pD3DDevice)
 	return S_OK;
 }
 
-/*
-BOOL CButton::OnLButtonUp(int x, int y)
-{
-	BOOL bRet = FALSE;
-
-	return bRet;
-}
-
-BOOL CButton::OnLButtonDown(int x, int y)
-{
-	BOOL bRet = FALSE;
-
-	return bRet;
-}
-*/
 
 BOOL CButton::IsOnMe(int x, int y, bool windowmode)
 {

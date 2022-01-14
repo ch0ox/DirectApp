@@ -17,6 +17,9 @@
 
 CDxDriver::CDxDriver(App* app)	:	m_pApp(app)
 {
+	m_pObjMgr = nullptr;
+	m_pObjMgr = new CObjMgr();
+
 	m_pDraw = nullptr;
 	m_pDraw = new CDraw();
 	m_pDraw->LinkD3D(this);
@@ -111,6 +114,12 @@ HRESULT CDxDriver::InitVB()
 	m_pDraw->CreateTriangleBuffer();
 	m_pDraw->TextInit();
 
+	// Obj file save after parsing.
+	if (m_pObjMgr)
+	{
+		m_pObjMgr->ObjData(this);
+	}
+	
 	return S_OK;
 }
 
@@ -261,6 +270,12 @@ VOID CDxDriver::Term()
 		m_pDraw = nullptr;
 	}
 
+	if (m_pObjMgr)
+	{
+		delete m_pObjMgr;
+		m_pObjMgr = nullptr;
+	}
+
 	for (int i = 0; i < m_pTextureList.size(); i++)
 	{
 		SAFE_RELEASE(m_pTextureList[i]);
@@ -375,10 +390,54 @@ VOID CDxDriver::DeviceLostRecovery()
 	}
 }
 
+// Obj 의 정보를 가지고 
+UINT CDxDriver::CreateObjVertexBuffer(UINT length, DWORD usage,DWORD fvf, D3DPOOL pool)
+{
+	UINT index = (UINT)-1;
+
+	if (m_pD3DDevice == nullptr)
+	{
+		MessageBox(NULL, TEXT("There's no d3ddevice."), TEXT("Error"), MB_OK);
+		return index;
+	}
+
+	LPDIRECT3DVERTEXBUFFER9 buffer = nullptr;
+	if (FAILED(m_pD3DDevice->CreateVertexBuffer(length, 0, fvf, pool, &buffer, nullptr)))
+	{
+		MessageBox(NULL, TEXT("Obj Create Vertex Buffer Error"), TEXT("Error"), MB_OK);
+		return index;
+	}
+
+	index = (UINT)m_pVertexBufferList.size();
+	m_pVertexBufferList.push_back(buffer);
+
+	return index;
+}
+
+HRESULT CDxDriver::CopyObjVertexBuffer()
+{
+	return S_OK;
+}
+
+UINT CDxDriver::CreateObjIndexBuffer()
+{
+	UINT index = -1;
+
+
+	return index;
+}
+
+HRESULT CDxDriver::CopyObjIndexBuffer()
+{
+	return S_OK;
+}
+
+
 // TO DO : Obj Model Draw
 VOID CDxDriver::DrawObjModel(CObjMgr* p_ObjMgr)
 {
 	m_pD3DDevice->SetFVF(p_ObjMgr->GetFVF());
+	// TO DO : VB 수정해야함
 	m_pD3DDevice->SetStreamSource(0, m_pVertexBufferList[0] // VB
 								, 0, sizeof(OBJVERTEX));
 }

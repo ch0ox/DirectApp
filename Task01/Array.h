@@ -16,8 +16,8 @@ public:
 	CArray() { m_pData = nullptr; }
 	//~CArray();
 
+	void Remove() { SetSize(0); }
 	int GetSize() const { return m_size; }
-	void Remove()		{ SetSize(0); }
 	T* GetData()		{ return m_pData; }
 	T& Get(int index) const
 	{

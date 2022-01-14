@@ -52,16 +52,16 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file)
 		CPoint3i p3i;
 
 		// o
-		if ((line[0] == 'o' && line[1] == ' ') || (line[0] == 'g'  && line[1] == ' '))
+		if ((line[0] == 'o' && line[1] == ' '))	// || (line[0] == 'g'  && line[1] == ' '))
 		{
 			tmpObj.name = line.substr(START_CONTEXT, len - START_CONTEXT);
-			objs.push_back(tmpObj);
+			m_objs.push_back(tmpObj);
 
 			if (objCnt > 0)
 			{
-				prev_v += objs[objCnt - 1].v.size();
-				prev_vt += objs[objCnt - 1].vt.size();
-				prev_vn += objs[objCnt - 1].vn.size();
+				prev_v += m_objs[objCnt - 1].v.size();
+				prev_vt += m_objs[objCnt - 1].vt.size();
+				prev_vn += m_objs[objCnt - 1].vn.size();
 			}
 			objCnt += 1;
 		}
@@ -71,7 +71,7 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file)
 		{
 			vf = StrtokFloat((char*)line.substr(START_CONTEXT, len - START_CONTEXT).c_str(), (char*)" ");
 			p3f.d = { vf[0], vf[1], vf[2] };
-			objs[objCnt - 1].v.push_back(p3f);
+			m_objs[objCnt - 1].v.push_back(p3f);
 		}
 
 		// vt
@@ -79,7 +79,7 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file)
 		{
 			vf = StrtokFloat((char*)line.substr(START_CONTEXT_else, len - START_CONTEXT_else).c_str(), (char*)" ");
 			p2f.d = { vf[0], vf[1] };
-			objs[objCnt - 1].vt.push_back(p2f);
+			m_objs[objCnt - 1].vt.push_back(p2f);
 		}
 
 		// vn
@@ -87,7 +87,7 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file)
 		{
 			vf = StrtokFloat((char*)line.substr(START_CONTEXT_else, len - START_CONTEXT_else).c_str(), (char*)" ");
 			p3f.d = { vf[0], vf[1], vf[2] };
-			objs[objCnt - 1].vn.push_back(p3f);
+			m_objs[objCnt - 1].vn.push_back(p3f);
 		}
 
 		//f
@@ -110,7 +110,7 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file)
 					tmpFace.v_pairs.push_back(p3i);
 				}
 			}
-			objs[objCnt - 1].f.push_back(tmpFace);
+			m_objs[objCnt - 1].f.push_back(tmpFace);
 		}
 		// o, v, vt, vn, f 이외의 Line
 		else
@@ -143,15 +143,25 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file)
 
 // Save Obj File Data.
 /* 이 함수에서 Buffer 생성 까지만.*/
-VOID CObjMgr::ObjData(std::vector<CObj> objs, CDxDriver* pDriver)
+VOID CObjMgr::ObjData(CDxDriver* pDriver)
 {
 	float x, y, z, nx, ny, nz, u, v;
 	int v_id, vt_id, vn_id;
 
-	// num : obj number
-	for (int num = 0; num < objs.size(); num++)
+	// 확인용 코드
+	if (NULL != m_objs.size())
 	{
-		int f = objs[num].f.size();
+		std::string tmp = std::to_string(m_objs.size());
+		std::wstring tmp2 = StringToLPCWSTR(tmp);
+		LPCWSTR lpcwstr = tmp2.c_str();
+
+		MessageBox(0, lpcwstr, TEXT("objs size"), MB_OK);
+	}
+
+	// num : obj number
+	for (int num = 0; num < m_objs.size(); num++)
+	{
+		int f = m_objs[num].f.size();
 //		std::vector<OBJVERTEX> vtx;
 //		std::vector<DWORD> idx;
 		OBJVERTEX tmpVtx;
@@ -159,32 +169,32 @@ VOID CObjMgr::ObjData(std::vector<CObj> objs, CDxDriver* pDriver)
 
 		for (int i = 0; i < f; i++)
 		{
-			int points = objs[num].f[i].v_pairs.size();
+			int points = m_objs[num].f[i].v_pairs.size();
 			for (int j = 0; j < points; j++)
 			{
-				v_id = objs[num].f[i].v_pairs[j].d[0];
-				vt_id = objs[num].f[i].v_pairs[j].d[1];
-				vn_id = objs[num].f[i].v_pairs[j].d[2];
+				v_id = m_objs[num].f[i].v_pairs[j].d[0];
+				vt_id = m_objs[num].f[i].v_pairs[j].d[1];
+				vn_id = m_objs[num].f[i].v_pairs[j].d[2];
 
 
 				// 정점 좌표 (v)
-				tmpVtx.x = objs[num].v[v_id - 1].d[0];
-				tmpVtx.y = objs[num].v[v_id - 1].d[1];
-				tmpVtx.z = objs[num].v[v_id - 1].d[2];
+				tmpVtx.x = m_objs[num].v[v_id - 1].d[0];
+				tmpVtx.y = m_objs[num].v[v_id - 1].d[1];
+				tmpVtx.z = m_objs[num].v[v_id - 1].d[2];
 
 				// 법선 벡터 좌표 (vn)
-				tmpVtx.nx = objs[num].vn[vn_id - 1].d[0];
-				tmpVtx.ny = objs[num].vn[vn_id - 1].d[1];
-				tmpVtx.nz = objs[num].vn[vn_id - 1].d[2];
+				tmpVtx.nx = m_objs[num].vn[vn_id - 1].d[0];
+				tmpVtx.ny = m_objs[num].vn[vn_id - 1].d[1];
+				tmpVtx.nz = m_objs[num].vn[vn_id - 1].d[2];
 
 				// 텍스쳐 좌표 (vt)
 				if (vt_id != NULL)									// If it has Textures ?
 				{
 					m_bIsTexturing = TRUE;
 
-					tmpVtx.u = objs[num].vt[vt_id - 1].d[0];
-					tmpVtx.v = objs[num].vt[vt_id - 1].d[1];
-					objs[num].fvf = D3DFVF_TEXTUREVERTEX;			// Texture 있을 경우, FVF 를 텍스쳐 용으로 설정.
+					tmpVtx.u = m_objs[num].vt[vt_id - 1].d[0];
+					tmpVtx.v = m_objs[num].vt[vt_id - 1].d[1];
+					m_objs[num].fvf = D3DFVF_TEXTUREVERTEX;			// Texture 있을 경우, FVF 를 텍스쳐 용으로 설정.
 				}
 				else
 				{
@@ -192,7 +202,7 @@ VOID CObjMgr::ObjData(std::vector<CObj> objs, CDxDriver* pDriver)
 
 					tmpVtx.u = NULL;
 					tmpVtx.v = NULL;	
-					objs[num].fvf = D3DFVF_NOTEXTUREVERTEX;			// Texture 없을 경우, FVF 를 컬러용(D3DFVF_DIFFUSE)으로 설정.
+					m_objs[num].fvf = D3DFVF_NOTEXTUREVERTEX;			// Texture 없을 경우, FVF 를 컬러용(D3DFVF_DIFFUSE)으로 설정.
 				}
 
 				// TO DO : vtx 겹치는지 확인 후 넣기......
@@ -203,19 +213,20 @@ VOID CObjMgr::ObjData(std::vector<CObj> objs, CDxDriver* pDriver)
 				{
 					MessageBox(NULL, TEXT("[ index = AddVertex() ] Function Error"), TEXT("Error"), MB_OK);
 				}
-				m_indices.push_back(index);
+				index += 1;											// index 는 1부터 시작하기 때문에 +1
+				m_indices.push_back(index);						
 				
 			}
 		}
-
 		// TO DO : Create Buffer
 		// obj 하나만 넘겨서 obj 하나에 대한 버퍼 생성.
 		// 해당 obj 에 대한 vertex 벡터 (vec[0], vec[1], ... )			-> 벡터 사용에서 해쉬테이블 사용으로 바꿔서 CreateObjBuffer 수정함.
 		// 각각의 vec 에는 v,vt,vn 정보가 들어있음.
-		CreateObjBuffer(objs[num], pDriver);
+		//CreateObjBuffer(m_objs[num], pDriver);
 //		vtx.clear();
 //		idx.clear();
 	}
+	
 
 }
 
@@ -301,17 +312,27 @@ VOID CObjMgr::CreateObjBuffer(CObj obj,CDxDriver* pDriver)
 	{
 		m_dwFVF = obj.fvf;
 
-		if (FAILED(pDriver->m_pD3DDevice->CreateVertexBuffer(m_vertices.GetSize() * m_vtxSize, 0, m_dwFVF, D3DPOOL_MANAGED, &(obj.m_pVB), NULL)))
-		{
-			MessageBox(NULL, TEXT("Obj Vertex Buffer Error"), TEXT("Error"), MB_OK);
-		}
+		// TO DO : 이 과정을 DxDriver 에서 할거임
+// 		if (FAILED(pDriver->m_pD3DDevice->CreateVertexBuffer(m_vertices.GetSize() * m_vtxSize, 0, m_dwFVF, D3DPOOL_MANAGED, &(obj.m_pVB), nullptr)))
+// 		{
+// 			MessageBox(NULL, TEXT("Obj Vertex Buffer Error"), TEXT("Error"), MB_OK);
+// 		}
+		UINT index = pDriver->CreateObjVertexBuffer(m_vertices.GetSize() * m_vtxSize, 0, m_dwFVF, D3DPOOL_MANAGED);
+		if (index == (UINT)-1)
+			return;
 
-		if (FAILED(pDriver->m_pD3DDevice->CreateIndexBuffer(m_indices.size() * m_indexSize, 0, m_vFormat, D3DPOOL_MANAGED, &(obj.m_pIB), NULL)))
+		HRESULT hr = pDriver->CopyObjVertexBuffer();
+
+
+
+		if (FAILED(pDriver->m_pD3DDevice->CreateIndexBuffer(m_indices.size() * m_indexSize, 0, m_vFormat, D3DPOOL_MANAGED, &(obj.m_pIB), nullptr)))
 		{
 			MessageBox(NULL, TEXT("Obj Index Buffer Error"), TEXT("Error"), MB_OK);
 		}
 
-		// TO DO : VB, IB 위치 수정 ( 현재는 obj 마다 obj class 에 멤버변수로 들어가 있음 )
+		/*///////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+		// TO DO : VB, IB 위치 수정 ( 현재는 obj 마다 obj class 에 멤버변수로 들어가 있음 )  -> DxDriver CopyBuffer 로 수정
 
 		VOID* pVertices;
 		obj.m_pVB->Lock(0, m_vtxNum, &pVertices, 0);
@@ -330,6 +351,7 @@ VOID CObjMgr::CreateObjBuffer(CObj obj,CDxDriver* pDriver)
 	// SetIndices
 	pDriver->m_pD3DDevice->SetIndices(obj.m_pIB);
 
+	// 만들고 넣을지, 만들면서 넣을지..
 	pDriver->m_pVertexBufferList.push_back(obj.m_pVB);
 	pDriver->m_pIndexBufferList.push_back(obj.m_pIB);
 }
@@ -364,7 +386,7 @@ VOID CObjMgr::Render(CObjMgr obj, CDxDriver* pDriver)
 	pDriver->m_pD3DDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	pDriver->m_pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 
-	pDriver->m_pD3DDevice->SetFVF(D3DFVF_TEXTUREVERTEX);
+	pDriver->m_pD3DDevice->SetFVF(obj.GetFVF());
 	pDriver->m_pD3DDevice->SetTransform(D3DTS_WORLD, &m_world);
 }
 
