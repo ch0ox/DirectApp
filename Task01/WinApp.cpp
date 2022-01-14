@@ -169,13 +169,47 @@ BOOL App::Render()
 	}
 }
 
+VOID App::FileLoad(HWND hWnd)
+{
+	OPENFILENAME ofn;
+	char lpstrFile[MAX_PATH] = "";
+
+	memset(&ofn, 0, sizeof(OPENFILENAME));
+	ofn.lStructSize = sizeof(OPENFILENAME);
+	ofn.hwndOwner = hWnd;
+	ofn.lpstrFilter = L"All File(*.*)\0*.*\0Text File(.txt)\0*.txt\0Obj File(.obj)\0*.obj\0";
+	ofn.lpstrFile = (LPWSTR)lpstrFile;
+	ofn.nMaxFile = 256;
+	ofn.lpstrInitialDir = TEXT("c:\\");
+
+
+	if (GetOpenFileName(&ofn) != 0)
+	{
+		std::string str;
+		std::wstring value = ofn.lpstrFile;
+		str.assign(value.begin(), value.end());
+
+		std::string filepath = str;
+		std::ifstream file(filepath);
+		MessageBox(hWnd, ofn.lpstrFile, TEXT("파일 열기 성공"), MB_OK);
+
+		if (!m_pDXDriver->m_pObjMgr->ObjLoad(file))
+		{
+			MessageBox(hWnd, TEXT("Obj Load Failed!"), TEXT("Error"), MB_OK);
+		}
+		m_pDXDriver->m_pObjMgr->ObjData(m_pDXDriver);
+		m_pDXDriver->m_pObjMgr->DeleteNode();
+		file.close();
+	}
+}
+
 
 LRESULT CALLBACK App::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IParam)
 {
 	HMENU hMenu, hSubMenu; 
 	
 	char str[300] = { 0, };
-	char lpstrFile[MAX_PATH] = "";
+
 
 	switch (msg)
 	{
@@ -220,34 +254,7 @@ LRESULT CALLBACK App::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IPar
 		case ID_FILE_LOAD:
 			// Menu Load Click ?
 			// Load Action Code
-			OPENFILENAME ofn;
-			memset(&ofn, 0, sizeof(OPENFILENAME));
-			ofn.lStructSize = sizeof(OPENFILENAME);
-			ofn.hwndOwner = hWnd;
-			ofn.lpstrFilter = L"All File(*.*)\0*.*\0Text File(.txt)\0*.txt\0Obj File(.obj)\0*.obj\0";
-			ofn.lpstrFile = (LPWSTR)lpstrFile;
-			ofn.nMaxFile = 256;
-			ofn.lpstrInitialDir = TEXT("c:\\");
-
-
-			if (GetOpenFileName(&ofn) != 0)
-			{
-				std::string str;
-				std::wstring value = ofn.lpstrFile;
-				str.assign(value.begin(), value.end());
-
-				std::string filepath = str;
-				std::ifstream file(filepath);
-				MessageBox(hWnd, ofn.lpstrFile, TEXT("파일 열기 성공"), MB_OK);
-
-				if (!m_pDXDriver->m_pObjMgr->ObjLoad(file))
-				{
-					MessageBox(hWnd, TEXT("Obj Load Failed!"), TEXT("Error"), MB_OK);
-				}
-				m_pDXDriver->m_pObjMgr->ObjData(m_pDXDriver);
-				m_pDXDriver->m_pObjMgr->DeleteNode();
-				file.close();
-			}
+			FileLoad(hWnd);
 			break;
 
 		case ID_ABOUT:

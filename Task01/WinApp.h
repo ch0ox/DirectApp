@@ -71,6 +71,7 @@ public:
 	LRESULT CALLBACK MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IParam);
 	VOID Term();
 	BOOL Render();
+	VOID FileLoad(HWND hWnd);
 
 	BOOL WindowMode = TRUE;
 	HWND m_hWnd = nullptr;
