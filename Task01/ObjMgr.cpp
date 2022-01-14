@@ -29,6 +29,11 @@ CObjMgr::~CObjMgr()
 
 BOOL CObjMgr::ObjLoad(std::ifstream& file)
 {
+	if (!m_objs.empty())
+	{
+		m_objs.clear();
+	}
+
 	std::string line = "";
 	std::string anotherLine = "";
 	CObj tmpObj;
@@ -205,8 +210,9 @@ VOID CObjMgr::ObjData(CDxDriver* pDriver)
 					m_objs[num].fvf = D3DFVF_NOTEXTUREVERTEX;			// Texture 없을 경우, FVF 를 컬러용(D3DFVF_DIFFUSE)으로 설정.
 				}
 
-				// TO DO : vtx 겹치는지 확인 후 넣기......
-				DWORD index = AddVertex((UINT)j, &tmpVtx);		// 몇번째 vtx 인지, 해당 tmp 를 추가할 수 있는지(이전 vtx 와 안겹치는지) 확인.
+				// TO DO : AddVertex 함수 수정해야함 자꾸 이상한 값이 들어감
+
+				DWORD index = AddVertex((UINT)j, &tmpVtx);			// 몇번째 vtx 인지, 해당 tmp 를 추가할 수 있는지(이전 vtx 와 안겹치는지) 확인.
 																	// 추가할 수 있으면 AddVertex 함수 안에서 vtx 추가.
 
 				if (index == (DWORD)-1)								
@@ -252,7 +258,7 @@ DWORD CObjMgr::AddVertex(UINT hash, OBJVERTEX* pVtx)
 			// Vertices 에 해당 pVtx 가 있다면
 			// pSrc == pVtx 같은거 발견!
 			// Exist
-			if (memcmp(pVtx, pSrc, sizeof(OBJVERTEX)) == 0)
+			if (memcmp(pVtx, pSrc, sizeof(OBJVERTEX)) == 0)					// TO DO : obj 파일을 두번 불러오는 경우 예외발생함 -> 수정ㄱ
 			{
 				bIsExist = TRUE;
 				index = pNode->index;	// 원래 있는 index 찾아서 넣기

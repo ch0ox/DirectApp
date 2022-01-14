@@ -198,6 +198,7 @@ VOID App::FileLoad(HWND hWnd)
 			MessageBox(hWnd, TEXT("Obj Load Failed!"), TEXT("Error"), MB_OK);
 		}
 		m_pDXDriver->m_pObjMgr->ObjData(m_pDXDriver);
+
 		m_pDXDriver->m_pObjMgr->DeleteNode();
 		file.close();
 	}
@@ -207,9 +208,6 @@ VOID App::FileLoad(HWND hWnd)
 LRESULT CALLBACK App::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IParam)
 {
 	HMENU hMenu, hSubMenu; 
-	
-	char str[300] = { 0, };
-
 
 	switch (msg)
 	{
