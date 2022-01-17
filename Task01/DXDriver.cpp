@@ -151,6 +151,9 @@ VOID CDxDriver::Drawing()
 // 	m_pDraw->SetupMatrices();
 // 	m_pDraw->DrawTriangle();
 
+	// Object Model
+	m_pApp->GetObjMgr()->ObjDraw(,this);
+
 	// Button
 	for (int i = 0; i < static_cast<int>(m_pDraw->m_btnVector.size()); i++)
 	{

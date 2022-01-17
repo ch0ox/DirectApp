@@ -108,12 +108,10 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file)
 				if (vi.size() == 3)
 				{
 					p3i.d = { vi[0] - prev_v, vi[1] - prev_vt, vi[2] - prev_vn };
-					//tmpFace.v_pairs.push_back(p3i);
 				}
 				else		// If it doesn't have vt. 'No Texture Vector'
 				{
 					p3i.d = { vi[0] - prev_v, NULL , vi[1] - prev_vn };
-					//tmpFace.v_pairs.push_back(p3i);
 				}
 
 				if (!m_uMap.count(str[faceOrder]))								// 해당 face string ( ex. _/_/_ ) 이 없음 ?
@@ -133,8 +131,6 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file)
 				}
 
 			}
-			//m_objs[objCnt - 1].f.push_back(tmpFace);
-
 		}
 		// o, v, vt, vn, f 이외의 Line
 		else
@@ -158,6 +154,7 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file)
 		MessageBox(NULL, elseLine, TEXT("예외 라인"), MB_OK);
 	}
 	
+
 
 	return TRUE;
 }

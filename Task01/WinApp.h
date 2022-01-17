@@ -53,6 +53,7 @@ class CDxInput;
 class CButton;
 class CTimer;
 class CObjMgr;
+class CObjModel;
 
 /*------------------------------------------------------------------------*/
 //								
@@ -78,8 +79,9 @@ public:
 
 	CButton* GetButton() const { return m_pButton; }
 	CTimer* GetTimer() const { return m_pTimer; }
+	CObjMgr* GetObjMgr() const { return m_pObjMgr; }
 
-	CObjMgr m_objMgr;
+	//CObjMgr m_objMgr;
 
 private:
 	VOID ShutDownWindow();
@@ -102,6 +104,8 @@ protected:
 	CDxInput* m_pDxInput = nullptr;
 	CButton* m_pButton = nullptr;
 	CTimer* m_pTimer = nullptr;
+	CObjMgr* m_pObjMgr = nullptr;
+	CObjModel* m_pObjModel = nullptr;
 };
 
 

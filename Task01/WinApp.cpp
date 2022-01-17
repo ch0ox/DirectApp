@@ -59,6 +59,14 @@ BOOL App::Initialize()
 	if (!m_pTimer)
 		return FALSE;
 
+	m_pObjMgr = new CObjMgr;
+	if (!m_pObjMgr)
+		return FALSE;
+
+	m_pObjModel = new CObjModel;
+	if (!m_pObjModel)
+		return FALSE;
+	//m_pObjModel->AddObjModel(m_pDXDriver);
 
 	m_pDxInput->Initialize(g_hInstance, m_hWnd);
 	if (!m_pDXDriver->Initialize(m_hWnd))
@@ -72,6 +80,18 @@ BOOL App::Initialize()
 
 VOID App::Term()
 {
+	if (m_pObjModel)
+	{
+		delete m_pObjModel;
+		m_pObjModel = nullptr;
+	}
+
+	if (m_pObjMgr)
+	{
+		delete m_pObjMgr;
+		m_pObjMgr = nullptr;
+	}
+
 	if (m_pTimer)
 	{
 		delete m_pTimer;
@@ -192,29 +212,19 @@ VOID App::FileLoad(HWND hWnd)
 		std::string filepath = str;
 		std::ifstream file(filepath);
 		MessageBox(hWnd, ofn.lpstrFile, TEXT("파일 열기 성공"), MB_OK);
-
-		CObjMgr* objMgr = new CObjMgr();
-
-		if (!objMgr->ObjLoad2(file, objMgr))
-		{
-
-		}
-		if (!m_pDXDriver->m_pObjMgr->ObjLoad(file))
+		
+//		if (!m_pDXDriver->m_pObjMgr->ObjLoad(file))
+		if (!m_pObjMgr->ObjLoad(file))
 		{
 			MessageBox(hWnd, TEXT("Obj Load Failed!"), TEXT("Error"), MB_OK);
 		}
 
-		if (objMgr)
-		{
-			delete objMgr;
-			objMgr = nullptr;
-		}
-		if (m_pDXDriver->m_pObjMgr)
-		{
-			delete m_pDXDriver->m_pObjMgr;
-			m_pDXDriver->m_pObjMgr = nullptr;
-			m_pDXDriver->m_pObjMgr = new CObjMgr();
-		}
+// 		if (m_pDXDriver->m_pObjMgr)
+// 		{
+// 			delete m_pDXDriver->m_pObjMgr;
+// 			m_pDXDriver->m_pObjMgr = nullptr;
+// 			m_pDXDriver->m_pObjMgr = new CObjMgr();
+// 		}
 		file.close();
 	}
 }

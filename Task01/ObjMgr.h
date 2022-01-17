@@ -151,15 +151,20 @@ protected:
 //								CObjModel.h
 /*------------------------------------------------------------------------*/
 
+
+
 class CObjModel
 {
 public:
 	CObjModel();
 	virtual ~CObjModel();
 
+	UINT AddObjModel(CDxDriver* pDriver);
+	VOID Drawing(CDxDriver* pDriver);
+
 private:
 
-
+	std::vector<CObjMgr*> m_ObjMgrList;
 };
 
 
