@@ -4,12 +4,12 @@
 #define __CHAE_ObjMgr_H
 
 #include "Draw.h"
-#include "Array.h"
 #include <windows.h>
 #include <D3dx9tex.h>
 #include <string>
 #include <vector>
 #include <fstream>
+#include <algorithm>
 #include <map>
 #include <unordered_map>
 
@@ -63,11 +63,6 @@ typedef struct OBJVERTEX
 	DWORD color = 0x666666;	// gray
 }objVertex;
 
-typedef struct FACEVERTEX
-{
-	DWORD v, vt, vn;
-}faceVertex;
-
 
 class CObj
 {
@@ -104,14 +99,13 @@ public:
 	virtual ~CObjMgr();
 
 	BOOL ObjLoad(std::ifstream&);
-	VOID ObjData(class CDxDriver* pDriver);
+
 	VOID CreateObjBuffer(CObj obj,CDxDriver* pDriver);
 	VOID ObjDraw(CObjMgr obj, CDxDriver* pDriver);
 	VOID Render(CObjMgr obj, CDxDriver* pDriver);
 
 	DWORD GetFVF() { return m_dwFVF; }
-	DWORD AddVertex(UINT, OBJVERTEX* pVtx);
-	VOID DeleteNode();
+
 
 	std::vector <CObj> m_objs;								// Objects Vector
 	std::vector <FLOAT> StrtokFloat(char*, char*);

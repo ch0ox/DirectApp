@@ -7,12 +7,9 @@
 #include "ObjMgr.h"
 #include "DXDriver.h"
 #include "WinApp.h"
-#include "Array.h"
 #include <iostream>
 #include <fstream>
 #include <stdio.h>
-#include <algorithm>
-#include <map>
 
 #pragma comment(lib, "d3d9.lib")
 #pragma comment(lib, "d3dx9.lib")
@@ -165,6 +162,7 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file)
 	return TRUE;
 }
 
+// Save Obj File Data.
 OBJVERTEX CObjMgr::FaceToVertex(int num, CPoint3i tmp)
 {
 	float x, y, z, nx, ny, nz, u, v;
@@ -205,107 +203,6 @@ OBJVERTEX CObjMgr::FaceToVertex(int num, CPoint3i tmp)
 		m_objs[num].fvf = D3DFVF_NOTEXTUREVERTEX;			// Texture 없을 경우, FVF 를 컬러용(D3DFVF_DIFFUSE)으로 설정.
 	}
 	return tmpVtx;
-}
-
-
-// Save Obj File Data.
-/* 이 함수에서 Buffer 생성 까지만.*/
-VOID CObjMgr::ObjData(CDxDriver* pDriver)
-{
-	float x, y, z, nx, ny, nz, u, v;
-	int v_id, vt_id, vn_id;
-
-	// 확인용 코드
-	if (NULL != m_objs.size())
-	{
-		std::string tmp = std::to_string(m_objs.size());
-		std::wstring tmp2 = StringToLPCWSTR(tmp);
-		LPCWSTR lpcwstr = tmp2.c_str();
-
-		MessageBox(0, lpcwstr, TEXT("objs size"), MB_OK);
-	}
-
-	// num : obj number
-	for (int num = 0; num < m_objs.size(); num++)
-	{
-		int f = m_objs[num].f.size();
-//		std::vector<OBJVERTEX> vtx;
-//		std::vector<DWORD> idx;
-		OBJVERTEX tmpVtx;
-
-
-		for (int i = 0; i < f; i++)
-		{
-			int points = m_objs[num].f[i].v_pairs.size();
-			for (int j = 0; j < points; j++)
-			{
-				v_id = m_objs[num].f[i].v_pairs[j].d[0];
-				vt_id = m_objs[num].f[i].v_pairs[j].d[1];
-				vn_id = m_objs[num].f[i].v_pairs[j].d[2];
-
-
-				// 정점 좌표 (v)
-				tmpVtx.x = m_objs[num].v[v_id - 1].d[0];
-				tmpVtx.y = m_objs[num].v[v_id - 1].d[1];
-				tmpVtx.z = m_objs[num].v[v_id - 1].d[2];
-
-				// 법선 벡터 좌표 (vn)
-				tmpVtx.nx = m_objs[num].vn[vn_id - 1].d[0];
-				tmpVtx.ny = m_objs[num].vn[vn_id - 1].d[1];
-				tmpVtx.nz = m_objs[num].vn[vn_id - 1].d[2];
-
-				// 텍스쳐 좌표 (vt)
-				if (vt_id != NULL)									// If it has Textures ?
-				{
-					m_bIsTexturing = TRUE;
-
-					tmpVtx.u = m_objs[num].vt[vt_id - 1].d[0];
-					tmpVtx.v = m_objs[num].vt[vt_id - 1].d[1];
-					m_objs[num].fvf = D3DFVF_TEXTUREVERTEX;			// Texture 있을 경우, FVF 를 텍스쳐 용으로 설정.
-				}
-				else
-				{
-					m_bIsTexturing = FALSE;
-
-					tmpVtx.u = NULL;
-					tmpVtx.v = NULL;	
-					m_objs[num].fvf = D3DFVF_NOTEXTUREVERTEX;			// Texture 없을 경우, FVF 를 컬러용(D3DFVF_DIFFUSE)으로 설정.
-				}
-
-				// TO DO : AddVertex 함수 수정해야함 자꾸 이상한 값이 들어감
-
-//				DWORD index = AddVertex((UINT)v_id, &tmpVtx);			// 몇번째 vtx 인지, 해당 tmp 를 추가할 수 있는지(이전 vtx 와 안겹치는지) 확인.
-																	// 추가할 수 있으면 AddVertex 함수 안에서 vtx 추가.
-																	// v_id 를 hash 로 대입
-																	// 
-				// TO DO : 여기서 어떤 index 값을 indices 에 넣을지 dword 반환값을 받는,
-				//			FaceVertex 에 v_id , vt_id , vn_id 넣어두고
-				//			v_id 가 저장되어있는 hashTable , vt_id 가 저장되어있는 hashTable, vn_id 가 저장되어있는 hashTable 을 만들어두고
-				//			v_id HashTable : unordered_map<UINT (hash) , Node* > 로 Node는 hash(해당 v_id)값에 연결된 vt_id 의 Node
-				//			vt_id HashTable : unordered_map<UINT (hash) , Node*> 로 Node 는 hash(해당 vt_id) 값이 연결된 vn_id 의 Node
-				//			vn_id HashTable : unordered_map<UINT (hash) , Node*> 로 Node 는 hash (해당 vn_id) 값이 연결된 ...
-
-//				if (index == (DWORD)-1)								
-//				{
-//					MessageBox(NULL, TEXT("[ index = AddVertex() ] Function Error"), TEXT("Error"), MB_OK);
-//				}
-//				index += 1;											// index 는 1부터 시작하기 때문에 +1
-//				m_indices.push_back(index);						
-
-			}
-		}
-		// TO DO : Create Buffer
-		// obj 하나만 넘겨서 obj 하나에 대한 버퍼 생성.
-		// 해당 obj 에 대한 vertex 벡터 (vec[0], vec[1], ... )			-> 벡터 사용에서 해쉬테이블 사용으로 바꿔서 CreateObjBuffer 수정함.
-		// 각각의 vec 에는 v,vt,vn 정보가 들어있음.
-
-//		vtx.clear();
-//		idx.clear();
-
-		//CreateObjBuffer(m_objs[num], pDriver);
-	}
-	
-
 }
 
 

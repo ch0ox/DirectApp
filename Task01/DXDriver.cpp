@@ -117,7 +117,7 @@ HRESULT CDxDriver::InitVB()
 	// Obj file save after parsing.
 	if (m_pObjMgr)
 	{
-		m_pObjMgr->ObjData(this);
+
 	}
 	
 	return S_OK;

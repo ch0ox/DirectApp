@@ -203,8 +203,7 @@ VOID App::FileLoad(HWND hWnd)
 		{
 			MessageBox(hWnd, TEXT("Obj Load Failed!"), TEXT("Error"), MB_OK);
 		}
-		//		m_pDXDriver->m_pObjMgr->ObjData(m_pDXDriver);
-		//		m_pDXDriver->m_pObjMgr->DeleteNode();
+
 		if (objMgr)
 		{
 			delete objMgr;
