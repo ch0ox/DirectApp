@@ -114,10 +114,10 @@ HRESULT CDxDriver::InitVB()
 	m_pDraw->CreateTriangleBuffer();
 	m_pDraw->TextInit();
 
-	// Obj file save after parsing.
-	if (m_pObjMgr)
+	// After Obj file Load
+	if (m_pApp->m_bObjLoad)
 	{
-
+		m_pApp->GetObjMgr()->CreateObjBuffer(this);
 	}
 	
 	return S_OK;
@@ -152,7 +152,11 @@ VOID CDxDriver::Drawing()
 // 	m_pDraw->DrawTriangle();
 
 	// Object Model
-	m_pApp->GetObjMgr()->ObjDraw(,this);
+	if (m_pApp->m_bObjLoad)		// obj file 이 Load 된 후에만 Drawing.
+	{
+		//m_pApp->GetObjMgr()->ObjDraw(, this);
+	}
+
 
 	// Button
 	for (int i = 0; i < static_cast<int>(m_pDraw->m_btnVector.size()); i++)
@@ -161,6 +165,17 @@ VOID CDxDriver::Drawing()
 		m_pDraw->m_btnVector[i]->SetTexture();
 		m_pDraw->DrawRect(m_pDraw->m_btnVector[i]);
 	}
+}
+
+VOID CDxDriver::DrawObjModel(CObjMgr* pObjMgr)
+{
+	// PrimitiveCount : Triangle Count
+	pObjMgr->m_primitiveCount = pObjMgr->m_indices.size() / 3;		
+
+	m_pD3DDevice->SetFVF(pObjMgr->GetFVF());
+	m_pD3DDevice->SetStreamSource(0, m_pVertexBufferList[pObjMgr->m_hVertexBuffer], 0, sizeof(OBJVERTEX));
+	m_pD3DDevice->SetIndices(m_pIndexBufferList[pObjMgr->m_hIndexBuffer]);
+	m_pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, pObjMgr->m_vertices.size(), 0, pObjMgr->m_primitiveCount);		
 }
 
 VOID CDxDriver::InputRender(CDxInput* pInput)
@@ -477,12 +492,3 @@ HRESULT CDxDriver::CopyObjIndexBuffer(UINT index, const void* p_src, int p_size)
 	return S_OK;
 }
 
-
-// TO DO : Obj Model Draw
-VOID CDxDriver::DrawObjModel(CObjMgr* p_ObjMgr)
-{
-	m_pD3DDevice->SetFVF(p_ObjMgr->GetFVF());
-	// TO DO : VB 수정해야함
-	m_pD3DDevice->SetStreamSource(0, m_pVertexBufferList[0] // VB
-								, 0, sizeof(OBJVERTEX));
-}

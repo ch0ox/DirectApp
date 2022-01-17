@@ -94,16 +94,18 @@ public:
 
 class CObjMgr
 {
+	typedef std::vector<OBJVERTEX>			OBJVERTEXLIST;
+	typedef std::vector<DWORD>				INDEXLIST;
 public:
 	CObjMgr();
 	virtual ~CObjMgr();
 
-	BOOL ObjLoad(std::ifstream&);
+	BOOL ObjLoad(std::ifstream&, CDxDriver* pDriver);
+	OBJVERTEX FaceToVertex(int, CPoint3i);
 
-	VOID CreateObjBuffer(CObj obj,CDxDriver* pDriver);
+	VOID CreateObjBuffer(CDxDriver* pDriver);
 	VOID ObjDraw(CObjMgr obj, CDxDriver* pDriver);
 	VOID Render(CObjMgr obj, CDxDriver* pDriver);
-
 	DWORD GetFVF() { return m_dwFVF; }
 
 
@@ -115,14 +117,17 @@ public:
 
 // 	CArray <Node*>		m_nodes;
 // 	CArray <OBJVERTEX>	m_vertices;
-	std::vector<DWORD>	m_indices;
 
-	std::unordered_map<UINT, Node*> m_entry;
-	std::vector<OBJVERTEX>			m_vertices;
-	std::unordered_map<std::string, DWORD> m_uMap;
+	OBJVERTEXLIST							m_vertices;
+	INDEXLIST								m_indices;
+	std::unordered_map<std::string, DWORD>	m_uMap;
+	std::vector<OBJVERTEXLIST>				m_verticesList;
+	std::vector<INDEXLIST>					m_indicesList;
+	std::vector<BOOL>						m_bIsTexturingList;
 
-	OBJVERTEX FaceToVertex(int, CPoint3i);
-	BOOL ObjLoad2(std::ifstream&, CObjMgr*);
+	UINT m_hVertexBuffer;
+	UINT m_hIndexBuffer;
+	int m_primitiveCount = 0;
 
 private:
 	

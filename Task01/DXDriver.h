@@ -76,6 +76,7 @@ public:
 	UINT CreateObjIndexBuffer(UINT length, DWORD usage, D3DFORMAT format, D3DPOOL pool);
 	HRESULT CopyObjVertexBuffer(UINT index, const void* p_src, int size);
 	HRESULT CopyObjIndexBuffer(UINT index, const void* p_src, int p_size);
+	//CObjMgr* AddObjModel(const )
 
 	CDraw* m_pDraw;
 	CMouse* m_pMouse;

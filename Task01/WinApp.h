@@ -75,6 +75,7 @@ public:
 	VOID FileLoad(HWND hWnd);
 
 	BOOL WindowMode = TRUE;
+	BOOL m_bObjLoad = FALSE;
 	HWND m_hWnd = nullptr;
 
 	CButton* GetButton() const { return m_pButton; }

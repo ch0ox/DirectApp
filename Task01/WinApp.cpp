@@ -212,11 +212,15 @@ VOID App::FileLoad(HWND hWnd)
 		std::string filepath = str;
 		std::ifstream file(filepath);
 		MessageBox(hWnd, ofn.lpstrFile, TEXT("파일 열기 성공"), MB_OK);
-		
+
 //		if (!m_pDXDriver->m_pObjMgr->ObjLoad(file))
-		if (!m_pObjMgr->ObjLoad(file))
+		if (!m_pObjMgr->ObjLoad(file, m_pDXDriver))
 		{
 			MessageBox(hWnd, TEXT("Obj Load Failed!"), TEXT("Error"), MB_OK);
+		}
+		else
+		{
+			m_bObjLoad = TRUE;
 		}
 
 // 		if (m_pDXDriver->m_pObjMgr)
