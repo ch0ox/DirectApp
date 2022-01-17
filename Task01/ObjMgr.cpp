@@ -167,6 +167,10 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file, CDxDriver* pDriver)
 			vertices.clear();
 			indices.clear();
 			uMap.clear();
+			if (m_bIsTexturing)
+				m_bIsTexturingList.push_back(TRUE);
+			else
+				m_bIsTexturingList.push_back(FALSE);
 
 			cur_objCnt = objCnt;
 		}
@@ -180,6 +184,10 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file, CDxDriver* pDriver)
 		vertices.clear();
 		indices.clear();
 		uMap.clear();
+		if (m_bIsTexturing)
+			m_bIsTexturingList.push_back(TRUE);
+		else
+			m_bIsTexturingList.push_back(FALSE);
 	}
 
 	std::wstring tmp = StringToLPCWSTR(anotherLine);
@@ -221,7 +229,6 @@ OBJVERTEX CObjMgr::FaceToVertex(int num, CPoint3i tmp)
 	if (vt_id != NULL)									// If it has Textures ?
 	{
 		m_bIsTexturing = TRUE;
-		m_bIsTexturingList[num] = TRUE;
 
 		tmpVtx.u = m_objs[num].vt[vt_id - 1].d[0];
 		tmpVtx.v = m_objs[num].vt[vt_id - 1].d[1];
@@ -231,7 +238,6 @@ OBJVERTEX CObjMgr::FaceToVertex(int num, CPoint3i tmp)
 	else
 	{
 		m_bIsTexturing = FALSE;
-		m_bIsTexturingList[num] = FALSE;
 
 		tmpVtx.u = NULL;
 		tmpVtx.v = NULL;
