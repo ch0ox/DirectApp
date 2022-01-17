@@ -193,13 +193,29 @@ VOID App::FileLoad(HWND hWnd)
 		std::ifstream file(filepath);
 		MessageBox(hWnd, ofn.lpstrFile, TEXT("파일 열기 성공"), MB_OK);
 
+		CObjMgr* objMgr = new CObjMgr();
+
+		if (!objMgr->ObjLoad2(file, objMgr))
+		{
+
+		}
 		if (!m_pDXDriver->m_pObjMgr->ObjLoad(file))
 		{
 			MessageBox(hWnd, TEXT("Obj Load Failed!"), TEXT("Error"), MB_OK);
 		}
-		m_pDXDriver->m_pObjMgr->ObjData(m_pDXDriver);
-
-		m_pDXDriver->m_pObjMgr->DeleteNode();
+		//		m_pDXDriver->m_pObjMgr->ObjData(m_pDXDriver);
+		//		m_pDXDriver->m_pObjMgr->DeleteNode();
+		if (objMgr)
+		{
+			delete objMgr;
+			objMgr = nullptr;
+		}
+		if (m_pDXDriver->m_pObjMgr)
+		{
+			delete m_pDXDriver->m_pObjMgr;
+			m_pDXDriver->m_pObjMgr = nullptr;
+			m_pDXDriver->m_pObjMgr = new CObjMgr();
+		}
 		file.close();
 	}
 }

@@ -39,6 +39,7 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file)
 	CObj tmpObj;
 	int objCnt = 0;
 	int lineNum = 1;
+	DWORD umap_index = 1;
 
 	// prev vertex count
 	int prev_v = 0;
@@ -98,24 +99,45 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file)
 		//f
 		else if (line[0] == 'f' && line[1] == ' ')						// face ?
 		{
+			// str : f 한줄을 띄어쓰기로 나눠둔 vector<string>
 			str = StrtokString((char*)line.substr(START_CONTEXT, len - START_CONTEXT).c_str(), (char*)" ");
 			int vertices = str.size();
+
 			CFace tmpFace;
-			for (int i = 0; i < vertices; i++)
+			// faceOrder : f 한줄 내에서 순서 번호
+			for (int faceOrder = 0; faceOrder < vertices; faceOrder++)
 			{
-				vi = StrtokInt((char*)str[i].c_str(), (char*)"/");
+				vi = StrtokInt((char*)str[faceOrder].c_str(), (char*)"/");
 				if (vi.size() == 3)
 				{
 					p3i.d = { vi[0] - prev_v, vi[1] - prev_vt, vi[2] - prev_vn };
-					tmpFace.v_pairs.push_back(p3i);
+					//tmpFace.v_pairs.push_back(p3i);
 				}
 				else		// If it doesn't have vt. 'No Texture Vector'
 				{
 					p3i.d = { vi[0] - prev_v, NULL , vi[1] - prev_vn };
-					tmpFace.v_pairs.push_back(p3i);
+					//tmpFace.v_pairs.push_back(p3i);
 				}
+
+				if (!m_uMap.count(str[faceOrder]))								// 해당 face string ( ex. _/_/_ ) 이 없음 ?
+				{
+					m_uMap.insert(make_pair(str[faceOrder], umap_index));		// 해당 face string , index INSERT.
+					m_indices.push_back(umap_index);
+					umap_index++;
+
+					// Face 에 해당되는 Vertex 정보
+					OBJVERTEX tmpVtx = FaceToVertex(objCnt - 1, p3i);
+					m_vertices.push_back(tmpVtx);
+				}
+				else															// 해당 face string ( ex. _/_/_ ) 이 있음 ?
+				{
+					DWORD index = m_uMap[str[faceOrder]];
+					m_indices.push_back(index);
+				}
+
 			}
-			m_objs[objCnt - 1].f.push_back(tmpFace);
+			//m_objs[objCnt - 1].f.push_back(tmpFace);
+
 		}
 		// o, v, vt, vn, f 이외의 Line
 		else
@@ -143,7 +165,47 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file)
 	return TRUE;
 }
 
+OBJVERTEX CObjMgr::FaceToVertex(int num, CPoint3i tmp)
+{
+	float x, y, z, nx, ny, nz, u, v;
+	int v_id, vt_id, vn_id;
 
+	OBJVERTEX tmpVtx;
+
+	v_id = tmp.d[0];
+	vt_id = tmp.d[1];
+	vn_id = tmp.d[2];
+
+
+	// 정점 좌표 (v)
+	tmpVtx.x = m_objs[num].v[v_id - 1].d[0];
+	tmpVtx.y = m_objs[num].v[v_id - 1].d[1];
+	tmpVtx.z = m_objs[num].v[v_id - 1].d[2];
+
+	// 법선 벡터 좌표 (vn)
+	tmpVtx.nx = m_objs[num].vn[vn_id - 1].d[0];
+	tmpVtx.ny = m_objs[num].vn[vn_id - 1].d[1];
+	tmpVtx.nz = m_objs[num].vn[vn_id - 1].d[2];
+
+	// 텍스쳐 좌표 (vt)
+	if (vt_id != NULL)									// If it has Textures ?
+	{
+		m_bIsTexturing = TRUE;
+
+		tmpVtx.u = m_objs[num].vt[vt_id - 1].d[0];
+		tmpVtx.v = m_objs[num].vt[vt_id - 1].d[1];
+		m_objs[num].fvf = D3DFVF_TEXTUREVERTEX;			// Texture 있을 경우, FVF 를 텍스쳐 용으로 설정.
+	}
+	else
+	{
+		m_bIsTexturing = FALSE;
+
+		tmpVtx.u = NULL;
+		tmpVtx.v = NULL;
+		m_objs[num].fvf = D3DFVF_NOTEXTUREVERTEX;			// Texture 없을 경우, FVF 를 컬러용(D3DFVF_DIFFUSE)으로 설정.
+	}
+	return tmpVtx;
+}
 
 
 // Save Obj File Data.
@@ -212,122 +274,41 @@ VOID CObjMgr::ObjData(CDxDriver* pDriver)
 
 				// TO DO : AddVertex 함수 수정해야함 자꾸 이상한 값이 들어감
 
-				DWORD index = AddVertex((UINT)j, &tmpVtx);			// 몇번째 vtx 인지, 해당 tmp 를 추가할 수 있는지(이전 vtx 와 안겹치는지) 확인.
+//				DWORD index = AddVertex((UINT)v_id, &tmpVtx);			// 몇번째 vtx 인지, 해당 tmp 를 추가할 수 있는지(이전 vtx 와 안겹치는지) 확인.
 																	// 추가할 수 있으면 AddVertex 함수 안에서 vtx 추가.
+																	// v_id 를 hash 로 대입
+																	// 
+				// TO DO : 여기서 어떤 index 값을 indices 에 넣을지 dword 반환값을 받는,
+				//			FaceVertex 에 v_id , vt_id , vn_id 넣어두고
+				//			v_id 가 저장되어있는 hashTable , vt_id 가 저장되어있는 hashTable, vn_id 가 저장되어있는 hashTable 을 만들어두고
+				//			v_id HashTable : unordered_map<UINT (hash) , Node* > 로 Node는 hash(해당 v_id)값에 연결된 vt_id 의 Node
+				//			vt_id HashTable : unordered_map<UINT (hash) , Node*> 로 Node 는 hash(해당 vt_id) 값이 연결된 vn_id 의 Node
+				//			vn_id HashTable : unordered_map<UINT (hash) , Node*> 로 Node 는 hash (해당 vn_id) 값이 연결된 ...
 
-				if (index == (DWORD)-1)								
-				{
-					MessageBox(NULL, TEXT("[ index = AddVertex() ] Function Error"), TEXT("Error"), MB_OK);
-				}
-				index += 1;											// index 는 1부터 시작하기 때문에 +1
-				m_indices.push_back(index);						
-				
+//				if (index == (DWORD)-1)								
+//				{
+//					MessageBox(NULL, TEXT("[ index = AddVertex() ] Function Error"), TEXT("Error"), MB_OK);
+//				}
+//				index += 1;											// index 는 1부터 시작하기 때문에 +1
+//				m_indices.push_back(index);						
+
 			}
 		}
 		// TO DO : Create Buffer
 		// obj 하나만 넘겨서 obj 하나에 대한 버퍼 생성.
 		// 해당 obj 에 대한 vertex 벡터 (vec[0], vec[1], ... )			-> 벡터 사용에서 해쉬테이블 사용으로 바꿔서 CreateObjBuffer 수정함.
 		// 각각의 vec 에는 v,vt,vn 정보가 들어있음.
-		
+
 //		vtx.clear();
 //		idx.clear();
 
-		CreateObjBuffer(m_objs[num], pDriver);
+		//CreateObjBuffer(m_objs[num], pDriver);
 	}
 	
 
 }
 
 
-
-DWORD CObjMgr::AddVertex(UINT hash, OBJVERTEX* pVtx)
-{
-	DWORD index = (DWORD)-1;
-	BOOL bIsExist = FALSE;
-
-	// TO DO : Is Exist ?
-	if ((UINT)m_nodes.GetSize() > hash)
-	{
-		Node* pNode = m_nodes.Get(hash);
-		// Node Loop
-		// TO DO : 수정 - while 문에 두번째부터 안들어옴 (pNode->pNext 가 nullptr이 나옴)
-		while (pNode != nullptr)
-		{
-			OBJVERTEX* pSrc = m_vertices.GetData() + pNode->index;
-
-			// Vertices 에 해당 pVtx 가 있다면
-			// pSrc == pVtx 같은거 발견!
-			// Exist
-			if (memcmp(pVtx, pSrc, sizeof(OBJVERTEX)) == 0)					// TO DO : obj 파일을 두번 불러오는 경우 예외발생함 -> 수정ㄱ
-			{
-				bIsExist = TRUE;
-				index = pNode->index;	// 원래 있는 index 찾아서 넣기
-				break;
-			}
-			pNode = pNode->pNext;
-		}
-	}
-
-
-	// Not Exist
-	if (!bIsExist)
-	{
-		// Last location index ?
-		index = m_vertices.GetSize();
-		// 해당 vtx 추가
-		m_vertices.Add(*pVtx);
-
-		Node* pNewNode = new Node;
-		if (pNewNode == nullptr)
-		{
-			return (DWORD)-1;
-		}
-
-		// New node 에 index 추가
-		pNewNode->index = index;
-		pNewNode->pNext = nullptr;
-
-		while ((UINT)m_nodes.GetSize() <= hash)
-		{
-			m_nodes.Add(nullptr);
-		}
-
-		Node* pCurNode = m_nodes.Get(hash);
-
-		if (pCurNode == nullptr)
-		{
-			m_nodes.Set(hash, pNewNode);
-		}
-		else
-		{
-			while (pCurNode->pNext != nullptr)
-			{
-				pCurNode = pCurNode->pNext;
-			}
-
-			// 새 공간 찾았다~ 연결
-			pCurNode->pNext = pNewNode;
-		}
-	}
-
-	return index;
-}
-
-VOID CObjMgr::DeleteNode()
-{
-	for (int i = 0; i < m_nodes.GetSize(); i++)
-	{
-		Node* pNode = m_nodes.Get(i);
-		while (pNode != nullptr)
-		{
-			Node* pNext = pNode->pNext;
-			delete pNode;
-			pNode = nullptr;
-
-			pNode = pNext;
-		}
-	}
-}
 
 // To Create Obj Buffer. each obj.
 VOID CObjMgr::CreateObjBuffer(CObj obj,CDxDriver* pDriver)
@@ -336,31 +317,11 @@ VOID CObjMgr::CreateObjBuffer(CObj obj,CDxDriver* pDriver)
 	{
 		m_dwFVF = obj.fvf;
 
-		// TO DO : 이 과정을 DxDriver 에서 할거임
-// 		if (FAILED(pDriver->m_pD3DDevice->CreateVertexBuffer(m_vertices.GetSize() * m_vtxSize, 0, m_dwFVF, D3DPOOL_MANAGED, &(obj.m_pVB), nullptr)))
-// 		{
-// 			MessageBox(NULL, TEXT("Obj Vertex Buffer Error"), TEXT("Error"), MB_OK);
-// 		}
-// 		VOID* pVertices;
-// 		obj.m_pVB->Lock(0, m_vtxNum, &pVertices, 0);
-// 		memcpy(pVertices, m_vertices.GetData(), m_vertices.GetSize() * m_vtxSize);
-// 		obj.m_pVB->Unlock();
-
-// 		if (FAILED(pDriver->m_pD3DDevice->CreateIndexBuffer(m_indices.size() * m_indexSize, 0, m_vFormat, D3DPOOL_MANAGED, &(obj.m_pIB), nullptr)))
-// 		{
-// 			MessageBox(NULL, TEXT("Obj Index Buffer Error"), TEXT("Error"), MB_OK);
-// 		}
-// 		VOID* pIndices;
-// 		obj.m_pIB->Lock(0, m_indexNum, &pIndices, 0);
-// 		memcpy(pIndices, &m_indices[0], m_indices.size() * m_indexSize);
-// 		obj.m_pIB->Unlock();
-
-
-		UINT index = pDriver->CreateObjVertexBuffer(m_vertices.GetSize() * m_vtxSize, 0, m_dwFVF, D3DPOOL_MANAGED);
+		UINT index = pDriver->CreateObjVertexBuffer(m_vertices.size() * m_vtxSize, 0, m_dwFVF, D3DPOOL_MANAGED);
 		if (index == (UINT)-1)
 			return;
 
-		HRESULT hr = pDriver->CopyObjVertexBuffer(index, m_vertices.GetData(), sizeof(m_vertices));
+		HRESULT hr = pDriver->CopyObjVertexBuffer(index, &m_vertices[0], sizeof(m_vertices));
 		if (FAILED(hr))
 			return;
 
@@ -371,7 +332,7 @@ VOID CObjMgr::CreateObjBuffer(CObj obj,CDxDriver* pDriver)
 		hr = pDriver->CopyObjIndexBuffer(index, &m_indices[0], sizeof(m_indices));
 
 
-		m_vertices.Remove();
+		m_vertices.clear();
 		m_indices.clear();
 	}
 	// SetIndices
@@ -473,6 +434,10 @@ std::wstring CObjMgr::StringToLPCWSTR(const std::string& str)
 	return r;
 }
 
+BOOL CObjMgr::ObjLoad2(std::ifstream&, CObjMgr*)
+{
+	return TRUE;
+}
 
 
 // To Save Object Data.

@@ -274,8 +274,8 @@ VOID CDxDriver::Term()
 
 	if (m_pObjMgr)
 	{
-		delete m_pObjMgr;
-		m_pObjMgr = nullptr;
+// 		delete m_pObjMgr;
+// 		m_pObjMgr = nullptr;
 	}
 
 	for (int i = 0; i < m_pTextureList.size(); i++)
@@ -404,7 +404,7 @@ UINT CDxDriver::CreateObjVertexBuffer(UINT length, DWORD usage,DWORD fvf, D3DPOO
 	}
 
 	LPDIRECT3DVERTEXBUFFER9 buffer = nullptr;
-	if (FAILED(m_pD3DDevice->CreateVertexBuffer(length, 0, fvf, pool, &buffer, nullptr)))
+	if (FAILED(m_pD3DDevice->CreateVertexBuffer(length, usage, fvf, pool, &buffer, nullptr)))
 	{
 		MessageBox(NULL, TEXT("Obj Create Vertex Buffer Error"), TEXT("Error"), MB_OK);
 		return index;

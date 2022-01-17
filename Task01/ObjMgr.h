@@ -11,6 +11,7 @@
 #include <vector>
 #include <fstream>
 #include <map>
+#include <unordered_map>
 
 #define START_CONTEXT 2
 #define START_CONTEXT_else 3
@@ -118,9 +119,16 @@ public:
 	std::vector <INT> StrtokInt(char*, char*);
 	std::wstring StringToLPCWSTR(const std::string& str);
 
-	CArray <Node*>		m_nodes;
-	CArray <OBJVERTEX>	m_vertices;
+// 	CArray <Node*>		m_nodes;
+// 	CArray <OBJVERTEX>	m_vertices;
 	std::vector<DWORD>	m_indices;
+
+	std::unordered_map<UINT, Node*> m_entry;
+	std::vector<OBJVERTEX>			m_vertices;
+	std::unordered_map<std::string, DWORD> m_uMap;
+
+	OBJVERTEX FaceToVertex(int, CPoint3i);
+	BOOL ObjLoad2(std::ifstream&, CObjMgr*);
 
 private:
 	
