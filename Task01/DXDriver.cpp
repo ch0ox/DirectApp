@@ -128,7 +128,7 @@ HRESULT CDxDriver::InitVB()
 HRESULT CDxDriver::InitGeometry()
 {
 	m_pDraw->CreateButton();
-	m_pDraw->TriangleInit();
+	//m_pDraw->TriangleInit();
 
 	for (int i = 0; i < static_cast<int>(m_pDraw->m_btnVector.size()); i++)
 	{
@@ -167,16 +167,6 @@ VOID CDxDriver::Drawing()
 	}
 }
 
-VOID CDxDriver::DrawObjModel(CObjMgr* pObjMgr)
-{
-	// PrimitiveCount : Triangle Count
-	pObjMgr->m_primitiveCount = pObjMgr->m_indices.size() / 3;		
-
-	m_pD3DDevice->SetFVF(pObjMgr->GetFVF());
-	m_pD3DDevice->SetStreamSource(0, m_pVertexBufferList[pObjMgr->m_hVertexBuffer], 0, sizeof(OBJVERTEX));
-	m_pD3DDevice->SetIndices(m_pIndexBufferList[pObjMgr->m_hIndexBuffer]);
-	m_pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, pObjMgr->m_vertices.size(), 0, pObjMgr->m_primitiveCount);		
-}
 
 VOID CDxDriver::InputRender(CDxInput* pInput)
 {
@@ -492,3 +482,14 @@ HRESULT CDxDriver::CopyObjIndexBuffer(UINT index, const void* p_src, int p_size)
 	return S_OK;
 }
 
+
+VOID CDxDriver::DrawObjModel(CObjMgr* pObjMgr)
+{
+	// PrimitiveCount : Triangle Count
+	pObjMgr->m_primitiveCount = pObjMgr->m_indices.size() / 3;
+
+	m_pD3DDevice->SetFVF(pObjMgr->GetFVF());
+	m_pD3DDevice->SetStreamSource(0, m_pVertexBufferList[pObjMgr->m_hVertexBuffer], 0, sizeof(OBJVERTEX));
+	m_pD3DDevice->SetIndices(m_pIndexBufferList[pObjMgr->m_hIndexBuffer]);
+	m_pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP, 0, 0, pObjMgr->m_vertices.size(), 0, pObjMgr->m_primitiveCount);
+}

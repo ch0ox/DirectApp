@@ -1,1 +1,24 @@
-﻿  Task01.vcxproj -> \\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Debug\Task01.exe
+﻿  ObjMgr.cpp
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\Draw.h(80,26): warning C4324: 'CDraw': 맞춤 지정자 때문에 구조체가 채워졌습니다.
+  C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.h(40,1): warning C4005: 'SAFE_RELEASE': 매크로 재정의
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\DXDriver.h(46): message : 'SAFE_RELEASE'의 이전 정의를 참조하십시오.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(212,14): warning C4101: 'z' :참조되지 않은 지역 변수입니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(212,17): warning C4101: 'nx' :참조되지 않은 지역 변수입니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(212,32): warning C4101: 'v' :참조되지 않은 지역 변수입니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(212,21): warning C4101: 'ny' :참조되지 않은 지역 변수입니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(212,11): warning C4101: 'y' :참조되지 않은 지역 변수입니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(212,25): warning C4101: 'nz' :참조되지 않은 지역 변수입니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(212,8): warning C4101: 'x' :참조되지 않은 지역 변수입니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(212,29): warning C4101: 'u' :참조되지 않은 지역 변수입니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(267,21): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(282): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(290): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(282,77): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(290,67): warning C4238: 비표준 확장이 사용됨: 클래스 rvalue를 lvalue로 사용했습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(343,21): warning C4244: '인수': 'double'에서 '_Ty'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Ty=FLOAT
+          ]
+  Task01.vcxproj -> \\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Debug\Task01.exe

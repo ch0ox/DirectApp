@@ -115,6 +115,8 @@ public:
 	std::vector <INT> StrtokInt(char*, char*);
 	std::wstring StringToLPCWSTR(const std::string& str);
 
+	const D3DXMATRIX& GetMatWorld() const;
+
 // 	CArray <Node*>		m_nodes;
 // 	CArray <OBJVERTEX>	m_vertices;
 
@@ -123,11 +125,15 @@ public:
 	std::unordered_map<std::string, DWORD>	m_uMap;
 	std::vector<OBJVERTEXLIST>				m_verticesList;
 	std::vector<INDEXLIST>					m_indicesList;
+	std::vector<int>						m_primCountList;
 	std::vector<BOOL>						m_bIsTexturingList;
 
-	UINT m_hVertexBuffer;
-	UINT m_hIndexBuffer;
-	int m_primitiveCount = 0;
+	UINT									m_hVertexBuffer;
+	UINT									m_hIndexBuffer;
+	int										m_primitiveCount = 0;
+
+	D3DXVECTOR3								m_pos;
+	D3DXMATRIX								m_matWorld;
 
 private:
 	

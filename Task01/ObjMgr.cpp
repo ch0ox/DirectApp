@@ -37,7 +37,7 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file, CDxDriver* pDriver)
 	int objCnt = 0;
 	int cur_objCnt = 1;
 	int lineNum = 1;
-	DWORD umap_index = 1;
+	DWORD umap_index = 0;
 
 	// prev vertex count
 	int prev_v = 0;
@@ -111,6 +111,7 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file, CDxDriver* pDriver)
 			// str : f 한줄을 띄어쓰기로 나눠둔 vector<string>
 			str = StrtokString((char*)line.substr(START_CONTEXT, len - START_CONTEXT).c_str(), (char*)" ");
 			int verticesCnt = str.size();
+			m_primitiveCount += (verticesCnt - 2) ;		// f가 몇개인지 체크 (polygon 개수 = vertex 개수 - 2 )
 
 			CFace tmpFace;
 			// faceOrder : f 한줄 내에서 순서 번호
@@ -164,6 +165,8 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file, CDxDriver* pDriver)
 			// obj 바뀔 때 마다 List 에 Vertex (리스트), Index (리스트) 추가
 			m_verticesList.push_back(vertices);
 			m_indicesList.push_back(indices);
+			m_primCountList.push_back(m_primitiveCount);
+			m_primitiveCount = 0;
 			vertices.clear();
 			indices.clear();
 			uMap.clear();
@@ -181,6 +184,7 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file, CDxDriver* pDriver)
 	{
 		m_verticesList.push_back(vertices);
 		m_indicesList.push_back(indices);
+		m_primCountList.push_back(m_primitiveCount);
 		vertices.clear();
 		indices.clear();
 		uMap.clear();
@@ -307,8 +311,12 @@ VOID CObjMgr::ObjDraw(CObjMgr objMgr, CDxDriver* pDriver)
 
 	// TO DO : Set Matrices
 
-	// TO DO : 좌표에 맞게 그려주기.
-	Render(objMgr, pDriver);
+
+}
+
+const D3DXMATRIX& CObjMgr::GetMatWorld() const
+{
+	return m_matWorld;
 }
 
 VOID CObjMgr::Render(CObjMgr obj, CDxDriver* pDriver)
