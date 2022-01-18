@@ -48,8 +48,8 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file, CDxDriver* pDriver)
 
 	OBJVERTEXLIST							vertices;
 	INDEXLIST								strip_indices;				// triangle strip
+	INDEXLIST								list_indices;				// trinagle list
 
-	// 
 	std::unordered_map<std::string, DWORD>	uMap;
 
 	// One by One Line
@@ -64,6 +64,7 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file, CDxDriver* pDriver)
 		CPoint3i p3i;
 		
 		b_face = FALSE;
+		
 
 
 		// o
@@ -133,6 +134,7 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file, CDxDriver* pDriver)
 				{
 					uMap.insert(make_pair(str[faceOrder], umap_index));		// 해당 face string , index INSERT.
 					strip_indices.push_back(umap_index);
+					list_indices.push_back(umap_index);
 					umap_index++;
 
 					// Face 에 해당되는 Vertex 정보
@@ -143,6 +145,7 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file, CDxDriver* pDriver)
 				{
 					DWORD index = uMap[str[faceOrder]];
 					strip_indices.push_back(index);
+					list_indices.push_back(index);
 				}
 
 			}
@@ -161,12 +164,22 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file, CDxDriver* pDriver)
 		vi.clear();
 		str.clear();
 
+		// Face 한줄 읽고나서 traingle_list Add
+		if (b_face && (!list_indices.empty()))
+		{
+			// Make (triangle_list) Indices List.
+			SaveToListIndices(list_indices);
+
+			list_indices.clear();
+		}
+
 		// obj 가 2개 이상일 경우에만 if 문에 들어감.
 		if (cur_objCnt < objCnt)
 		{
 			// obj 바뀔 때 마다 List 에 Vertex (리스트), Index (리스트) 추가
 			m_verticesList.push_back(vertices);
 			m_indicesList.push_back(strip_indices);
+			m_list_indicesList.push_back(m_list_indices);
 			m_primCountList.push_back(m_primitiveCount);
 			m_primitiveCount = 0;
 			vertices.clear();
@@ -186,6 +199,7 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file, CDxDriver* pDriver)
 	{
 		m_verticesList.push_back(vertices);
 		m_indicesList.push_back(strip_indices);
+		m_list_indicesList.push_back(m_list_indices);
 		m_primCountList.push_back(m_primitiveCount);
 		vertices.clear();
 		strip_indices.clear();
@@ -195,9 +209,6 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file, CDxDriver* pDriver)
 		else
 			m_bIsTexturingList.push_back(FALSE);
 	}
-
-	// Make (triangle_list) Indices List.
-	SaveToListIndices();
 
 	std::wstring tmp = StringToLPCWSTR(anotherLine);
 	LPCWSTR elseLine = tmp.c_str();
@@ -255,7 +266,7 @@ OBJVERTEX CObjMgr::FaceToVertex(int num, CPoint3i tmp)
 	return tmpVtx;
 }
 
-VOID CObjMgr::SaveToListIndices()
+VOID CObjMgr::SaveToListIndices(INDEXLIST list)
 {
 //	CCW
 //	-------------------------
@@ -268,39 +279,39 @@ VOID CObjMgr::SaveToListIndices()
 //  -------------------------
 // STRIP : { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }
 // LIST  : { {1,2,3}, {3,2,4}, {3,4,5}, {5,4,6}, {5,6,7}, {7,6,8}, {7,8,9}, {9,8,10} }
+	
+// TO DO : 받아온 list -> list_indices 에 triangle_list 에 맞게 조합.
 
 	INDEXLIST::iterator indiceIter;
 	INDEXLIST::iterator tmpIter;
-	int flag = 0;
 
-	for (int i = 0; i < m_indicesList.size(); i++)
+
+	// triangle list
+	INDEXLIST list_indices;				
+	// triangle strip iterator
+	indiceIter = list.begin();
+	tmpIter = indiceIter;
+
+	for (; list.end() != indiceIter; ++indiceIter)
 	{
-		// triangle list
-		INDEXLIST list_indices;				
-		// triangle strip iterator
-		indiceIter = m_indicesList[i].begin();
+		indiceIter = tmpIter;
+
+		list_indices.push_back(*indiceIter);
+		list_indices.push_back(*(++indiceIter));
+		list_indices.push_back(*(++indiceIter));
+
 		tmpIter = indiceIter;
 
-		for (; m_indicesList[i].end() != indiceIter; ++indiceIter)
-		{
-			indiceIter = tmpIter;
-
-			list_indices.push_back(*indiceIter);
-			list_indices.push_back(*(++indiceIter));
-			list_indices.push_back(*(++indiceIter));
-
-			tmpIter = indiceIter;
-
-			list_indices.push_back(*indiceIter);
-			list_indices.push_back(*(--indiceIter));
-			indiceIter++;
-			list_indices.push_back(*(++indiceIter));
-		}
-		
+		list_indices.push_back(*indiceIter);
+		list_indices.push_back(*(--indiceIter));
+		indiceIter++;
+		list_indices.push_back(*(++indiceIter));
 	}
 
-
-
+	// list_indices -> m_list_indices 에 insert.
+	m_list_indices.insert( m_list_indices.end(), list_indices.begin(), list_indices.end() );
+	
+	list_indices.clear();
 }
 
 // To Create Obj Buffer. each obj.

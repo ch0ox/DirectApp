@@ -102,6 +102,7 @@ public:
 
 	BOOL ObjLoad(std::ifstream&, CDxDriver* pDriver);
 	OBJVERTEX FaceToVertex(int, CPoint3i);
+	VOID SaveToListIndices(INDEXLIST list);
 
 	VOID CreateObjBuffer(CDxDriver* pDriver);
 	VOID ObjDraw(CDxDriver* pDriver);
@@ -116,13 +117,12 @@ public:
 	std::wstring StringToLPCWSTR(const std::string& str);
 
 	const D3DXMATRIX& GetMatWorld() const;
-	VOID SaveToListIndices();
 
 // 	CArray <Node*>		m_nodes;
 // 	CArray <OBJVERTEX>	m_vertices;
 
 	OBJVERTEXLIST							m_vertices;
-	INDEXLIST								m_indices;
+	INDEXLIST								m_list_indices;
 	std::unordered_map<std::string, DWORD>	m_uMap;
 	std::vector<OBJVERTEXLIST>				m_verticesList;
 	std::vector<INDEXLIST>					m_indicesList;
