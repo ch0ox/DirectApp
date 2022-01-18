@@ -344,18 +344,27 @@ VOID CObjMgr::CreateObjBuffer(CDxDriver* pDriver)
 			if (index == (UINT)-1)
 				return;
 
-
 			HRESULT hr = pDriver->CopyObjVertexBuffer(index, &m_verticesList[i].begin(), sizeof(m_verticesList[i]));
 			if (FAILED(hr))
 				return;
 
-			index = pDriver->CreateObjIndexBuffer(m_indicesList[i].size() * m_indexSize, 0, m_vFormat, D3DPOOL_MANAGED);
+			// List
+			index = pDriver->CreateObjIndexBuffer(m_list_indicesList[i].size() * m_indexSize, 0, m_vFormat, D3DPOOL_MANAGED);
 			if (index == (UINT)-1)
 				return;
 
-			hr = pDriver->CopyObjIndexBuffer(index, &m_indicesList[i].begin(), sizeof(m_indicesList[i]));
+			hr = pDriver->CopyObjIndexBuffer(index, &m_list_indicesList[i].begin(), sizeof(m_list_indicesList[i]));
 			if (FAILED(hr))
 				return;
+
+			// Strip
+// 			index = pDriver->CreateObjIndexBuffer(m_indicesList[i].size() * m_indexSize, 0, m_vFormat, D3DPOOL_MANAGED);
+// 			if (index == (UINT)-1)
+// 				return;
+// 
+// 			hr = pDriver->CopyObjIndexBuffer(index, &m_indicesList[i].begin(), sizeof(m_indicesList[i]));
+// 			if (FAILED(hr))
+// 				return;
 		}
 	}
 }
@@ -370,7 +379,10 @@ VOID CObjMgr::ObjDraw(CDxDriver* pDriver)
 
 // Drawing
 
-	pDriver->DrawObjModel(this);
+	//pDriver->DrawObjStripModel(this);
+	pDriver->DrawObjListModel(this);
+
+
 	// or
 // 	for (int i = 0; i < m_verticesList.size(); i++)
 // 	{

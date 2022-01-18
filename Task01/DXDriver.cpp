@@ -476,8 +476,31 @@ HRESULT CDxDriver::CopyObjIndexBuffer(UINT index, const void* p_src, int p_size)
 	return S_OK;
 }
 
+// If Obj Model is Triangle_List Mode, 
+VOID CDxDriver::DrawObjListModel(CObjMgr* pObjMgr)
+{
+	DWORD dwFVF;
 
-VOID CDxDriver::DrawObjModel(CObjMgr* pObjMgr)
+	for (int i = 0; i < pObjMgr->m_verticesList.size(); i++)
+	{
+		if (pObjMgr->m_bIsTexturingList[i])
+			dwFVF = D3DFVF_TEXTUREVERTEX;
+		else
+			dwFVF = D3DFVF_NOTEXTUREVERTEX;
+
+		m_pD3DDevice->SetFVF(dwFVF);
+		m_pD3DDevice->SetStreamSource(0, m_pVertexBufferList[i], 0, sizeof(OBJVERTEX));
+		m_pD3DDevice->SetIndices(m_pIndexBufferList[i]);
+		HRESULT hr = m_pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0,
+														pObjMgr->m_verticesList[i].size(), 0,
+														pObjMgr->m_primCountList[i]);				// PrimitiveCount : Triangle Count
+		if (FAILED(hr))
+			MessageBox(NULL, TEXT("DrawIndexedPrimitive Error"), TEXT("DrawIndexedPrimitive Error"), MB_OK);
+	}
+}
+
+// If Obj Model is Triangle_Strip Mode, 
+VOID CDxDriver::DrawObjStripModel(CObjMgr* pObjMgr)
 {
 	DWORD dwFVF;
 

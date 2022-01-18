@@ -69,7 +69,8 @@ public:
 	VOID ChangeDisplayMode(int mode);
 	VOID DeviceLostRecovery();
 	VOID InputRender(class CDxInput* pInput);
-	VOID DrawObjModel(CObjMgr* p_ObjMgr);
+	VOID DrawObjStripModel(CObjMgr* p_ObjMgr);
+	VOID DrawObjListModel(CObjMgr* p_ObjMgr);
 	HRESULT SetTexture(UINT texture);
 
 	UINT CreateObjVertexBuffer(UINT length, DWORD usage, DWORD fvf, D3DPOOL pool);
