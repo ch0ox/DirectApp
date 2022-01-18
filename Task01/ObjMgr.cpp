@@ -48,7 +48,7 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file, CDxDriver* pDriver)
 
 	OBJVERTEXLIST							vertices;
 	INDEXLIST								strip_indices;				// triangle strip
-	INDEXLIST								list_indices;				// triangle list
+
 	// 
 	std::unordered_map<std::string, DWORD>	uMap;
 
@@ -270,10 +270,32 @@ VOID CObjMgr::SaveToListIndices()
 // LIST  : { {1,2,3}, {3,2,4}, {3,4,5}, {5,4,6}, {5,6,7}, {7,6,8}, {7,8,9}, {9,8,10} }
 
 	INDEXLIST::iterator indiceIter;
+	INDEXLIST::iterator tmpIter;
+	int flag = 0;
 
 	for (int i = 0; i < m_indicesList.size(); i++)
 	{
+		// triangle list
+		INDEXLIST list_indices;				
+		// triangle strip iterator
 		indiceIter = m_indicesList[i].begin();
+		tmpIter = indiceIter;
+
+		for (; m_indicesList[i].end() != indiceIter; ++indiceIter)
+		{
+			indiceIter = tmpIter;
+
+			list_indices.push_back(*indiceIter);
+			list_indices.push_back(*(++indiceIter));
+			list_indices.push_back(*(++indiceIter));
+
+			tmpIter = indiceIter;
+
+			list_indices.push_back(*indiceIter);
+			list_indices.push_back(*(--indiceIter));
+			indiceIter++;
+			list_indices.push_back(*(++indiceIter));
+		}
 		
 	}
 
