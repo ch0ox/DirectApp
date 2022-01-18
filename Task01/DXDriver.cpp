@@ -146,24 +146,23 @@ VOID CDxDriver::Drawing()
 	m_pDraw->SetDuringTime(static_cast<float>(m_pApp->GetTimer()->GetFPS()));
 	m_pDraw->DrawTextFPS();
 
-	// Triangle
-// 	m_pD3DDevice->SetTexture(0, m_pDraw->m_pTexture);
-// 	m_pDraw->SetupMatrices();
-// 	m_pDraw->DrawTriangle();
-
-	// Object Model
-	if (m_pApp->m_bObjLoad)		// obj file 이 Load 된 후에만 Drawing.
-	{
-		m_pApp->GetObjMgr()->ObjDraw(this);
-	}
-
-
 	// Button
 	for (int i = 0; i < static_cast<int>(m_pDraw->m_btnVector.size()); i++)
 	{
 		m_pD3DDevice->SetTexture(0, m_pDraw->m_btnVector[i]->m_pTexture);
 		m_pDraw->m_btnVector[i]->SetTexture();
 		m_pDraw->DrawRect(m_pDraw->m_btnVector[i]);
+	}
+
+	// Triangle
+	m_pD3DDevice->SetTexture(0, m_pDraw->m_pTexture);
+	m_pDraw->SetupMatrices();
+	m_pDraw->DrawTriangle();
+
+	// Object Model
+	if (m_pApp->m_bObjLoad)		// obj file 이 Load 된 후에만 Drawing.
+	{
+		m_pApp->GetObjMgr()->ObjDraw(this);
 	}
 }
 
@@ -520,34 +519,31 @@ VOID CDxDriver::DrawObjStripModel(CObjMgr* pObjMgr)
 		if (FAILED(hr))
 			MessageBox(NULL, TEXT("DrawIndexedPrimitive Error"), TEXT("DrawIndexedPrimitive Error"), MB_OK);
 	}
-	/*
-		if (pObjMgr->m_bIsTexturingList[pObjMgr->m_hVertexBuffer])
-			dwFVF = D3DFVF_TEXTUREVERTEX;
-		else
-			dwFVF = D3DFVF_NOTEXTUREVERTEX;
-
-		m_pD3DDevice->SetFVF(dwFVF);
-		m_pD3DDevice->SetStreamSource(0, m_pVertexBufferList[pObjMgr->m_hVertexBuffer], 0, sizeof(OBJVERTEX));
-		m_pD3DDevice->SetIndices(m_pIndexBufferList[pObjMgr->m_hIndexBuffer]);
-		HRESULT hr = m_pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP, 0, 0,
-														pObjMgr->m_verticesList[pObjMgr->m_hVertexBuffer].size(), 0,
-														pObjMgr->m_primCountList[pObjMgr->m_hIndexBuffer]);				// PrimitiveCount : Triangle Count
-		if (FAILED(hr))
-			MessageBox(NULL, TEXT("DrawIndexedPrimitive Error"), TEXT("DrawIndexedPrimitive Error"), MB_OK);
-	*/
 }
 
-VOID CDxDriver::SetWorldMatrix(const D3DXMATRIX& matWorld)
+VOID CDxDriver::SetWorldMatrix(D3DXMATRIX& matWorld)
 {
+	FLOAT m_fAngle = 0.0f;
+	FLOAT m_fScale = 1.0f;
+	D3DXMatrixRotationY(&matWorld, m_fAngle);
 	m_pD3DDevice->SetTransform(D3DTS_WORLDMATRIX(0), &matWorld);
 }
 
-VOID CDxDriver::SetProjMatrix()		// 원근행렬
+VOID CDxDriver::SetCameraMatrix(D3DXMATRIX& matView, D3DXVECTOR3 p_eye, D3DXVECTOR3 p_at, D3DXVECTOR3 p_up)
 {
-
+	D3DXMatrixLookAtLH(&matView, &p_eye, &p_at, &p_up);	// Camera 변환 행렬 계산
+	m_pD3DDevice->SetTransform(D3DTS_VIEW, &matView);
 }
 
-VOID CDxDriver::SetCameraMatrix(const D3DXMATRIX& matCamera)
+VOID CDxDriver::SetProjMatrix(D3DXMATRIX& matProj)		// 원근행렬
 {
-
+	D3DXMatrixPerspectiveFovLH(&matProj, D3DX_PI / 4, 1.0f, 1.0f, 100.f);
+	m_pD3DDevice->SetTransform(D3DTS_PROJECTION, &matProj);
 }
+
+
+
+
+
+
+

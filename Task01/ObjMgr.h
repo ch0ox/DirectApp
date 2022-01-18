@@ -136,6 +136,10 @@ public:
 
 	D3DXVECTOR3								m_pos;
 	D3DXMATRIX								m_matWorld;
+	//D3DXMATRIXA16 m_matWorld;
+	D3DXMATRIXA16							m_matView;
+	D3DXMATRIXA16							m_matProj;
+	D3DXVECTOR3								m_eye, m_at, m_up;
 
 private:
 	
