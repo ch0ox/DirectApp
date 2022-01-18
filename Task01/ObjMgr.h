@@ -116,6 +116,7 @@ public:
 	std::wstring StringToLPCWSTR(const std::string& str);
 
 	const D3DXMATRIX& GetMatWorld() const;
+	VOID SaveToListIndices();
 
 // 	CArray <Node*>		m_nodes;
 // 	CArray <OBJVERTEX>	m_vertices;
@@ -125,6 +126,7 @@ public:
 	std::unordered_map<std::string, DWORD>	m_uMap;
 	std::vector<OBJVERTEXLIST>				m_verticesList;
 	std::vector<INDEXLIST>					m_indicesList;
+	std::vector<INDEXLIST>					m_list_indicesList;					// triangle_list
 	std::vector<int>						m_primCountList;
 	std::vector<BOOL>						m_bIsTexturingList;
 

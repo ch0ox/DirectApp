@@ -47,7 +47,9 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file, CDxDriver* pDriver)
 	bool b_face = FALSE;
 
 	OBJVERTEXLIST							vertices;
-	INDEXLIST								indices;
+	INDEXLIST								strip_indices;				// triangle strip
+	INDEXLIST								list_indices;				// triangle list
+	// 
 	std::unordered_map<std::string, DWORD>	uMap;
 
 	// One by One Line
@@ -130,7 +132,7 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file, CDxDriver* pDriver)
 				if (!uMap.count(str[faceOrder]))								// 해당 face string ( ex. _/_/_ ) 이 없음 ?
 				{
 					uMap.insert(make_pair(str[faceOrder], umap_index));		// 해당 face string , index INSERT.
-					indices.push_back(umap_index);
+					strip_indices.push_back(umap_index);
 					umap_index++;
 
 					// Face 에 해당되는 Vertex 정보
@@ -140,7 +142,7 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file, CDxDriver* pDriver)
 				else															// 해당 face string ( ex. _/_/_ ) 이 있음 ?
 				{
 					DWORD index = uMap[str[faceOrder]];
-					indices.push_back(index);
+					strip_indices.push_back(index);
 				}
 
 			}
@@ -164,11 +166,11 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file, CDxDriver* pDriver)
 		{
 			// obj 바뀔 때 마다 List 에 Vertex (리스트), Index (리스트) 추가
 			m_verticesList.push_back(vertices);
-			m_indicesList.push_back(indices);
+			m_indicesList.push_back(strip_indices);
 			m_primCountList.push_back(m_primitiveCount);
 			m_primitiveCount = 0;
 			vertices.clear();
-			indices.clear();
+			strip_indices.clear();
 			uMap.clear();
 			if (m_bIsTexturing)
 				m_bIsTexturingList.push_back(TRUE);
@@ -183,16 +185,19 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file, CDxDriver* pDriver)
 	if (b_face)
 	{
 		m_verticesList.push_back(vertices);
-		m_indicesList.push_back(indices);
+		m_indicesList.push_back(strip_indices);
 		m_primCountList.push_back(m_primitiveCount);
 		vertices.clear();
-		indices.clear();
+		strip_indices.clear();
 		uMap.clear();
 		if (m_bIsTexturing)
 			m_bIsTexturingList.push_back(TRUE);
 		else
 			m_bIsTexturingList.push_back(FALSE);
 	}
+
+	// Make (triangle_list) Indices List.
+	SaveToListIndices();
 
 	std::wstring tmp = StringToLPCWSTR(anotherLine);
 	LPCWSTR elseLine = tmp.c_str();
@@ -250,7 +255,31 @@ OBJVERTEX CObjMgr::FaceToVertex(int num, CPoint3i tmp)
 	return tmpVtx;
 }
 
+VOID CObjMgr::SaveToListIndices()
+{
+//	CCW
+//	-------------------------
+//  1     3     5     7     9
+// 	|   / |   / |   / |   / | 
+//	|  /  |  /  |  /  |  /  |
+//	| /   | /   | /   | /   |
+//  |/    |/    |/    |/    |
+//  2     4     6     8     10
+//  -------------------------
+// STRIP : { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }
+// LIST  : { {1,2,3}, {3,2,4}, {3,4,5}, {5,4,6}, {5,6,7}, {7,6,8}, {7,8,9}, {9,8,10} }
 
+	INDEXLIST::iterator indiceIter;
+
+	for (int i = 0; i < m_indicesList.size(); i++)
+	{
+		indiceIter = m_indicesList[i].begin();
+		
+	}
+
+
+
+}
 
 // To Create Obj Buffer. each obj.
 VOID CObjMgr::CreateObjBuffer(CDxDriver* pDriver)
