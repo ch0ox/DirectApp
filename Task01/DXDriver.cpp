@@ -154,7 +154,7 @@ VOID CDxDriver::Drawing()
 	// Object Model
 	if (m_pApp->m_bObjLoad)		// obj file 이 Load 된 후에만 Drawing.
 	{
-		//m_pApp->GetObjMgr()->ObjDraw(, this);
+		m_pApp->GetObjMgr()->ObjDraw(this);
 	}
 
 
@@ -239,12 +239,6 @@ BOOL CDxDriver::Render(CDxInput* pInput)
 	if (SUCCEEDED(m_pD3DDevice->BeginScene()))
 	{
 		Drawing();
-
-		// TO DO : obj 파일이 있다면 draw 해주기
-		if (m_pObjMgr)
-		{
-			// obj drawing Rendering
-		}
 
 		m_pD3DDevice->EndScene();
 	}
@@ -485,11 +479,52 @@ HRESULT CDxDriver::CopyObjIndexBuffer(UINT index, const void* p_src, int p_size)
 
 VOID CDxDriver::DrawObjModel(CObjMgr* pObjMgr)
 {
-	// PrimitiveCount : Triangle Count
-	pObjMgr->m_primitiveCount = pObjMgr->m_indices.size() / 3;
+	DWORD dwFVF;
 
-	m_pD3DDevice->SetFVF(pObjMgr->GetFVF());
-	m_pD3DDevice->SetStreamSource(0, m_pVertexBufferList[pObjMgr->m_hVertexBuffer], 0, sizeof(OBJVERTEX));
-	m_pD3DDevice->SetIndices(m_pIndexBufferList[pObjMgr->m_hIndexBuffer]);
-	m_pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP, 0, 0, pObjMgr->m_vertices.size(), 0, pObjMgr->m_primitiveCount);
+	for (int i = 0; i < pObjMgr->m_verticesList.size(); i++)
+	{
+		if (pObjMgr->m_bIsTexturingList[i])
+			dwFVF = D3DFVF_TEXTUREVERTEX;
+		else
+			dwFVF = D3DFVF_NOTEXTUREVERTEX;
+
+		m_pD3DDevice->SetFVF(dwFVF);
+		m_pD3DDevice->SetStreamSource(0, m_pVertexBufferList[i], 0, sizeof(OBJVERTEX));
+		m_pD3DDevice->SetIndices(m_pIndexBufferList[i]);
+		HRESULT hr = m_pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP, 0, 0,
+														pObjMgr->m_verticesList[i].size(), 0,
+														pObjMgr->m_primCountList[i]);				// PrimitiveCount : Triangle Count
+		if (FAILED(hr))
+			MessageBox(NULL, TEXT("DrawIndexedPrimitive Error"), TEXT("DrawIndexedPrimitive Error"), MB_OK);
+	}
+	/*
+		if (pObjMgr->m_bIsTexturingList[pObjMgr->m_hVertexBuffer])
+			dwFVF = D3DFVF_TEXTUREVERTEX;
+		else
+			dwFVF = D3DFVF_NOTEXTUREVERTEX;
+
+		m_pD3DDevice->SetFVF(dwFVF);
+		m_pD3DDevice->SetStreamSource(0, m_pVertexBufferList[pObjMgr->m_hVertexBuffer], 0, sizeof(OBJVERTEX));
+		m_pD3DDevice->SetIndices(m_pIndexBufferList[pObjMgr->m_hIndexBuffer]);
+		HRESULT hr = m_pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP, 0, 0,
+														pObjMgr->m_verticesList[pObjMgr->m_hVertexBuffer].size(), 0,
+														pObjMgr->m_primCountList[pObjMgr->m_hIndexBuffer]);				// PrimitiveCount : Triangle Count
+		if (FAILED(hr))
+			MessageBox(NULL, TEXT("DrawIndexedPrimitive Error"), TEXT("DrawIndexedPrimitive Error"), MB_OK);
+	*/
+}
+
+VOID CDxDriver::SetWorldMatrix(const D3DXMATRIX& matWorld)
+{
+
+}
+
+VOID CDxDriver::SetProjMatrix()		// 원근행렬
+{
+
+}
+
+VOID CDxDriver::SetCameraMatrix(const D3DXMATRIX& matCamera)
+{
+
 }

@@ -104,7 +104,7 @@ public:
 	OBJVERTEX FaceToVertex(int, CPoint3i);
 
 	VOID CreateObjBuffer(CDxDriver* pDriver);
-	VOID ObjDraw(CObjMgr obj, CDxDriver* pDriver);
+	VOID ObjDraw(CDxDriver* pDriver);
 	VOID Render(CObjMgr obj, CDxDriver* pDriver);
 	DWORD GetFVF() { return m_dwFVF; }
 

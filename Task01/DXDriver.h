@@ -78,6 +78,10 @@ public:
 	HRESULT CopyObjIndexBuffer(UINT index, const void* p_src, int p_size);
 	//CObjMgr* AddObjModel(const )
 
+	VOID SetWorldMatrix(const D3DXMATRIX& matWorld);
+	VOID SetProjMatrix();	// 원근행렬
+	VOID SetCameraMatrix(const D3DXMATRIX& matCamera);
+
 	CDraw* m_pDraw;
 	CMouse* m_pMouse;
 	App* m_pApp;

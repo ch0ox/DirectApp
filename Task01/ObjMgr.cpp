@@ -255,31 +255,28 @@ OBJVERTEX CObjMgr::FaceToVertex(int num, CPoint3i tmp)
 // To Create Obj Buffer. each obj.
 VOID CObjMgr::CreateObjBuffer(CDxDriver* pDriver)
 {
-//	if (!vtxVec.empty())
+	// Culling CCW (반시계)
+	pDriver->m_pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);		// 안나오면 D3DCULL_NONE 로 확인
+	pDriver->m_pD3DDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
+
+	//	if (!vtxVec.empty())
 	{
-// 		UINT index = pDriver->CreateObjVertexBuffer(m_vertices.size() * m_vtxSize, 0, m_dwFVF, D3DPOOL_MANAGED);
-// 		HRESULT hr = pDriver->CopyObjVertexBuffer(index, &m_vertices[0], sizeof(m_vertices));
-// 		index = pDriver->CreateObjIndexBuffer(m_indices.size() * m_indexSize, 0, m_vFormat, D3DPOOL_MANAGED);
-// 		hr = pDriver->CopyObjIndexBuffer(index, &m_indices[0], sizeof(m_indices));
-// 		m_vertices.clear();
-// 		m_indices.clear();
-		
 		for (int i = 0; i < m_verticesList.size(); i++)
 		{
 			DWORD dwFVF;
 
-			if(m_bIsTexturingList[i])
+			if (m_bIsTexturingList[i])
 				dwFVF = D3DFVF_TEXTUREVERTEX;
 			else
 				dwFVF = D3DFVF_NOTEXTUREVERTEX;
-			
-				
+
+
 			UINT index = pDriver->CreateObjVertexBuffer(m_verticesList[i].size() * m_vtxSize, 0, dwFVF, D3DPOOL_MANAGED);
 			if (index == (UINT)-1)
 				return;
 
-			
-			HRESULT hr = pDriver->CopyObjVertexBuffer(index, &m_verticesList[i].begin(), sizeof(m_verticesList));
+
+			HRESULT hr = pDriver->CopyObjVertexBuffer(index, &m_verticesList[i].begin(), sizeof(m_verticesList[i]));
 			if (FAILED(hr))
 				return;
 
@@ -287,15 +284,36 @@ VOID CObjMgr::CreateObjBuffer(CDxDriver* pDriver)
 			if (index == (UINT)-1)
 				return;
 
-			hr = pDriver->CopyObjIndexBuffer(index, &m_indicesList[i].begin(), sizeof(m_indicesList));
+			hr = pDriver->CopyObjIndexBuffer(index, &m_indicesList[i].begin(), sizeof(m_indicesList[i]));
+			if (FAILED(hr))
+				return;
 		}
 	}
 }
 
-VOID CObjMgr::ObjDraw(CObjMgr objMgr, CDxDriver* pDriver)
-{
-
 /* Draw 부분 */
+VOID CObjMgr::ObjDraw(CDxDriver* pDriver)
+{
+	DWORD dwFVF;
+
+	for (int i = 0; i < m_verticesList.size(); i++)
+	{
+		if (m_bIsTexturingList[i])
+			dwFVF = D3DFVF_TEXTUREVERTEX;
+		else
+			dwFVF = D3DFVF_NOTEXTUREVERTEX;
+
+		pDriver->m_pD3DDevice->SetFVF(dwFVF);
+		pDriver->m_pD3DDevice->SetStreamSource(0, pDriver->m_pVertexBufferList[i], 0, sizeof(OBJVERTEX));
+		pDriver->m_pD3DDevice->SetIndices(pDriver->m_pIndexBufferList[i]);
+		HRESULT hr = pDriver->m_pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP, 0, 0,
+																m_verticesList[i].size(), 0,
+																m_primCountList[i]);				// PrimitiveCount : Triangle Count
+		if (FAILED(hr))
+			MessageBox(NULL, TEXT("DrawIndexedPrimitive Error"), TEXT("DrawIndexedPrimitive Error"), MB_OK);
+	}
+
+
 	if (m_bIsTexturing)
 	{
 		// TO DO : 좌표에 맞게 텍스쳐 입히기.
@@ -304,7 +322,7 @@ VOID CObjMgr::ObjDraw(CObjMgr objMgr, CDxDriver* pDriver)
 	else
 	{
 		// No Texturing.
-		pDriver->SetTexture(NO_TEXTURE);
+//		pDriver->SetTexture(NO_TEXTURE);
 		// TO DO : 회색으로 Shading.
 
 	}
