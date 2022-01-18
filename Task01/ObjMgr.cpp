@@ -284,6 +284,7 @@ VOID CObjMgr::SaveToListIndices(INDEXLIST list)
 
 	INDEXLIST::iterator indiceIter;
 	INDEXLIST::iterator tmpIter;
+	INDEXLIST::iterator checkIter;
 
 
 	// triangle list
@@ -292,7 +293,7 @@ VOID CObjMgr::SaveToListIndices(INDEXLIST list)
 	indiceIter = list.begin();
 	tmpIter = indiceIter;
 
-	for (; list.end() != indiceIter; ++indiceIter)
+	for (; list.end() != indiceIter; indiceIter++)
 	{
 		indiceIter = tmpIter;
 
@@ -301,11 +302,17 @@ VOID CObjMgr::SaveToListIndices(INDEXLIST list)
 		list_indices.push_back(*(++indiceIter));
 
 		tmpIter = indiceIter;
-
-		list_indices.push_back(*indiceIter);
-		list_indices.push_back(*(--indiceIter));
-		indiceIter++;
-		list_indices.push_back(*(++indiceIter));
+		checkIter = indiceIter;
+		
+		if (++checkIter != list.end())
+		{
+			list_indices.push_back(*indiceIter);
+			list_indices.push_back(*(--indiceIter));
+			++indiceIter;
+			list_indices.push_back(*(++indiceIter));
+		}
+		else
+			break;
 	}
 
 	// list_indices -> m_list_indices ¿¡ insert.
