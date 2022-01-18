@@ -296,22 +296,32 @@ VOID CObjMgr::ObjDraw(CDxDriver* pDriver)
 {
 	DWORD dwFVF;
 
-	for (int i = 0; i < m_verticesList.size(); i++)
-	{
-		if (m_bIsTexturingList[i])
-			dwFVF = D3DFVF_TEXTUREVERTEX;
-		else
-			dwFVF = D3DFVF_NOTEXTUREVERTEX;
+// TO DO : Set Matrices
+	pDriver->SetWorldMatrix(GetMatWorld());
 
-		pDriver->m_pD3DDevice->SetFVF(dwFVF);
-		pDriver->m_pD3DDevice->SetStreamSource(0, pDriver->m_pVertexBufferList[i], 0, sizeof(OBJVERTEX));
-		pDriver->m_pD3DDevice->SetIndices(pDriver->m_pIndexBufferList[i]);
-		HRESULT hr = pDriver->m_pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP, 0, 0,
-																m_verticesList[i].size(), 0,
-																m_primCountList[i]);				// PrimitiveCount : Triangle Count
-		if (FAILED(hr))
-			MessageBox(NULL, TEXT("DrawIndexedPrimitive Error"), TEXT("DrawIndexedPrimitive Error"), MB_OK);
-	}
+// Drawing
+
+	pDriver->DrawObjModel(this);
+	// or
+// 	for (int i = 0; i < m_verticesList.size(); i++)
+// 	{
+// 		if (m_bIsTexturingList[i])
+// 			dwFVF = D3DFVF_TEXTUREVERTEX;
+// 		else
+// 			dwFVF = D3DFVF_NOTEXTUREVERTEX;
+// 
+// 		pDriver->m_pD3DDevice->SetFVF(dwFVF);
+// 		pDriver->m_pD3DDevice->SetStreamSource(0, pDriver->m_pVertexBufferList[i], 0, sizeof(OBJVERTEX));
+// 		pDriver->m_pD3DDevice->SetIndices(pDriver->m_pIndexBufferList[i]);
+// 		HRESULT hr = pDriver->m_pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP, 0, 0,
+// 																m_verticesList[i].size(), 0,
+// 																m_primCountList[i]);				// PrimitiveCount : Triangle Count
+// 		if (FAILED(hr))
+// 			MessageBox(NULL, TEXT("DrawIndexedPrimitive Error"), TEXT("DrawIndexedPrimitive Error"), MB_OK);
+// 	}
+
+
+// TO DO : Set Texture
 
 
 	if (m_bIsTexturing)
@@ -326,9 +336,6 @@ VOID CObjMgr::ObjDraw(CDxDriver* pDriver)
 		// TO DO : 회색으로 Shading.
 
 	}
-
-	// TO DO : Set Matrices
-
 
 }
 

@@ -516,7 +516,7 @@ VOID CDxDriver::DrawObjModel(CObjMgr* pObjMgr)
 
 VOID CDxDriver::SetWorldMatrix(const D3DXMATRIX& matWorld)
 {
-
+	m_pD3DDevice->SetTransform(D3DTS_WORLDMATRIX(0), &matWorld);
 }
 
 VOID CDxDriver::SetProjMatrix()		// 원근행렬
