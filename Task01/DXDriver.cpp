@@ -155,9 +155,10 @@ VOID CDxDriver::Drawing()
 	}
 
 	// Triangle
-	m_pD3DDevice->SetTexture(0, m_pDraw->m_pTexture);
-	m_pDraw->SetupMatrices();
-	m_pDraw->DrawTriangle();
+//m_pD3DDevice->SetTexture(0, m_pDraw->m_pTexture);
+//m_pDraw->SetupMatrices();
+//m_pDraw->DrawTriangle();
+
 
 	// Object Model
 	if (m_pApp->m_bObjLoad)		// obj file 이 Load 된 후에만 Drawing.
@@ -497,9 +498,9 @@ VOID CDxDriver::DrawObjListModel(CObjMgr* pObjMgr)
 //		else
 //			MessageBox(NULL, TEXT("prim 다름"), TEXT("Failed"), MB_OK);
 
-		m_pD3DDevice->SetFVF(dwFVF);
 		m_pD3DDevice->SetStreamSource(i, m_pVertexBufferList[i], 0, sizeof(OBJVERTEX));
-
+		m_pD3DDevice->SetFVF(dwFVF);
+		m_pD3DDevice->SetIndices(m_pIndexBufferList[i]);
 		HRESULT hr = m_pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, i, 0,
 														pObjMgr->m_verticesList[i].size(), 0,
 													  //pObjMgr->m_primCountList[i]);				// PrimitiveCount : Triangle Count
@@ -543,7 +544,7 @@ VOID CDxDriver::SetWorldMatrix(D3DXMATRIXA16& matWorld)
 	FLOAT m_fAngle = 0.0f;
 	FLOAT m_fScale = 1.0f;
 	D3DXMatrixIdentity(&matWorld);
-	D3DXMatrixTranslation(&matWorld, 0.0f, 0.0f, 5.0f);
+	D3DXMatrixTranslation(&matWorld, 0.0f, 10.0f, -15.0f);
 	D3DXMatrixRotationY(&matWorld, m_fAngle);
 	if (FAILED(m_pD3DDevice->SetTransform(D3DTS_WORLDMATRIX(0), &matWorld)))
 		MessageBox(NULL, TEXT("Set World Matrix Error"), TEXT("Matrix Error"), MB_OK);
@@ -553,6 +554,7 @@ VOID CDxDriver::SetWorldMatrix(D3DXMATRIXA16& matWorld)
 
 VOID CDxDriver::SetCameraMatrix(D3DXMATRIXA16& matView, D3DXVECTOR3 p_eye, D3DXVECTOR3 p_at, D3DXVECTOR3 p_up)
 {
+	D3DXMatrixIdentity(&matView);
 	D3DXMatrixLookAtLH(&matView, &p_eye, &p_at, &p_up);	// Camera 변환 행렬 계산
 	if (FAILED(m_pD3DDevice->SetTransform(D3DTS_VIEW, &matView)))
 		MessageBox(NULL, TEXT("Set VIEW Matrix Error"), TEXT("Matrix Error"), MB_OK);
@@ -562,6 +564,7 @@ VOID CDxDriver::SetCameraMatrix(D3DXMATRIXA16& matView, D3DXVECTOR3 p_eye, D3DXV
 
 VOID CDxDriver::SetProjMatrix(D3DXMATRIXA16& matProj)		// 원근행렬
 {
+	D3DXMatrixIdentity(&matProj);
 	D3DXMatrixPerspectiveFovLH(&matProj, D3DX_PI / 0.5f, 1.0f, 1.0f, 1000.f);
 	if (FAILED(m_pD3DDevice->SetTransform(D3DTS_PROJECTION, &matProj)))
 		MessageBox(NULL, TEXT("Set PROJ Matrix Error"), TEXT("Matrix Error"), MB_OK);

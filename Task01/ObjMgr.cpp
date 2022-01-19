@@ -360,10 +360,13 @@ VOID CObjMgr::CreateObjBuffer(CDxDriver* pDriver)
 			if (FAILED(hr))
 				return;
 
+			//pDriver->m_pD3DDevice->SetIndices(pDriver->m_pIndexBufferList[i]);
+
 			// Strip
 // 			index = pDriver->CreateObjIndexBuffer(m_indicesList[i].size() * m_indexSize, 0, m_vFormat, D3DPOOL_MANAGED);
 // 			hr = pDriver->CopyObjIndexBuffer(index, &m_indicesList[i].begin(), sizeof(m_indicesList[i]));
 		}
+		
 	}
 }
 
@@ -374,7 +377,7 @@ VOID CObjMgr::ObjDraw(CDxDriver* pDriver)
 	DWORD dwFVF;
 	m_eye.x = 0.0f;
 	m_eye.y = 0.0f;
-	m_eye.z = -5.0f;
+	m_eye.z = -1.0f;
 
 	m_at.x = 0.0f;
 	m_at.y = 0.0f;
@@ -403,6 +406,11 @@ VOID CObjMgr::ObjDraw(CDxDriver* pDriver)
 // No Texturing.
 	//pDriver->SetTexture(NO_TEXTURE);
 // TO DO :  Texture 없을 경우 -회색으로 Shading.
+}
+
+VOID CObjMgr::SetPosition(D3DXVECTOR3 pos)
+{
+	D3DXMatrixTranslation(&m_matWorld, pos.x, pos.y, pos.z);
 }
 
 const D3DXMATRIX& CObjMgr::GetMatWorld() const

@@ -108,7 +108,7 @@ public:
 	VOID CreateObjBuffer(CDxDriver* pDriver);
 	VOID ObjDraw(CDxDriver* pDriver);
 	DWORD GetFVF() { return m_dwFVF; }
-
+	VOID SetPosition(D3DXVECTOR3 pos);
 
 	std::vector <CObj> m_objs;								// Objects Vector
 	std::vector <FLOAT> StrtokFloat(char*, char*);
