@@ -16,8 +16,9 @@
 #define START_CONTEXT 2
 #define START_CONTEXT_else 3
 
-#define D3DFVF_TEXTUREVERTEX (D3DFVF_XYZ | D3DFVF_TEX1 | D3DFVF_NORMAL | D3DFVF_DIFFUSE )
-#define D3DFVF_NOTEXTUREVERTEX (D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_DIFFUSE)
+#define D3DFVF_TEXTUREVERTEX (D3DFVF_XYZ | D3DFVF_TEX1 | D3DFVF_NORMAL )		// | D3DFVF_DIFFUSE 
+#define D3DFVF_NOTEXTUREVERTEX (D3DFVF_XYZ | D3DFVF_TEX1 | D3DFVF_NORMAL )		// | D3DFVF_DIFFUSE 
+//#define D3DFVF_NOTEXTUREVERTEX (D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_DIFFUSE)
 
 #define NO_TEXTURE 0
 
@@ -60,7 +61,7 @@ typedef struct OBJVERTEX
 	float x, y, z;
 	float u, v;				// TEXTURE ÁÂÇ¥
 	float nx, ny, nz;
-	DWORD color = 0x666666;	// gray
+	//DWORD color = 0x666666;	// gray
 }objVertex;
 
 
@@ -106,7 +107,6 @@ public:
 
 	VOID CreateObjBuffer(CDxDriver* pDriver);
 	VOID ObjDraw(CDxDriver* pDriver);
-	VOID Render(CObjMgr obj, CDxDriver* pDriver);
 	DWORD GetFVF() { return m_dwFVF; }
 
 
@@ -130,15 +130,14 @@ public:
 	std::vector<int>						m_primCountList;
 	std::vector<BOOL>						m_bIsTexturingList;
 
-	UINT									m_hVertexBuffer;
-	UINT									m_hIndexBuffer;
+	UINT									m_hVertexBuffer = 0;
+	UINT									m_hIndexBuffer = 0;
 	int										m_primitiveCount = 0;
 
-	D3DXVECTOR3								m_pos;
-	D3DXMATRIX								m_matWorld;
-	//D3DXMATRIXA16 m_matWorld;
+	D3DXMATRIXA16							m_matWorld;
 	D3DXMATRIXA16							m_matView;
 	D3DXMATRIXA16							m_matProj;
+	D3DXVECTOR3								m_pos;
 	D3DXVECTOR3								m_eye, m_at, m_up;
 
 private:
@@ -156,7 +155,6 @@ protected:
 	UINT m_indexSize = sizeof(DWORD);											// ÀÎµ¦½º ±¸Á¶Ã¼ »çÀÌÁî
 	UINT m_indexNum = 0;														// »ï°¢Çü °¹¼ö
 	D3DFORMAT m_vFormat = D3DFMT_INDEX32;										//¹öÆÛ Æ÷¸Ë
-
 	D3DPRIMITIVETYPE m_primitiveType = D3DPT_TRIANGLELIST;						//Draw Type
 
 };

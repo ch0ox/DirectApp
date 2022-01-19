@@ -80,7 +80,7 @@ public:
 	//CObjMgr* AddObjModel(const )
 
 	VOID SetWorldMatrix(D3DXMATRIX& matWorld);
-	VOID SetProjMatrix(D3DXMATRIX& matCamera);	// 원근행렬
+	VOID SetProjMatrix(D3DXMATRIX& matCamera);
 	VOID SetCameraMatrix(D3DXMATRIX& matView, D3DXVECTOR3 p_eye, D3DXVECTOR3 p_at, D3DXVECTOR3 p_up);
 
 	CDraw* m_pDraw;
@@ -107,11 +107,10 @@ public:
 	BOOL						WindowMode = TRUE;
 	BOOL						m_bLostDevice = FALSE;
 
+
 private:
 	VOID						Drawing();
 	double						m_duringTime = 0;
-
-
 
 
 protected:

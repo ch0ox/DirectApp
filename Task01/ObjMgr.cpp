@@ -325,8 +325,11 @@ VOID CObjMgr::SaveToListIndices(INDEXLIST list)
 VOID CObjMgr::CreateObjBuffer(CDxDriver* pDriver)
 {
 	// Culling CCW (반시계)
-	pDriver->m_pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);		// 안나오면 D3DCULL_NONE 로 확인
-	pDriver->m_pD3DDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
+//	pDriver->m_pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);		// 안나오면 D3DCULL_NONE 로 확인
+//	pDriver->m_pD3DDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+//	pDriver->m_pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+//	pDriver->m_pD3DDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+//	pDriver->m_pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 
 	//	if (!vtxVec.empty())
 	{
@@ -359,12 +362,7 @@ VOID CObjMgr::CreateObjBuffer(CDxDriver* pDriver)
 
 			// Strip
 // 			index = pDriver->CreateObjIndexBuffer(m_indicesList[i].size() * m_indexSize, 0, m_vFormat, D3DPOOL_MANAGED);
-// 			if (index == (UINT)-1)
-// 				return;
-// 
 // 			hr = pDriver->CopyObjIndexBuffer(index, &m_indicesList[i].begin(), sizeof(m_indicesList[i]));
-// 			if (FAILED(hr))
-// 				return;
 		}
 	}
 }
@@ -385,6 +383,7 @@ VOID CObjMgr::ObjDraw(CDxDriver* pDriver)
 	m_up.x = 0.0f;
 	m_up.y = 1.0f;
 	m_up.z = 0.0f;
+
 //TO DO : Set Matrices
 	pDriver->SetWorldMatrix(m_matWorld);
 	pDriver->SetCameraMatrix(m_matView, m_eye, m_at, m_up);
@@ -398,37 +397,18 @@ VOID CObjMgr::ObjDraw(CDxDriver* pDriver)
 
 // TO DO : Set Texture
 
+// TO DO : Texture 있을 경우 - 좌표에 맞게 텍스쳐 입히기.
+//pDriver->SetTexture(texture...);
 
-	if (m_bIsTexturing)
-	{
-		// TO DO : 좌표에 맞게 텍스쳐 입히기.
-		//pDriver->SetTexture(texture...);
-	}
-	else
-	{
-		// No Texturing.
-//		pDriver->SetTexture(NO_TEXTURE);
-		// TO DO : 회색으로 Shading.
-
-	}
+// No Texturing.
+	//pDriver->SetTexture(NO_TEXTURE);
+// TO DO :  Texture 없을 경우 -회색으로 Shading.
 }
 
 const D3DXMATRIX& CObjMgr::GetMatWorld() const
 {
 	return m_matWorld;
 }
-
-VOID CObjMgr::Render(CObjMgr obj, CDxDriver* pDriver)
-{
-	pDriver->m_pD3DDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
-	pDriver->m_pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
-	pDriver->m_pD3DDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-	pDriver->m_pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-
-	pDriver->m_pD3DDevice->SetFVF(obj.GetFVF());
-	pDriver->m_pD3DDevice->SetTransform(D3DTS_WORLD, &m_world);
-}
-
 
 
 std::vector <FLOAT> CObjMgr::StrtokFloat(char* str, char* delimeter)
@@ -498,6 +478,23 @@ CObjModel::CObjModel()
 }
 
 CObjModel::~CObjModel()
+{
+	std::vector<CObjMgr*>::iterator iter = m_ObjMgrList.begin();
+	for (; m_ObjMgrList.end() != iter; ++iter)
+	{
+		delete (*iter);
+		*iter = nullptr;
+	}
+	m_ObjMgrList.clear();
+}
+
+UINT CObjModel::AddObjModel(CDxDriver* pDriver)
+{
+	return -1;
+}
+
+
+VOID CObjModel::Drawing(CDxDriver* pDriver)
 {
 
 }

@@ -155,9 +155,9 @@ VOID CDxDriver::Drawing()
 	}
 
 	// Triangle
-	m_pD3DDevice->SetTexture(0, m_pDraw->m_pTexture);
-	m_pDraw->SetupMatrices();
-	m_pDraw->DrawTriangle();
+//	m_pD3DDevice->SetTexture(0, m_pDraw->m_pTexture);
+//	m_pDraw->SetupMatrices();
+//	m_pDraw->DrawTriangle();
 
 	// Object Model
 	if (m_pApp->m_bObjLoad)		// obj file 이 Load 된 후에만 Drawing.
@@ -393,7 +393,7 @@ VOID CDxDriver::DeviceLostRecovery()
 	}
 }
 
-// Obj 의 정보를 가지고 
+// Obj 의 정보를 가지고 Create Buffers
 UINT CDxDriver::CreateObjVertexBuffer(UINT length, DWORD usage,DWORD fvf, D3DPOOL pool)
 {
 	UINT index = (UINT)-1;
@@ -487,14 +487,28 @@ VOID CDxDriver::DrawObjListModel(CObjMgr* pObjMgr)
 		else
 			dwFVF = D3DFVF_NOTEXTUREVERTEX;
 
+		// For Test
+//		if ((pObjMgr->m_list_indicesList[i].size() / 3) == pObjMgr->m_primCountList[i])
+//		{
+//			MessageBox(NULL, TEXT("prim 동일"), TEXT("Success"), MB_OK);
+//		}
+//		else
+//			MessageBox(NULL, TEXT("prim 다름"), TEXT("Failed"), MB_OK);
+
 		m_pD3DDevice->SetFVF(dwFVF);
 		m_pD3DDevice->SetStreamSource(0, m_pVertexBufferList[i], 0, sizeof(OBJVERTEX));
 		m_pD3DDevice->SetIndices(m_pIndexBufferList[i]);
 		HRESULT hr = m_pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0,
 														pObjMgr->m_verticesList[i].size(), 0,
-														pObjMgr->m_primCountList[i]);				// PrimitiveCount : Triangle Count
+													  //pObjMgr->m_primCountList[i]);				// PrimitiveCount : Triangle Count
+														pObjMgr->m_list_indicesList[i].size() / 3);
+		// For Cube Test
+//		HRESULT hr = m_pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 8, 0, 12);
+
 		if (FAILED(hr))
 			MessageBox(NULL, TEXT("DrawIndexedPrimitive Error"), TEXT("DrawIndexedPrimitive Error"), MB_OK);
+//		else
+//			MessageBox(NULL, TEXT("DrawIndexedPrimitive Success"), TEXT("Success"), MB_OK);
 	}
 }
 
@@ -515,7 +529,8 @@ VOID CDxDriver::DrawObjStripModel(CObjMgr* pObjMgr)
 		m_pD3DDevice->SetIndices(m_pIndexBufferList[i]);
 		HRESULT hr = m_pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP, 0, 0,
 														pObjMgr->m_verticesList[i].size(), 0,
-														pObjMgr->m_primCountList[i]);				// PrimitiveCount : Triangle Count
+													  //pObjMgr->m_primCountList[i]);				// PrimitiveCount : Triangle Count
+														pObjMgr->m_list_indicesList[i].size() / 3);
 		if (FAILED(hr))
 			MessageBox(NULL, TEXT("DrawIndexedPrimitive Error"), TEXT("DrawIndexedPrimitive Error"), MB_OK);
 	}
@@ -525,20 +540,31 @@ VOID CDxDriver::SetWorldMatrix(D3DXMATRIX& matWorld)
 {
 	FLOAT m_fAngle = 0.0f;
 	FLOAT m_fScale = 1.0f;
+	D3DXMatrixIdentity(&matWorld);
+	D3DXMatrixTranslation(&matWorld, 0.0f, 0.0f, 5.0f);
 	D3DXMatrixRotationY(&matWorld, m_fAngle);
-	m_pD3DDevice->SetTransform(D3DTS_WORLDMATRIX(0), &matWorld);
+	if (FAILED(m_pD3DDevice->SetTransform(D3DTS_WORLDMATRIX(0), &matWorld)))
+		MessageBox(NULL, TEXT("Set World Matrix Error"), TEXT("Matrix Error"), MB_OK);
+//	else
+//		MessageBox(NULL, TEXT("Set World Matrix Success"), TEXT("Success"), MB_OK);
 }
 
 VOID CDxDriver::SetCameraMatrix(D3DXMATRIX& matView, D3DXVECTOR3 p_eye, D3DXVECTOR3 p_at, D3DXVECTOR3 p_up)
 {
 	D3DXMatrixLookAtLH(&matView, &p_eye, &p_at, &p_up);	// Camera 변환 행렬 계산
-	m_pD3DDevice->SetTransform(D3DTS_VIEW, &matView);
+	if (FAILED(m_pD3DDevice->SetTransform(D3DTS_VIEW, &matView)))
+		MessageBox(NULL, TEXT("Set VIEW Matrix Error"), TEXT("Matrix Error"), MB_OK);
+//	else
+//		MessageBox(NULL, TEXT("Set VIEW Matrix Success"), TEXT("Success"), MB_OK);
 }
 
 VOID CDxDriver::SetProjMatrix(D3DXMATRIX& matProj)		// 원근행렬
 {
-	D3DXMatrixPerspectiveFovLH(&matProj, D3DX_PI / 4, 1.0f, 1.0f, 100.f);
-	m_pD3DDevice->SetTransform(D3DTS_PROJECTION, &matProj);
+	D3DXMatrixPerspectiveFovLH(&matProj, D3DX_PI / 0.5f, 1.0f, 1.0f, 1000.f);
+	if (FAILED(m_pD3DDevice->SetTransform(D3DTS_PROJECTION, &matProj)))
+		MessageBox(NULL, TEXT("Set PROJ Matrix Error"), TEXT("Matrix Error"), MB_OK);
+//	else
+//		MessageBox(NULL, TEXT("Set PROJ Matrix Success"), TEXT("Success"), MB_OK);
 }
 
 
