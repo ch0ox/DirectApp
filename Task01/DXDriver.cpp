@@ -155,9 +155,9 @@ VOID CDxDriver::Drawing()
 	}
 
 	// Triangle
-//	m_pD3DDevice->SetTexture(0, m_pDraw->m_pTexture);
-//	m_pDraw->SetupMatrices();
-//	m_pDraw->DrawTriangle();
+	m_pD3DDevice->SetTexture(0, m_pDraw->m_pTexture);
+	m_pDraw->SetupMatrices();
+	m_pDraw->DrawTriangle();
 
 	// Object Model
 	if (m_pApp->m_bObjLoad)		// obj file 이 Load 된 후에만 Drawing.
@@ -472,6 +472,8 @@ HRESULT CDxDriver::CopyObjIndexBuffer(UINT index, const void* p_src, int p_size)
 	memcpy(pIndices, p_src, p_size);
 	m_pIndexBufferList[index]->Unlock();
 
+	m_pD3DDevice->SetIndices(m_pIndexBufferList[index]);
+
 	return S_OK;
 }
 
@@ -496,9 +498,9 @@ VOID CDxDriver::DrawObjListModel(CObjMgr* pObjMgr)
 //			MessageBox(NULL, TEXT("prim 다름"), TEXT("Failed"), MB_OK);
 
 		m_pD3DDevice->SetFVF(dwFVF);
-		m_pD3DDevice->SetStreamSource(0, m_pVertexBufferList[i], 0, sizeof(OBJVERTEX));
-		m_pD3DDevice->SetIndices(m_pIndexBufferList[i]);
-		HRESULT hr = m_pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0,
+		m_pD3DDevice->SetStreamSource(i, m_pVertexBufferList[i], 0, sizeof(OBJVERTEX));
+
+		HRESULT hr = m_pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, i, 0,
 														pObjMgr->m_verticesList[i].size(), 0,
 													  //pObjMgr->m_primCountList[i]);				// PrimitiveCount : Triangle Count
 														pObjMgr->m_list_indicesList[i].size() / 3);
@@ -525,8 +527,7 @@ VOID CDxDriver::DrawObjStripModel(CObjMgr* pObjMgr)
 			dwFVF = D3DFVF_NOTEXTUREVERTEX;
 
 		m_pD3DDevice->SetFVF(dwFVF);
-		m_pD3DDevice->SetStreamSource(0, m_pVertexBufferList[i], 0, sizeof(OBJVERTEX));
-		m_pD3DDevice->SetIndices(m_pIndexBufferList[i]);
+		m_pD3DDevice->SetStreamSource(i, m_pVertexBufferList[i], 0, sizeof(OBJVERTEX));
 		HRESULT hr = m_pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP, 0, 0,
 														pObjMgr->m_verticesList[i].size(), 0,
 													  //pObjMgr->m_primCountList[i]);				// PrimitiveCount : Triangle Count
