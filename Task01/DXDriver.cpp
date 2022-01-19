@@ -536,7 +536,7 @@ VOID CDxDriver::DrawObjStripModel(CObjMgr* pObjMgr)
 	}
 }
 
-VOID CDxDriver::SetWorldMatrix(D3DXMATRIX& matWorld)
+VOID CDxDriver::SetWorldMatrix(D3DXMATRIXA16& matWorld)
 {
 	FLOAT m_fAngle = 0.0f;
 	FLOAT m_fScale = 1.0f;
@@ -549,7 +549,7 @@ VOID CDxDriver::SetWorldMatrix(D3DXMATRIX& matWorld)
 //		MessageBox(NULL, TEXT("Set World Matrix Success"), TEXT("Success"), MB_OK);
 }
 
-VOID CDxDriver::SetCameraMatrix(D3DXMATRIX& matView, D3DXVECTOR3 p_eye, D3DXVECTOR3 p_at, D3DXVECTOR3 p_up)
+VOID CDxDriver::SetCameraMatrix(D3DXMATRIXA16& matView, D3DXVECTOR3 p_eye, D3DXVECTOR3 p_at, D3DXVECTOR3 p_up)
 {
 	D3DXMatrixLookAtLH(&matView, &p_eye, &p_at, &p_up);	// Camera 변환 행렬 계산
 	if (FAILED(m_pD3DDevice->SetTransform(D3DTS_VIEW, &matView)))
@@ -558,7 +558,7 @@ VOID CDxDriver::SetCameraMatrix(D3DXMATRIX& matView, D3DXVECTOR3 p_eye, D3DXVECT
 //		MessageBox(NULL, TEXT("Set VIEW Matrix Success"), TEXT("Success"), MB_OK);
 }
 
-VOID CDxDriver::SetProjMatrix(D3DXMATRIX& matProj)		// 원근행렬
+VOID CDxDriver::SetProjMatrix(D3DXMATRIXA16& matProj)		// 원근행렬
 {
 	D3DXMatrixPerspectiveFovLH(&matProj, D3DX_PI / 0.5f, 1.0f, 1.0f, 1000.f);
 	if (FAILED(m_pD3DDevice->SetTransform(D3DTS_PROJECTION, &matProj)))
