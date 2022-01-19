@@ -114,7 +114,7 @@ HRESULT CDxDriver::InitVB()
 	m_pDraw->CreateTriangleBuffer();
 	m_pDraw->TextInit();
 
-	// After Obj file Load
+	// After Obj file Load (for Toggle )
 	if (m_pApp->m_bObjLoad)
 	{
 		m_pApp->GetObjMgr()->CreateObjBuffer(this);
@@ -297,28 +297,28 @@ VOID CDxDriver::Term()
 	}
 	m_pVertexBufferList.clear();
 
-	if (m_pTexture != NULL)
+	if (m_pTexture != nullptr)
 		SAFE_RELEASE(m_pTexture);
 
-	if (m_pFont != NULL)
+	if (m_pFont != nullptr)
 	{
 		SAFE_RELEASE(m_pFont);
 		m_pDesc = { NULL };
 	}
 
-	if (m_pIB != NULL)
+	if (m_pIB != nullptr)
 		SAFE_RELEASE(m_pIB);
 
-	if (m_pVB_Tri != NULL)
+	if (m_pVB_Tri != nullptr)
 		SAFE_RELEASE(m_pVB_Tri);
 
-	if (m_pVB != NULL)
+	if (m_pVB != nullptr)
 		SAFE_RELEASE(m_pVB);
 
-	if (m_pD3DDevice != NULL)
+	if (m_pD3DDevice != nullptr)
 		SAFE_RELEASE(m_pD3DDevice);
 
-	if (m_pD3D != NULL)
+	if (m_pD3D != nullptr)
 		SAFE_RELEASE(m_pD3D);
 }
 
@@ -472,7 +472,7 @@ HRESULT CDxDriver::CopyObjIndexBuffer(UINT index, const void* p_src, int p_size)
 	memcpy(pIndices, p_src, p_size);
 	m_pIndexBufferList[index]->Unlock();
 
-	m_pD3DDevice->SetIndices(m_pIndexBufferList[index]);
+
 
 	return S_OK;
 }
@@ -528,6 +528,7 @@ VOID CDxDriver::DrawObjStripModel(CObjMgr* pObjMgr)
 
 		m_pD3DDevice->SetFVF(dwFVF);
 		m_pD3DDevice->SetStreamSource(i, m_pVertexBufferList[i], 0, sizeof(OBJVERTEX));
+		m_pD3DDevice->SetIndices(m_pIndexBufferList[i]);
 		HRESULT hr = m_pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP, 0, 0,
 														pObjMgr->m_verticesList[i].size(), 0,
 													  //pObjMgr->m_primCountList[i]);				// PrimitiveCount : Triangle Count
@@ -569,8 +570,35 @@ VOID CDxDriver::SetProjMatrix(D3DXMATRIXA16& matProj)		// 원근행렬
 }
 
 
+VOID CDxDriver::SetLight()
+{
+	if(m_pD3DDevice == nullptr)
+		MessageBox(NULL, TEXT("No D3DDevice"), TEXT("Set Error"), MB_OK);
 
+	D3DLIGHT9 light;
+	memset(&light, 0, sizeof(light));
 
+	light.Ambient.r = light.Diffuse.g = light.Diffuse.b = 0.5f;			// 환경광
+	light.Diffuse.r = light.Diffuse.g = light.Diffuse.b = 0.5f;			// 난반사광
+	light.Direction.x = 0.0f;
+	light.Direction.y = 0.0f;
+	light.Direction.z = 1.0f;
 
+	// Light Enroll.
+	m_pD3DDevice->SetLight(0, &light);
+	m_pD3DDevice->LightEnable(0, TRUE);
+
+}
+
+VOID CDxDriver::SetMaterial()
+{
+	D3DMATERIAL9 material;
+	memset(&material, 0, sizeof(material));
+	material.Diffuse.r = material.Diffuse.g = material.Diffuse.b = 1.0f;
+	material.Ambient.r = material.Ambient.g = material.Ambient.b = 1.0f;
+
+	// Material Enroll.
+	m_pD3DDevice->SetMaterial(&material);
+}
 
 

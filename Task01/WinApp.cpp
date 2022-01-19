@@ -75,6 +75,9 @@ BOOL App::Initialize()
 		return FALSE;
 	}
 
+	m_pDXDriver->SetLight();
+	m_pDXDriver->SetMaterial();
+
 	return TRUE;
 }
 

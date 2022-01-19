@@ -325,7 +325,7 @@ VOID CObjMgr::SaveToListIndices(INDEXLIST list)
 VOID CObjMgr::CreateObjBuffer(CDxDriver* pDriver)
 {
 	// Culling CCW (반시계)
-//	pDriver->m_pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);		// 안나오면 D3DCULL_NONE 로 확인
+	pDriver->m_pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);		// 안나오면 D3DCULL_NONE 로 확인
 //	pDriver->m_pD3DDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
 //	pDriver->m_pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 //	pDriver->m_pD3DDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
