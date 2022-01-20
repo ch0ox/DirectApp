@@ -164,11 +164,10 @@ VOID App::InitWindow()
 	int monitorX = (static_cast<int>(GetSystemMetrics(SM_CXSCREEN) / 2)) - nWidth / 2;
 	int monitorY = (static_cast<int>(GetSystemMetrics(SM_CYSCREEN) / 2)) - nHeight / 2;
 
-	// TO DO : 수정 필요.
-	// Menu Bar 를 만들면서 조금 밀렸음.
+	// Menu Bar 를 만들면서 조금 밀렸음. -> 수정완료
 	RECT rect;
 	SetRect(&rect, 0, 0, nWidth, nHeight);
-	AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, FALSE);
+	AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, TRUE);
 
 	m_hWnd = ::CreateWindowEx(0, TEXT("Task"), TEXT("Task"), WS_OVERLAPPEDWINDOW, monitorX, monitorY, rect.right - rect.left, rect.bottom - rect.top, NULL, NULL, ::GetModuleHandle(NULL), NULL);
 	DWORD d = GetLastError();
@@ -227,12 +226,6 @@ VOID App::FileLoad(HWND hWnd)
 		}
 		m_pObjMgr->SetPosition(D3DXVECTOR3(0.0f, 0.0f, -1.0f));
 
-// 		if (m_pDXDriver->m_pObjMgr)
-// 		{
-// 			delete m_pDXDriver->m_pObjMgr;
-// 			m_pDXDriver->m_pObjMgr = nullptr;
-// 			m_pDXDriver->m_pObjMgr = new CObjMgr();
-// 		}
 		file.close();
 	}
 }
@@ -249,6 +242,7 @@ LRESULT CALLBACK App::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IPar
 
 		hSubMenu = CreatePopupMenu();
 		AppendMenuW(hSubMenu, MF_STRING, ID_FILE_LOAD, TEXT("L&oad"));
+		//AppendMenuW(hSubMenu, MF_STRING, ID_FILE_CANCLE, TEXT("C&ancel"));
 		AppendMenuW(hSubMenu, MF_STRING, ID_FILE_EXIT, TEXT("E&xit"));
 		AppendMenuW(hMenu, MF_STRING | MF_POPUP, (UINT)hSubMenu,TEXT("&File"));
 
@@ -286,6 +280,10 @@ LRESULT CALLBACK App::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IPar
 			// Menu Load Click ?
 			// Load Action Code
 			FileLoad(hWnd);
+			break;
+
+		case ID_FILE_CANCLE:
+			MessageBox(hWnd, TEXT("Obj Cancel"), TEXT("Cancel"), MB_OK);
 			break;
 
 		case ID_ABOUT:

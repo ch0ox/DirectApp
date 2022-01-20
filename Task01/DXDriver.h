@@ -99,8 +99,12 @@ public:
 	LPDIRECT3DVERTEXBUFFER9		m_pVB = nullptr;							// 정점 버퍼
 	LPDIRECT3DVERTEXBUFFER9		m_pVB_Btn = nullptr;						// Button 정점 버퍼
 	LPDIRECT3DVERTEXBUFFER9		m_pVB_Tri = nullptr;						// Triangle 정점 버퍼
-	LPDIRECT3DINDEXBUFFER9		m_pIB = nullptr;							// 인덱스 버퍼
+	LPDIRECT3DINDEXBUFFER9		m_pIB_Tri = nullptr;						// 인덱스 버퍼
 	LPDIRECT3DTEXTURE9			m_pTexture = nullptr;						// 사용할 텍스쳐
+
+	// Test
+	LPDIRECT3DVERTEXBUFFER9		m_pVB_Test = nullptr;						
+	LPDIRECT3DINDEXBUFFER9		m_pIB_Test = nullptr;						
 
 	VERTEXBUFFERLIST			m_pVertexBufferList;
 	INDEXBUFFERLIST				m_pIndexBufferList;

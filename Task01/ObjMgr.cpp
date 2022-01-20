@@ -16,7 +16,17 @@
 
 CObjMgr::CObjMgr()
 {
+	m_eye.x = 0.0f;
+	m_eye.y = 0.0f;
+	m_eye.z = -10.0f;
 
+	m_at.x = 0.0f;
+	m_at.y = 0.0f;
+	m_at.z = 0.0f;
+
+	m_up.x = 0.0f;
+	m_up.y = 1.0f;
+	m_up.z = 0.0f;
 }
 
 CObjMgr::~CObjMgr()
@@ -326,10 +336,10 @@ VOID CObjMgr::CreateObjBuffer(CDxDriver* pDriver)
 {
 	// Culling CCW (반시계)
 	pDriver->m_pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);		// 안나오면 D3DCULL_NONE 로 확인
-//	pDriver->m_pD3DDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
-//	pDriver->m_pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
-//	pDriver->m_pD3DDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-//	pDriver->m_pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+	pDriver->m_pD3DDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+// 	pDriver->m_pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+// 	pDriver->m_pD3DDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+// 	pDriver->m_pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 
 	//	if (!vtxVec.empty())
 	{
@@ -347,7 +357,7 @@ VOID CObjMgr::CreateObjBuffer(CDxDriver* pDriver)
 			if (index == (UINT)-1)
 				return;
 
-			HRESULT hr = pDriver->CopyObjVertexBuffer(index, &m_verticesList[i].begin(), sizeof(m_verticesList[i]));
+			HRESULT hr = pDriver->CopyObjVertexBuffer(index, &m_verticesList[i]/*.begin()*/, sizeof(m_verticesList[i]));
 			if (FAILED(hr))
 				return;
 
@@ -356,12 +366,11 @@ VOID CObjMgr::CreateObjBuffer(CDxDriver* pDriver)
 			if (index == (UINT)-1)
 				return;
 
-			hr = pDriver->CopyObjIndexBuffer(index, &m_list_indicesList[i].begin(), sizeof(m_list_indicesList[i]));
+			hr = pDriver->CopyObjIndexBuffer(index, &m_list_indicesList[i]/*.begin()*/, sizeof(m_list_indicesList[i]));
 			if (FAILED(hr))
 				return;
 
 			//pDriver->m_pD3DDevice->SetIndices(pDriver->m_pIndexBufferList[i]);
-
 			// Strip
 // 			index = pDriver->CreateObjIndexBuffer(m_indicesList[i].size() * m_indexSize, 0, m_vFormat, D3DPOOL_MANAGED);
 // 			hr = pDriver->CopyObjIndexBuffer(index, &m_indicesList[i].begin(), sizeof(m_indicesList[i]));
@@ -374,31 +383,21 @@ VOID CObjMgr::CreateObjBuffer(CDxDriver* pDriver)
 /* Draw 부분 */
 VOID CObjMgr::ObjDraw(CDxDriver* pDriver)
 {
-	DWORD dwFVF;
-	m_eye.x = 0.0f;
-	m_eye.y = 0.0f;
-	m_eye.z = -1.0f;
+	//TEST
+/*	pDriver->m_pDraw->m_eye.z = -5.5f;*/
+	pDriver->m_pDraw->m_eye.y = -15.0f;
 
-	m_at.x = 0.0f;
-	m_at.y = 0.0f;
-	m_at.z = 0.0f;
-
-	m_up.x = 0.0f;
-	m_up.y = 1.0f;
-	m_up.z = 0.0f;
-
-//TO DO : Set Matrices
-	pDriver->SetWorldMatrix(m_matWorld);
-	pDriver->SetCameraMatrix(m_matView, m_eye, m_at, m_up);
-	pDriver->SetProjMatrix(m_matProj);
+// Set Matrices
+// 	pDriver->SetWorldMatrix(m_matWorld);
+// 	pDriver->SetCameraMatrix(m_matView, m_eye, m_at, m_up);
+// 	pDriver->SetProjMatrix(m_matProj);
 
 // Drawing
-
-	//pDriver->DrawObjStripModel(this);
 	pDriver->DrawObjListModel(this);
-
+	//pDriver->DrawObjStripModel(this);
 
 // TO DO : Set Texture
+	// 한 번 더 Load File 하던가 material 파일 읽어오던가.
 
 // TO DO : Texture 있을 경우 - 좌표에 맞게 텍스쳐 입히기.
 //pDriver->SetTexture(texture...);

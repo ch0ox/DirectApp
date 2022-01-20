@@ -111,10 +111,13 @@ HRESULT CDxDriver::InitD3D()
 
 HRESULT CDxDriver::InitVB()
 {
-	m_pDraw->CreateTriangleBuffer();
+	//m_pDraw->CreateTriangleBuffer();
+	// Test
+	//m_pDraw->CreateCubeBuffer();
+
 	m_pDraw->TextInit();
 
-	// After Obj file Load (for Toggle )
+	// After Obj file Load ( for Toggle )
 	if (m_pApp->m_bObjLoad)
 	{
 		m_pApp->GetObjMgr()->CreateObjBuffer(this);
@@ -128,7 +131,7 @@ HRESULT CDxDriver::InitVB()
 HRESULT CDxDriver::InitGeometry()
 {
 	m_pDraw->CreateButton();
-	//m_pDraw->TriangleInit();
+	//m_pDraw->MatrixInit();
 
 	for (int i = 0; i < static_cast<int>(m_pDraw->m_btnVector.size()); i++)
 	{
@@ -154,16 +157,22 @@ VOID CDxDriver::Drawing()
 		m_pDraw->DrawRect(m_pDraw->m_btnVector[i]);
 	}
 
-	// Triangle
-//m_pD3DDevice->SetTexture(0, m_pDraw->m_pTexture);
-//m_pDraw->SetupMatrices();
-//m_pDraw->DrawTriangle();
+	// Matrix
+	m_pDraw->SetupMatrices();
 
+	// Triangle
+// 	m_pD3DDevice->SetTexture(0, m_pDraw->m_pTexture);
+// 	m_pDraw->DrawTriangle();
 
 	// Object Model
 	if (m_pApp->m_bObjLoad)		// obj file 이 Load 된 후에만 Drawing.
 	{
 		m_pApp->GetObjMgr()->ObjDraw(this);
+	}
+	else
+	{
+		// Test Cube
+		//m_pDraw->DrawCube();
 	}
 }
 
@@ -307,8 +316,8 @@ VOID CDxDriver::Term()
 		m_pDesc = { NULL };
 	}
 
-	if (m_pIB != nullptr)
-		SAFE_RELEASE(m_pIB);
+	if (m_pIB_Tri != nullptr)
+		SAFE_RELEASE(m_pIB_Tri);
 
 	if (m_pVB_Tri != nullptr)
 		SAFE_RELEASE(m_pVB_Tri);
@@ -345,7 +354,7 @@ VOID CDxDriver::ChangeDisplayMode(int mode)
 		RECT rect;
 	case windowMode:
 		SetRect(&rect, 0, 0, nWidth, nHeight);
-		AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, FALSE);
+		AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, TRUE);
 
 		SetWindowLong(m_hWnd, GWL_STYLE, WS_OVERLAPPEDWINDOW);
 		SetWindowPos(m_hWnd, HWND_NOTOPMOST, monitorX, monitorY, rect.right - rect.left, rect.bottom - rect.top, SWP_NOACTIVATE | SWP_SHOWWINDOW);
@@ -353,7 +362,7 @@ VOID CDxDriver::ChangeDisplayMode(int mode)
 
 	case fullScreenMode:
 		SetRect(&rect, 0, 0, dmode.Width, dmode.Height);
-		AdjustWindowRect(&rect, WS_VISIBLE | WS_POPUP, FALSE);
+		AdjustWindowRect(&rect, WS_VISIBLE | WS_POPUP, TRUE);
 
 		SetWindowLong(m_hWnd, GWL_STYLE, WS_VISIBLE | WS_POPUP);
 		SetWindowPos(m_hWnd, NULL, 0, 0, rect.right - rect.left, rect.bottom - rect.top, SWP_NOZORDER);
@@ -449,7 +458,7 @@ HRESULT CDxDriver::CopyObjVertexBuffer(UINT index, const void* p_src, int p_size
 		return E_FAIL;
 
 	VOID* pVertices;
-	m_pVertexBufferList[index]->Lock(0, 0, &pVertices, 0);
+	m_pVertexBufferList[index]->Lock(0, p_size, &pVertices, 0);
 	memcpy(pVertices, p_src, p_size);
 	m_pVertexBufferList[index]->Unlock();
 
@@ -469,7 +478,7 @@ HRESULT CDxDriver::CopyObjIndexBuffer(UINT index, const void* p_src, int p_size)
 		return E_FAIL;
 
 	VOID* pIndices;
-	m_pIndexBufferList[index]->Lock(0, 0, &pIndices, 0);
+	m_pIndexBufferList[index]->Lock(0, p_size, &pIndices, 0);
 	memcpy(pIndices, p_src, p_size);
 	m_pIndexBufferList[index]->Unlock();
 
@@ -498,10 +507,12 @@ VOID CDxDriver::DrawObjListModel(CObjMgr* pObjMgr)
 //		else
 //			MessageBox(NULL, TEXT("prim 다름"), TEXT("Failed"), MB_OK);
 
-		m_pD3DDevice->SetStreamSource(i, m_pVertexBufferList[i], 0, sizeof(OBJVERTEX));
+		// Drawing Preparation
+		m_pD3DDevice->SetStreamSource(0, m_pVertexBufferList[i], 0, sizeof(OBJVERTEX));
 		m_pD3DDevice->SetFVF(dwFVF);
 		m_pD3DDevice->SetIndices(m_pIndexBufferList[i]);
-		HRESULT hr = m_pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, i, 0,
+		// Drawing
+		HRESULT hr = m_pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0,
 														pObjMgr->m_verticesList[i].size(), 0,
 													  //pObjMgr->m_primCountList[i]);				// PrimitiveCount : Triangle Count
 														pObjMgr->m_list_indicesList[i].size() / 3);
@@ -544,8 +555,8 @@ VOID CDxDriver::SetWorldMatrix(D3DXMATRIXA16& matWorld)
 	FLOAT m_fAngle = 0.0f;
 	FLOAT m_fScale = 1.0f;
 	D3DXMatrixIdentity(&matWorld);
-	D3DXMatrixTranslation(&matWorld, 0.0f, 10.0f, -15.0f);
 	D3DXMatrixRotationY(&matWorld, m_fAngle);
+	D3DXMatrixTranslation(&matWorld, 0.0f, 10.0f, -15.0f);
 	if (FAILED(m_pD3DDevice->SetTransform(D3DTS_WORLDMATRIX(0), &matWorld)))
 		MessageBox(NULL, TEXT("Set World Matrix Error"), TEXT("Matrix Error"), MB_OK);
 //	else
@@ -554,7 +565,7 @@ VOID CDxDriver::SetWorldMatrix(D3DXMATRIXA16& matWorld)
 
 VOID CDxDriver::SetCameraMatrix(D3DXMATRIXA16& matView, D3DXVECTOR3 p_eye, D3DXVECTOR3 p_at, D3DXVECTOR3 p_up)
 {
-	D3DXMatrixIdentity(&matView);
+	//D3DXMatrixIdentity(&matView);
 	D3DXMatrixLookAtLH(&matView, &p_eye, &p_at, &p_up);	// Camera 변환 행렬 계산
 	if (FAILED(m_pD3DDevice->SetTransform(D3DTS_VIEW, &matView)))
 		MessageBox(NULL, TEXT("Set VIEW Matrix Error"), TEXT("Matrix Error"), MB_OK);

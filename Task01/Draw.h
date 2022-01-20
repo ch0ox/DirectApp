@@ -16,10 +16,18 @@ class CButton;
 
 #define D3DFVF_BOXVERTEX (D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1)
 #define D3DFVF_COLORVERTEX (D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX1)
+#define D3DFVF_NVERTEX (D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_NORMAL)	// Test
 
 #define idle 1
 #define over 2
 #define click 3
+
+typedef struct NVERTEX
+{
+	FLOAT x, y, z;
+	DWORD color;
+	FLOAT nx, ny, nz;
+}test;
 
 typedef struct COLORVERTEX
 {
@@ -55,7 +63,7 @@ public:
 	VOID DrawRect(CButton* pButton);
 	VOID LinkD3D(CDxDriver* pDriver);
 	VOID TextInit();
-	VOID TriangleInit();
+	VOID MatrixInit();
 
 	VOID DrawTextFPS();
 	VOID DrawTexture();
@@ -64,6 +72,11 @@ public:
 	VOID SetDuringTime(FLOAT time);
 	VOID SetupMatrices();
 	VOID SetupOrthogonal();
+
+	// Test
+	VOID DrawCube();
+	HRESULT CreateCubeBuffer();
+
 
 	std::vector<CButton*>				m_btnVector;
 	std::vector<CButton*>::iterator		m_btnIter;

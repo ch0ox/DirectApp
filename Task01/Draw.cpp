@@ -16,7 +16,7 @@
 
 CDraw::CDraw()
 {
-	TriangleInit();
+	MatrixInit();
 }
 
 CDraw::~CDraw()
@@ -147,10 +147,91 @@ VOID CDraw::DrawTriangle()
 {
 	m_pDriver->m_pD3DDevice->SetStreamSource(0, m_pDriver->m_pVB_Tri, 0, sizeof(COLORVERTEX));
 	m_pDriver->m_pD3DDevice->SetFVF(D3DFVF_COLORVERTEX);
+	// SetIndices
+	m_pDriver->m_pD3DDevice->SetIndices(m_pDriver->m_pIB_Tri);
 	HRESULT hr = m_pDriver->m_pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 3, 0, 1);
 	if (FAILED(hr))
 		MessageBox(NULL, TEXT("DrawIndexedPrimitive Error"), TEXT("DrawIndexedPrimitive Error"), MB_OK);
 }
+
+/*/////////////////////////////////////////*/
+// Test Code
+VOID CDraw::DrawCube()
+{
+	m_pDriver->m_pD3DDevice->SetStreamSource(0, m_pDriver->m_pVB_Test, 0, sizeof(NVERTEX));
+	m_pDriver->m_pD3DDevice->SetFVF(D3DFVF_COLORVERTEX);
+	// SetIndices
+	m_pDriver->m_pD3DDevice->SetIndices(m_pDriver->m_pIB_Test);
+	HRESULT hr = m_pDriver->m_pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 8, 0, 12);
+	if (FAILED(hr))
+		MessageBox(NULL, TEXT("DrawIndexedPrimitive Error"), TEXT("DrawIndexedPrimitive Error"), MB_OK);
+}
+
+// Test Code
+HRESULT CDraw::CreateCubeBuffer()
+{
+	// Culling OFF.
+	m_pDriver->m_pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
+	m_pDriver->m_pD3DDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+
+	if (FAILED(m_pDriver->m_pD3DDevice->CreateVertexBuffer(8 * sizeof(NVERTEX), 0, D3DFVF_NVERTEX, D3DPOOL_MANAGED, &(m_pDriver->m_pVB_Test), NULL)))
+	{
+		MessageBox(NULL, TEXT("Vertex Buffer Error"), TEXT("Vertex Buffer Error"), MB_OK);
+		return E_FAIL;
+	}
+
+	if (FAILED(m_pDriver->m_pD3DDevice->CreateIndexBuffer(12 * iTriSize, 0, vFormat, D3DPOOL_MANAGED, &(m_pDriver->m_pIB_Test), NULL)))
+	{
+		MessageBox(NULL, TEXT("Index Buffer Error"), TEXT("Index Buffer Error"), MB_OK);
+		return E_FAIL;
+	}
+
+	NVERTEX cube[] =
+	{
+				{ -1.0f, -1.0f, 1.0f, 0xffffffff, -0.5f, -0.5f, 0.5f },
+				{ -1.0f, 1.0f, 1.0f, 0xffffffff, -0.5f, 0.5f, 0.5f },
+				{ 1.0f, 1.0f, 1.0f, 0xffffffff, 0.5f, 0.5f, 0.5f },
+				{ 1.0f, -1.0f, 1.0f, 0xffffffff, 0.5f, -0.5f, 0.5f },
+				{ -1.0f, -1.0f, -1.0f, 0xffffffff, -0.5f, -0.5f, -0.5f },
+				{ -1.0f, 1.0f, -1.0f, 0xffffffff, -0.5f, 0.5f, -0.5f },
+				{ 1.0f, 1.0f, -1.0f, 0xffffffff, 0.5f, 0.5f, -0.5f },
+				{ 1.0f, -1.0f, -1.0f, 0xffffffff, 0.5f, -0.5f, -0.5f },
+	};
+
+	UINT cubeIndex[36] =
+	{
+		0,3,2,
+		2,3,1,
+		0,4,7,
+		7,4,3,
+		1,5,4,
+		4,5,0,
+		2,6,5,
+		5,6,1,
+		3,7,6,
+		6,7,2,
+		5,6,7,
+		7,6,4,
+	};
+
+	// Triangle
+	VOID* pVertices;
+	m_pDriver->m_pVB_Test->Lock(0, sizeof(cube), &pVertices, 0);
+	memcpy(pVertices, cube, sizeof(cube));
+	m_pDriver->m_pVB_Test->Unlock();
+
+	VOID* pIndices;
+	m_pDriver->m_pIB_Test->Lock(0, sizeof(cubeIndex), &pIndices, 0);
+	memcpy(pIndices, cubeIndex, sizeof(cubeIndex));
+	m_pDriver->m_pIB_Test->Unlock();
+
+	//D3DXCreateTextureFromFile(m_pDriver->m_pD3DDevice, TEXT("tree2.png"), &m_pTexture);
+
+	return S_OK;
+
+}
+
+/*/////////////////////////////////////////*/
 
 // Use D3DFVF_XYZRHW and DrawPrimitiveUp.
 VOID CDraw::DrawRect(CButton* pButton)
@@ -162,7 +243,7 @@ VOID CDraw::DrawRect(CButton* pButton)
 		MessageBox(NULL, TEXT("DrawPrimitiveUp Error"), TEXT("DrawPrimitiveUp Error"), MB_OK);
 }
 
-VOID CDraw::TriangleInit()
+VOID CDraw::MatrixInit()
 {
 	m_anglePitch = 0;
 	m_angleYaw = 0;
@@ -173,7 +254,7 @@ VOID CDraw::TriangleInit()
 
 	m_eye.x = 0.0f;
 	m_eye.y = 0.0f;
-	m_eye.z = -5.0f;
+	m_eye.z = -10.0f;
 
 	m_at.x = 0.0f;
 	m_at.y = 0.0f;
@@ -190,7 +271,7 @@ HRESULT CDraw::CreateTriangleBuffer()
 {
 	// Culling OFF.
 	m_pDriver->m_pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
-	m_pDriver->m_pD3DDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
+	m_pDriver->m_pD3DDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
 
 	if (FAILED(m_pDriver->m_pD3DDevice->CreateVertexBuffer(iVtxNum * iVtxSize, 0, dwFVF, D3DPOOL_MANAGED, &(m_pDriver->m_pVB_Tri), NULL)))
 	{
@@ -198,7 +279,7 @@ HRESULT CDraw::CreateTriangleBuffer()
 		return E_FAIL;
 	}
 
-	if (FAILED(m_pDriver->m_pD3DDevice->CreateIndexBuffer(iTriNum * iTriSize, 0, vFormat, D3DPOOL_MANAGED, &(m_pDriver->m_pIB), NULL)))
+	if (FAILED(m_pDriver->m_pD3DDevice->CreateIndexBuffer(iTriNum * iTriSize, 0, vFormat, D3DPOOL_MANAGED, &(m_pDriver->m_pIB_Tri), NULL)))
 	{
 		MessageBox(NULL, TEXT("Index Buffer Error"), TEXT("Index Buffer Error"), MB_OK);
 		return E_FAIL;
@@ -206,14 +287,14 @@ HRESULT CDraw::CreateTriangleBuffer()
 
 	COLORVERTEX triangle[] =
 	{
-				{ -0.5f, -0.5f, 0.0f, 0xffffffff, 0.0f, 1.0f },
-				{ 0.5f, -0.5f, 0.0f, 0xffffffff, 1.0f, 1.0f },
-				{ 0.0f, 0.5f, 0.0f, 0xffffffff, 0.5f, 0.0f },
+				{ -1.0f, -1.0f, 0.0f, 0xffffffff, 0.0f, 1.0f },
+				{ 1.0f, -1.0f, 0.0f, 0xffffffff, 1.0f, 1.0f },
+				{ 0.0f, 1.0f, 0.0f, 0xffffffff, 0.5f, 0.0f },
 	};
 
 	UINT triangleIndex[3] =
 	{
-		2, 1, 0
+		2, 0, 1,
 	};
 
 	// Triangle
@@ -223,19 +304,17 @@ HRESULT CDraw::CreateTriangleBuffer()
 	m_pDriver->m_pVB_Tri->Unlock();
 
 	VOID* pIndices;
-	m_pDriver->m_pIB->Lock(0, sizeof(triangleIndex), &pIndices, 0);
+	m_pDriver->m_pIB_Tri->Lock(0, sizeof(triangleIndex), &pIndices, 0);
 	memcpy(pIndices, triangleIndex, sizeof(triangleIndex));
-	m_pDriver->m_pIB->Unlock();
-
-	// SetIndices
-	m_pDriver->m_pD3DDevice->SetIndices(m_pDriver->m_pIB);
-
+	m_pDriver->m_pIB_Tri->Unlock();
 
 	D3DXCreateTextureFromFile(m_pDriver->m_pD3DDevice, TEXT("tree2.png"), &m_pTexture);
 
 	return S_OK;
 
 }
+
+
 
 HRESULT CDraw::CreateRectBuffer()
 {

@@ -16,6 +16,7 @@
 #define START_CONTEXT 2
 #define START_CONTEXT_else 3
 
+//								V				Vt				Vn
 #define D3DFVF_TEXTUREVERTEX (D3DFVF_XYZ | D3DFVF_TEX1 | D3DFVF_NORMAL )		// | D3DFVF_DIFFUSE 
 #define D3DFVF_NOTEXTUREVERTEX (D3DFVF_XYZ | D3DFVF_TEX1 | D3DFVF_NORMAL )		// | D3DFVF_DIFFUSE 
 //#define D3DFVF_NOTEXTUREVERTEX (D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_DIFFUSE)
@@ -58,9 +59,9 @@ typedef struct Node
 
 typedef struct OBJVERTEX
 {
-	float x, y, z;
-	float u, v;				// TEXTURE 좌표
-	float nx, ny, nz;
+	float x, y, z;				// VERTEX 좌표
+	float u, v;					// TEXTURE 좌표
+	float nx, ny, nz;			// NORMAL 좌표
 	//DWORD color = 0x666666;	// gray
 }objVertex;
 
@@ -77,10 +78,6 @@ public:
 	std::map<std::string, std::vector<D3DXVECTOR2>> m_tex;
 
 	DWORD fvf;
-
-	LPDIRECT3DVERTEXBUFFER9		m_pVB = nullptr;							// 정점 버퍼
-	LPDIRECT3DINDEXBUFFER9		m_pIB = nullptr;							// 인덱스 버퍼
-	LPDIRECT3DTEXTURE9			m_pTexture = nullptr;						// 사용할 텍스쳐
 
 };
 
@@ -142,8 +139,6 @@ public:
 
 private:
 	
-
-	D3DXMATRIXA16 m_world;
 	bool m_bIsTexturing = FALSE;
 
 
