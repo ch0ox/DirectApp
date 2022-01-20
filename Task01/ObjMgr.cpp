@@ -347,12 +347,12 @@ VOID CObjMgr::CreateObjBuffer(CDxDriver* pDriver)
 			if (index == (UINT)-1)
 				return;
 
-			HRESULT hr = pDriver->CopyObjVertexBuffer(index, &m_verticesList[i]/*.begin()*/, sizeof(m_verticesList[i]));
+			HRESULT hr = pDriver->CopyObjVertexBuffer(index, &m_verticesList[i] /*.begin()*/, sizeof(m_verticesList[i]));
 			if (FAILED(hr))
 				return;
 
 			// List
-			index = pDriver->CreateObjIndexBuffer(m_list_indicesList[i].size() * m_indexSize, 0, m_vFormat, D3DPOOL_MANAGED);
+			index = pDriver->CreateObjIndexBuffer(m_list_indicesList[i].size() /*/3*/ * m_indexSize, 0, m_vFormat, D3DPOOL_MANAGED);
 			if (index == (UINT)-1)
 				return;
 

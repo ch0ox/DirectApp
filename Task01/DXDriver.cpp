@@ -123,7 +123,8 @@ HRESULT CDxDriver::InitD3D()
 
 HRESULT CDxDriver::InitVB()
 {
-	m_pDraw->CreateTriangleBuffer();
+	// Triangle
+//	m_pDraw->CreateTriangleBuffer();
 	// Test
 //	m_pDraw->CreateCubeBuffer();
 
@@ -176,8 +177,8 @@ VOID CDxDriver::Drawing()
 //	m_pDraw->SetupMatrices();
 
 	// Triangle
- 	m_pD3DDevice->SetTexture(0, m_pDraw->m_pTexture);
- 	m_pDraw->DrawTriangle();
+//  	m_pD3DDevice->SetTexture(0, m_pDraw->m_pTexture);
+//  	m_pDraw->DrawTriangle();
 
 	// Object Model
 	if (m_pApp->m_bObjLoad)		// obj file 이 Load 된 후에만 Drawing.
