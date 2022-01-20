@@ -105,7 +105,6 @@ public:
 	VOID CreateObjBuffer(CDxDriver* pDriver);
 	VOID ObjDraw(CDxDriver* pDriver);
 	DWORD GetFVF() { return m_dwFVF; }
-	VOID SetPosition(D3DXVECTOR3 pos);
 
 	std::vector <CObj> m_objs;								// Objects Vector
 	std::vector <FLOAT> StrtokFloat(char*, char*);
@@ -131,11 +130,6 @@ public:
 	UINT									m_hIndexBuffer = 0;
 	int										m_primitiveCount = 0;
 
-	D3DXMATRIXA16							m_matWorld;
-	D3DXMATRIXA16							m_matView;
-	D3DXMATRIXA16							m_matProj;
-	D3DXVECTOR3								m_pos;
-	D3DXVECTOR3								m_eye, m_at, m_up;
 
 private:
 	

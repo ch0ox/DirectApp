@@ -71,6 +71,7 @@ public:
 	VOID InputRender(class CDxInput* pInput);
 	VOID SetLight();
 	VOID SetMaterial();
+	VOID SetPosition(D3DXVECTOR3 pos);
 
 	HRESULT SetTexture(UINT texture);
 
@@ -112,6 +113,14 @@ public:
 
 	BOOL						WindowMode = TRUE;
 	BOOL						m_bLostDevice = FALSE;
+
+	D3DXMATRIXA16				m_matWorld;
+	D3DXMATRIXA16				m_matView;
+	D3DXMATRIXA16				m_matProj;
+	FLOAT						m_fAngle = 0.0f;
+	FLOAT						m_fScale = 1.0f;
+	D3DXVECTOR3					m_pos;
+	D3DXVECTOR3					m_eye, m_at, m_up;
 
 
 private:

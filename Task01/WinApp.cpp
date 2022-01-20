@@ -224,7 +224,7 @@ VOID App::FileLoad(HWND hWnd)
 		{
 			m_bObjLoad = TRUE;
 		}
-		m_pObjMgr->SetPosition(D3DXVECTOR3(0.0f, 0.0f, -1.0f));
+		m_pDXDriver->SetPosition(D3DXVECTOR3(0.0f, 0.0f, -1.0f));
 
 		file.close();
 	}

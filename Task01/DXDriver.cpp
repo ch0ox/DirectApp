@@ -27,6 +27,18 @@ CDxDriver::CDxDriver(App* app)	:	m_pApp(app)
 	m_pMouse = nullptr;
 	m_pMouse = new CMouse();
 	m_pMouse->LinkD3D(this);
+
+	m_eye.x = 0.0f;
+	m_eye.y = 0.0f;
+	m_eye.z = -10.0f;
+
+	m_at.x = 0.0f;
+	m_at.y = 0.0f;
+	m_at.z = 0.0f;
+
+	m_up.x = 0.0f;
+	m_up.y = 1.0f;
+	m_up.z = 0.0f;
 }
 
 CDxDriver::~CDxDriver()
@@ -111,9 +123,9 @@ HRESULT CDxDriver::InitD3D()
 
 HRESULT CDxDriver::InitVB()
 {
-	//m_pDraw->CreateTriangleBuffer();
+	m_pDraw->CreateTriangleBuffer();
 	// Test
-	//m_pDraw->CreateCubeBuffer();
+//	m_pDraw->CreateCubeBuffer();
 
 	m_pDraw->TextInit();
 
@@ -158,11 +170,14 @@ VOID CDxDriver::Drawing()
 	}
 
 	// Matrix
-	m_pDraw->SetupMatrices();
+	SetWorldMatrix(m_matWorld);
+	SetCameraMatrix(m_matView, m_eye, m_at, m_up);
+	SetProjMatrix(m_matProj);
+//	m_pDraw->SetupMatrices();
 
 	// Triangle
-// 	m_pD3DDevice->SetTexture(0, m_pDraw->m_pTexture);
-// 	m_pDraw->DrawTriangle();
+ 	m_pD3DDevice->SetTexture(0, m_pDraw->m_pTexture);
+ 	m_pDraw->DrawTriangle();
 
 	// Object Model
 	if (m_pApp->m_bObjLoad)		// obj file 이 Load 된 후에만 Drawing.
@@ -172,7 +187,7 @@ VOID CDxDriver::Drawing()
 	else
 	{
 		// Test Cube
-		//m_pDraw->DrawCube();
+//		m_pDraw->DrawCube();
 	}
 }
 
@@ -514,7 +529,6 @@ VOID CDxDriver::DrawObjListModel(CObjMgr* pObjMgr)
 		// Drawing
 		HRESULT hr = m_pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0,
 														pObjMgr->m_verticesList[i].size(), 0,
-													  //pObjMgr->m_primCountList[i]);				// PrimitiveCount : Triangle Count
 														pObjMgr->m_list_indicesList[i].size() / 3);
 		// For Cube Test
 //		HRESULT hr = m_pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 8, 0, 12);
@@ -552,11 +566,9 @@ VOID CDxDriver::DrawObjStripModel(CObjMgr* pObjMgr)
 
 VOID CDxDriver::SetWorldMatrix(D3DXMATRIXA16& matWorld)
 {
-	FLOAT m_fAngle = 0.0f;
-	FLOAT m_fScale = 1.0f;
-	D3DXMatrixIdentity(&matWorld);
+	//D3DXMatrixIdentity(&matWorld);
 	D3DXMatrixRotationY(&matWorld, m_fAngle);
-	D3DXMatrixTranslation(&matWorld, 0.0f, 10.0f, -15.0f);
+	//D3DXMatrixTranslation(&matWorld, 0.0f, 10.0f, -15.0f);
 	if (FAILED(m_pD3DDevice->SetTransform(D3DTS_WORLDMATRIX(0), &matWorld)))
 		MessageBox(NULL, TEXT("Set World Matrix Error"), TEXT("Matrix Error"), MB_OK);
 //	else
@@ -576,7 +588,7 @@ VOID CDxDriver::SetCameraMatrix(D3DXMATRIXA16& matView, D3DXVECTOR3 p_eye, D3DXV
 VOID CDxDriver::SetProjMatrix(D3DXMATRIXA16& matProj)		// 원근행렬
 {
 	D3DXMatrixIdentity(&matProj);
-	D3DXMatrixPerspectiveFovLH(&matProj, D3DX_PI / 0.5f, 1.0f, 1.0f, 1000.f);
+	D3DXMatrixPerspectiveFovLH(&matProj, D3DX_PI / 4.0f, 1.0f, 1.0f, 1000.f);
 	if (FAILED(m_pD3DDevice->SetTransform(D3DTS_PROJECTION, &matProj)))
 		MessageBox(NULL, TEXT("Set PROJ Matrix Error"), TEXT("Matrix Error"), MB_OK);
 //	else
@@ -615,4 +627,8 @@ VOID CDxDriver::SetMaterial()
 	m_pD3DDevice->SetMaterial(&material);
 }
 
+VOID CDxDriver::SetPosition(D3DXVECTOR3 pos)
+{
+	D3DXMatrixTranslation(&m_matWorld, pos.x, pos.y, pos.z);
+}
 

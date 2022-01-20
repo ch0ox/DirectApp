@@ -83,10 +83,10 @@ VOID CMouse::MouseManager(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, INT
 					this->m_btnVector[state]->m_state = click;
 
 					if (state == left)
-						m_pDriver->m_pDraw->m_fAngle += 0.2f;
+						m_pDriver->m_fAngle += 0.2f;
 
 					else if (state == right)
-						m_pDriver->m_pDraw->m_fAngle -= 0.2f;
+						m_pDriver->m_fAngle -= 0.2f;
 				}
 			}
 		}
@@ -109,10 +109,10 @@ VOID CMouse::MouseManager(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, INT
 						PostMessage(hWnd, WM_DESTROY, wParam, lParam);
 				}
 				else if (state == left)
-					m_pDriver->m_pDraw->m_fAngle += 0.2f;
+					m_pDriver->m_fAngle += 0.2f;
 
 				else if (state == right)
-					m_pDriver->m_pDraw->m_fAngle -= 0.2f;
+					m_pDriver->m_fAngle -= 0.2f;
 			}
 		}
 

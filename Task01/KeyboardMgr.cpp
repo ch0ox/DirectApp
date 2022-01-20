@@ -78,11 +78,11 @@ VOID CKeyboard::KeyManager(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, CD
 	{
 	case VK_LEFT:
 	{
-		m_pDriver->m_pDraw->m_fAngle += 0.2f;
+		m_pDriver->m_fAngle += 0.2f;
 	}break;
 	case VK_RIGHT:
 	{
-		m_pDriver->m_pDraw->m_fAngle -= 0.2f;
+		m_pDriver->m_fAngle -= 0.2f;
 	}break;
 	}
 }

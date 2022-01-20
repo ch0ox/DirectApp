@@ -16,17 +16,7 @@
 
 CObjMgr::CObjMgr()
 {
-	m_eye.x = 0.0f;
-	m_eye.y = 0.0f;
-	m_eye.z = -10.0f;
 
-	m_at.x = 0.0f;
-	m_at.y = 0.0f;
-	m_at.z = 0.0f;
-
-	m_up.x = 0.0f;
-	m_up.y = 1.0f;
-	m_up.z = 0.0f;
 }
 
 CObjMgr::~CObjMgr()
@@ -383,14 +373,6 @@ VOID CObjMgr::CreateObjBuffer(CDxDriver* pDriver)
 /* Draw 부분 */
 VOID CObjMgr::ObjDraw(CDxDriver* pDriver)
 {
-	//TEST
-/*	pDriver->m_pDraw->m_eye.z = -5.5f;*/
-	pDriver->m_pDraw->m_eye.y = -15.0f;
-
-// Set Matrices
-// 	pDriver->SetWorldMatrix(m_matWorld);
-// 	pDriver->SetCameraMatrix(m_matView, m_eye, m_at, m_up);
-// 	pDriver->SetProjMatrix(m_matProj);
 
 // Drawing
 	pDriver->DrawObjListModel(this);
@@ -406,17 +388,6 @@ VOID CObjMgr::ObjDraw(CDxDriver* pDriver)
 	//pDriver->SetTexture(NO_TEXTURE);
 // TO DO :  Texture 없을 경우 -회색으로 Shading.
 }
-
-VOID CObjMgr::SetPosition(D3DXVECTOR3 pos)
-{
-	D3DXMatrixTranslation(&m_matWorld, pos.x, pos.y, pos.z);
-}
-
-const D3DXMATRIX& CObjMgr::GetMatWorld() const
-{
-	return m_matWorld;
-}
-
 
 std::vector <FLOAT> CObjMgr::StrtokFloat(char* str, char* delimeter)
 {
