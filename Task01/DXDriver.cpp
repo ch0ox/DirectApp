@@ -29,7 +29,7 @@ CDxDriver::CDxDriver(App* app)	:	m_pApp(app)
 	m_pMouse->LinkD3D(this);
 
 	m_eye.x = 0.0f;
-	m_eye.y = 0.0f;
+	m_eye.y = 2.0f;
 	m_eye.z = -10.0f;
 
 	m_at.x = 0.0f;
@@ -124,7 +124,7 @@ HRESULT CDxDriver::InitD3D()
 HRESULT CDxDriver::InitVB()
 {
 	// Triangle
-//	m_pDraw->CreateTriangleBuffer();
+	m_pDraw->CreateTriangleBuffer();
 	// Test
 //	m_pDraw->CreateCubeBuffer();
 
@@ -176,10 +176,6 @@ VOID CDxDriver::Drawing()
 	SetProjMatrix(m_matProj);
 //	m_pDraw->SetupMatrices();
 
-	// Triangle
-//  	m_pD3DDevice->SetTexture(0, m_pDraw->m_pTexture);
-//  	m_pDraw->DrawTriangle();
-
 	// Object Model
 	if (m_pApp->m_bObjLoad)		// obj file 이 Load 된 후에만 Drawing.
 	{
@@ -189,6 +185,10 @@ VOID CDxDriver::Drawing()
 	{
 		// Test Cube
 //		m_pDraw->DrawCube();
+
+		// Triangle
+		m_pD3DDevice->SetTexture(0, m_pDraw->m_pTexture);
+		m_pDraw->DrawTriangle();
 	}
 }
 
@@ -474,7 +474,7 @@ HRESULT CDxDriver::CopyObjVertexBuffer(UINT index, const void* p_src, int p_size
 		return E_FAIL;
 
 	VOID* pVertices;
-	m_pVertexBufferList[index]->Lock(0, p_size, &pVertices, 0);
+	m_pVertexBufferList[index]->Lock(0, p_size, (VOID**)&pVertices, 0);
 	memcpy(pVertices, p_src, p_size);
 	m_pVertexBufferList[index]->Unlock();
 
@@ -494,7 +494,7 @@ HRESULT CDxDriver::CopyObjIndexBuffer(UINT index, const void* p_src, int p_size)
 		return E_FAIL;
 
 	VOID* pIndices;
-	m_pIndexBufferList[index]->Lock(0, p_size, &pIndices, 0);
+	m_pIndexBufferList[index]->Lock(0, p_size, (VOID**)&pIndices, 0);
 	memcpy(pIndices, p_src, p_size);
 	m_pIndexBufferList[index]->Unlock();
 
@@ -508,20 +508,15 @@ VOID CDxDriver::DrawObjListModel(CObjMgr* pObjMgr)
 {
 	DWORD dwFVF;
 
-	for (int i = 0; i < pObjMgr->m_verticesList.size(); i++)
+	for (int i = 0; i < m_pVertexBufferList.size(); i++)
 	{
 		if (pObjMgr->m_bIsTexturingList[i])
 			dwFVF = D3DFVF_TEXTUREVERTEX;
 		else
+		{
 			dwFVF = D3DFVF_NOTEXTUREVERTEX;
-
-		// For Test
-//		if ((pObjMgr->m_list_indicesList[i].size() / 3) == pObjMgr->m_primCountList[i])
-//		{
-//			MessageBox(NULL, TEXT("prim 동일"), TEXT("Success"), MB_OK);
-//		}
-//		else
-//			MessageBox(NULL, TEXT("prim 다름"), TEXT("Failed"), MB_OK);
+			SetTexture(NO_TEXTURE);
+		}
 
 		// Drawing Preparation
 		m_pD3DDevice->SetStreamSource(0, m_pVertexBufferList[i], 0, sizeof(OBJVERTEX));
@@ -531,8 +526,6 @@ VOID CDxDriver::DrawObjListModel(CObjMgr* pObjMgr)
 		HRESULT hr = m_pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0,
 														pObjMgr->m_verticesList[i].size(), 0,
 														pObjMgr->m_list_indicesList[i].size() / 3);
-		// For Cube Test
-//		HRESULT hr = m_pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 8, 0, 12);
 
 		if (FAILED(hr))
 			MessageBox(NULL, TEXT("DrawIndexedPrimitive Error"), TEXT("DrawIndexedPrimitive Error"), MB_OK);
@@ -551,14 +544,16 @@ VOID CDxDriver::DrawObjStripModel(CObjMgr* pObjMgr)
 		if (pObjMgr->m_bIsTexturingList[i])
 			dwFVF = D3DFVF_TEXTUREVERTEX;
 		else
+		{
 			dwFVF = D3DFVF_NOTEXTUREVERTEX;
+			SetTexture(NO_TEXTURE);
+		}
 
 		m_pD3DDevice->SetFVF(dwFVF);
 		m_pD3DDevice->SetStreamSource(i, m_pVertexBufferList[i], 0, sizeof(OBJVERTEX));
 		m_pD3DDevice->SetIndices(m_pIndexBufferList[i]);
 		HRESULT hr = m_pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP, 0, 0,
 														pObjMgr->m_verticesList[i].size(), 0,
-													  //pObjMgr->m_primCountList[i]);				// PrimitiveCount : Triangle Count
 														pObjMgr->m_list_indicesList[i].size() / 3);
 		if (FAILED(hr))
 			MessageBox(NULL, TEXT("DrawIndexedPrimitive Error"), TEXT("DrawIndexedPrimitive Error"), MB_OK);
@@ -589,7 +584,7 @@ VOID CDxDriver::SetCameraMatrix(D3DXMATRIXA16& matView, D3DXVECTOR3 p_eye, D3DXV
 VOID CDxDriver::SetProjMatrix(D3DXMATRIXA16& matProj)		// 원근행렬
 {
 	D3DXMatrixIdentity(&matProj);
-	D3DXMatrixPerspectiveFovLH(&matProj, D3DX_PI / 4.0f, 1.0f, 1.0f, 1000.f);
+	D3DXMatrixPerspectiveFovLH(&matProj, D3DX_PI / 3.0f, 1.0f, 1.0f, 1000.f);
 	if (FAILED(m_pD3DDevice->SetTransform(D3DTS_PROJECTION, &matProj)))
 		MessageBox(NULL, TEXT("Set PROJ Matrix Error"), TEXT("Matrix Error"), MB_OK);
 //	else
@@ -597,7 +592,7 @@ VOID CDxDriver::SetProjMatrix(D3DXMATRIXA16& matProj)		// 원근행렬
 }
 
 
-VOID CDxDriver::SetLight()
+VOID CDxDriver::SetLight(BOOL bLight)
 {
 	if(m_pD3DDevice == nullptr)
 		MessageBox(NULL, TEXT("No D3DDevice"), TEXT("Set Error"), MB_OK);
@@ -605,15 +600,20 @@ VOID CDxDriver::SetLight()
 	D3DLIGHT9 light;
 	memset(&light, 0, sizeof(light));
 
-	light.Ambient.r = light.Diffuse.g = light.Diffuse.b = 0.5f;			// 환경광
+	light.Type = D3DLIGHT_DIRECTIONAL;
+
+	light.Ambient.r = light.Ambient.g = light.Ambient.b = 0.8f;			// 환경광
 	light.Diffuse.r = light.Diffuse.g = light.Diffuse.b = 0.5f;			// 난반사광
 	light.Direction.x = 0.0f;
 	light.Direction.y = 0.0f;
-	light.Direction.z = 1.0f;
+	light.Direction.z = 2.0f;
+	light.Range = 10.0f;
 
 	// Light Enroll.
 	m_pD3DDevice->SetLight(0, &light);
-	m_pD3DDevice->LightEnable(0, TRUE);
+	m_pD3DDevice->LightEnable(0, bLight);
+	m_pD3DDevice->SetRenderState(D3DRS_LIGHTING, bLight);
+	m_pD3DDevice->SetRenderState(D3DRS_SHADEMODE, D3DSHADE_GOURAUD);
 
 }
 

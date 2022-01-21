@@ -69,7 +69,7 @@ public:
 	VOID ChangeDisplayMode(int mode);
 	VOID DeviceLostRecovery();
 	VOID InputRender(class CDxInput* pInput);
-	VOID SetLight();
+	VOID SetLight(BOOL bLight);
 	VOID SetMaterial();
 	VOID SetPosition(D3DXVECTOR3 pos);
 

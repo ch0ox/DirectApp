@@ -259,8 +259,8 @@ OBJVERTEX CObjMgr::FaceToVertex(int num, CPoint3i tmp)
 	{
 		m_bIsTexturing = FALSE;
 
-		tmpVtx.u = NULL;
-		tmpVtx.v = NULL;
+		tmpVtx.u = 0.0f;
+		tmpVtx.v = 0.0f;
 		m_objs[num].fvf = D3DFVF_NOTEXTUREVERTEX;			// Texture 없을 경우, FVF 를 컬러용(D3DFVF_DIFFUSE)으로 설정.
 	}
 	return tmpVtx;
@@ -293,22 +293,44 @@ VOID CObjMgr::SaveToListIndices(INDEXLIST list)
 	indiceIter = list.begin();
 	tmpIter = indiceIter;
 
+// 	for (; list.end() != indiceIter; indiceIter++)
+// 	{
+// 		indiceIter = tmpIter;
+// 
+// 		list_indices.push_back(*indiceIter);
+// 		list_indices.push_back(*(++indiceIter));
+// 		list_indices.push_back(*(++indiceIter));
+// 
+// 		tmpIter = indiceIter;
+// 		checkIter = indiceIter;
+// 		
+// 		if (++checkIter != list.end())
+// 		{
+// 			list_indices.push_back(*indiceIter);
+// 			list_indices.push_back(*(--indiceIter));
+// 			++indiceIter;
+// 			list_indices.push_back(*(++indiceIter));
+// 		}
+// 		else
+// 			break;
+// 	}
+
 	for (; list.end() != indiceIter; indiceIter++)
 	{
-		indiceIter = tmpIter;
+		//tmpIter = indiceIter;
 
 		list_indices.push_back(*indiceIter);
 		list_indices.push_back(*(++indiceIter));
 		list_indices.push_back(*(++indiceIter));
 
-		tmpIter = indiceIter;
-		checkIter = indiceIter;
+		indiceIter = tmpIter;
+		checkIter = tmpIter;
 		
-		if (++checkIter != list.end())
+		if (++tmpIter != list.end())
 		{
 			list_indices.push_back(*indiceIter);
-			list_indices.push_back(*(--indiceIter));
 			++indiceIter;
+			list_indices.push_back(*(++indiceIter));
 			list_indices.push_back(*(++indiceIter));
 		}
 		else
@@ -324,12 +346,6 @@ VOID CObjMgr::SaveToListIndices(INDEXLIST list)
 // To Create Obj Buffer. each obj.
 VOID CObjMgr::CreateObjBuffer(CDxDriver* pDriver)
 {
-	// Culling CCW (반시계)
-	pDriver->m_pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);		// 안나오면 D3DCULL_NONE 로 확인
-	pDriver->m_pD3DDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
-// 	pDriver->m_pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
-// 	pDriver->m_pD3DDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-// 	pDriver->m_pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 
 	//	if (!vtxVec.empty())
 	{
@@ -342,23 +358,34 @@ VOID CObjMgr::CreateObjBuffer(CDxDriver* pDriver)
 			else
 				dwFVF = D3DFVF_NOTEXTUREVERTEX;
 
-
 			UINT index = pDriver->CreateObjVertexBuffer(m_verticesList[i].size() * m_vtxSize, 0, dwFVF, D3DPOOL_MANAGED);
 			if (index == (UINT)-1)
 				return;
 
-			HRESULT hr = pDriver->CopyObjVertexBuffer(index, &m_verticesList[i] /*.begin()*/, sizeof(m_verticesList[i]));
+			HRESULT hr = pDriver->CopyObjVertexBuffer(index, &m_verticesList[i][0], m_vtxSize * m_verticesList[i].size());
 			if (FAILED(hr))
 				return;
 
 			// List
-			index = pDriver->CreateObjIndexBuffer(m_list_indicesList[i].size() /*/3*/ * m_indexSize, 0, m_vFormat, D3DPOOL_MANAGED);
+			index = pDriver->CreateObjIndexBuffer((m_list_indicesList[i].size()) * m_indexSize, 0, m_vFormat, D3DPOOL_MANAGED);
 			if (index == (UINT)-1)
 				return;
 
-			hr = pDriver->CopyObjIndexBuffer(index, &m_list_indicesList[i]/*.begin()*/, sizeof(m_list_indicesList[i]));
+			hr = pDriver->CopyObjIndexBuffer(index, &m_list_indicesList[i][0], m_indexSize * m_list_indicesList[i].size() );
 			if (FAILED(hr))
 				return;
+
+			std::cout << "vertex ***************************" << std::endl;
+			for (auto& v : m_verticesList[i])
+			{
+				std::cout << "v: " << v.x << "/" << v.y << "/" << v.z << std::endl;
+			}
+
+			std::cout << "indices ****************************" << std::endl;
+			for (auto& indes : m_list_indicesList[i])
+			{
+				std::cout << "i: " << indes << std::endl;
+			}
 
 			//pDriver->m_pD3DDevice->SetIndices(pDriver->m_pIndexBufferList[i]);
 			// Strip
@@ -373,7 +400,11 @@ VOID CObjMgr::CreateObjBuffer(CDxDriver* pDriver)
 /* Draw 부분 */
 VOID CObjMgr::ObjDraw(CDxDriver* pDriver)
 {
-
+	// Culling CCW (반시계)
+	pDriver->m_pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);		// 안나오면 D3DCULL_NONE 로 확인
+	//pDriver->m_pD3DDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+	//pDriver->m_pD3DDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+	
 // Drawing
 	pDriver->DrawObjListModel(this);
 	//pDriver->DrawObjStripModel(this);
@@ -446,36 +477,6 @@ std::wstring CObjMgr::StringToLPCWSTR(const std::string& str)
 
 
 
-// To Save Object Data.
-/*------------------------------------------------------------------------*/
-//								CObjModel.cpp
-/*------------------------------------------------------------------------*/
-CObjModel::CObjModel()
-{
-
-}
-
-CObjModel::~CObjModel()
-{
-	std::vector<CObjMgr*>::iterator iter = m_ObjMgrList.begin();
-	for (; m_ObjMgrList.end() != iter; ++iter)
-	{
-		delete (*iter);
-		*iter = nullptr;
-	}
-	m_ObjMgrList.clear();
-}
-
-UINT CObjModel::AddObjModel(CDxDriver* pDriver)
-{
-	return -1;
-}
-
-
-VOID CObjModel::Drawing(CDxDriver* pDriver)
-{
-
-}
 
 
 

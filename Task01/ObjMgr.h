@@ -126,8 +126,6 @@ public:
 	std::vector<int>						m_primCountList;
 	std::vector<BOOL>						m_bIsTexturingList;
 
-	UINT									m_hVertexBuffer = 0;
-	UINT									m_hIndexBuffer = 0;
 	int										m_primitiveCount = 0;
 
 
@@ -147,33 +145,6 @@ protected:
 	D3DPRIMITIVETYPE m_primitiveType = D3DPT_TRIANGLELIST;						//Draw Type
 
 };
-
-
-
-
-/*------------------------------------------------------------------------*/
-//								CObjModel.h
-/*------------------------------------------------------------------------*/
-
-
-
-class CObjModel
-{
-public:
-	CObjModel();
-	virtual ~CObjModel();
-
-	UINT AddObjModel(CDxDriver* pDriver);
-	VOID Drawing(CDxDriver* pDriver);
-
-private:
-
-	std::vector<CObjMgr*> m_ObjMgrList;
-};
-
-
-
-
 
 
 

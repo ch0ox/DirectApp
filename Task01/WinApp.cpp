@@ -2,7 +2,6 @@
 //								WinApp.cpp
 /*------------------------------------------------------------------------*/
 
-//#pragma comment ( linker, "/entry:WinMainCRTStartup /subsystem:console" )
 
 /*------------------------------------------------------------------------*/
 //								INCLUDES
@@ -63,9 +62,6 @@ BOOL App::Initialize()
 	if (!m_pObjMgr)
 		return FALSE;
 
-	m_pObjModel = new CObjModel;
-	if (!m_pObjModel)
-		return FALSE;
 	//m_pObjModel->AddObjModel(m_pDXDriver);
 
 	m_pDxInput->Initialize(g_hInstance, m_hWnd);
@@ -75,7 +71,7 @@ BOOL App::Initialize()
 		return FALSE;
 	}
 
-	m_pDXDriver->SetLight();
+	m_pDXDriver->SetLight(TRUE);
 	m_pDXDriver->SetMaterial();
 
 	return TRUE;
