@@ -75,10 +75,7 @@ public:
 	std::vector<CPoint3f>	vn;
 	std::vector<CFace>		f;
 
-	std::map<std::string, std::vector<D3DXVECTOR2>> m_tex;
-
 	DWORD fvf;
-
 };
 
 
@@ -112,8 +109,6 @@ public:
 	std::vector <INT> StrtokInt(char*, char*);
 	std::wstring StringToLPCWSTR(const std::string& str);
 
-	const D3DXMATRIX& GetMatWorld() const;
-
 // 	CArray <Node*>		m_nodes;
 // 	CArray <OBJVERTEX>	m_vertices;
 
@@ -123,16 +118,13 @@ public:
 	std::vector<OBJVERTEXLIST>				m_verticesList;
 	std::vector<INDEXLIST>					m_indicesList;
 	std::vector<INDEXLIST>					m_list_indicesList;					// triangle_list
-	std::vector<int>						m_primCountList;
 	std::vector<BOOL>						m_bIsTexturingList;
-
-	int										m_primitiveCount = 0;
 
 
 private:
 	
 	bool m_bIsTexturing = FALSE;
-
+	VOID Term();
 
 protected:
 	UINT m_vtxSize = sizeof(OBJVERTEX);											// 정점 정보 구조체 사이즈

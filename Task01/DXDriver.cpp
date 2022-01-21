@@ -17,9 +17,6 @@
 
 CDxDriver::CDxDriver(App* app)	:	m_pApp(app)
 {
-	m_pObjMgr = nullptr;
-	m_pObjMgr = new CObjMgr();
-
 	m_pDraw = nullptr;
 	m_pDraw = new CDraw();
 	m_pDraw->LinkD3D(this);
@@ -30,7 +27,7 @@ CDxDriver::CDxDriver(App* app)	:	m_pApp(app)
 
 	m_eye.x = 0.0f;
 	m_eye.y = 2.0f;
-	m_eye.z = -10.0f;
+	m_eye.z = -5.0f;
 
 	m_at.x = 0.0f;
 	m_at.y = 0.0f;
@@ -299,12 +296,6 @@ VOID CDxDriver::Term()
 		m_pDraw = nullptr;
 	}
 
-	if (m_pObjMgr)
-	{
-// 		delete m_pObjMgr;
-// 		m_pObjMgr = nullptr;
-	}
-
 	for (int i = 0; i < m_pTextureList.size(); i++)
 	{
 		SAFE_RELEASE(m_pTextureList[i]);
@@ -515,12 +506,18 @@ VOID CDxDriver::DrawObjListModel(CObjMgr* pObjMgr)
 		else
 		{
 			dwFVF = D3DFVF_NOTEXTUREVERTEX;
-			SetTexture(NO_TEXTURE);
+			
 		}
 
+		SetTexture(NO_TEXTURE);
 		// Drawing Preparation
 		m_pD3DDevice->SetStreamSource(0, m_pVertexBufferList[i], 0, sizeof(OBJVERTEX));
 		m_pD3DDevice->SetFVF(dwFVF);
+
+// 		D3DXMATRIXA16 matTrans;
+// 		D3DXMatrixTranslation(&matTrans, 0.0f, 0.0f, 0.0f);
+// 		m_pD3DDevice->SetTransform(D3DTS_WORLDMATRIX(0), &matTrans);
+
 		m_pD3DDevice->SetIndices(m_pIndexBufferList[i]);
 		// Drawing
 		HRESULT hr = m_pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0,
@@ -562,9 +559,9 @@ VOID CDxDriver::DrawObjStripModel(CObjMgr* pObjMgr)
 
 VOID CDxDriver::SetWorldMatrix(D3DXMATRIXA16& matWorld)
 {
-	//D3DXMatrixIdentity(&matWorld);
+	D3DXMatrixIdentity(&matWorld);
 	D3DXMatrixRotationY(&matWorld, m_fAngle);
-	//D3DXMatrixTranslation(&matWorld, 0.0f, 10.0f, -15.0f);
+
 	if (FAILED(m_pD3DDevice->SetTransform(D3DTS_WORLDMATRIX(0), &matWorld)))
 		MessageBox(NULL, TEXT("Set World Matrix Error"), TEXT("Matrix Error"), MB_OK);
 //	else
@@ -573,7 +570,7 @@ VOID CDxDriver::SetWorldMatrix(D3DXMATRIXA16& matWorld)
 
 VOID CDxDriver::SetCameraMatrix(D3DXMATRIXA16& matView, D3DXVECTOR3 p_eye, D3DXVECTOR3 p_at, D3DXVECTOR3 p_up)
 {
-	//D3DXMatrixIdentity(&matView);
+	D3DXMatrixIdentity(&matView);
 	D3DXMatrixLookAtLH(&matView, &p_eye, &p_at, &p_up);	// Camera 변환 행렬 계산
 	if (FAILED(m_pD3DDevice->SetTransform(D3DTS_VIEW, &matView)))
 		MessageBox(NULL, TEXT("Set VIEW Matrix Error"), TEXT("Matrix Error"), MB_OK);

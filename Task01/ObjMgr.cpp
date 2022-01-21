@@ -21,7 +21,7 @@ CObjMgr::CObjMgr()
 
 CObjMgr::~CObjMgr()
 {
-	
+	Term();
 }
 
 BOOL CObjMgr::ObjLoad(std::ifstream& file, CDxDriver* pDriver)
@@ -114,7 +114,6 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file, CDxDriver* pDriver)
 			// str : f 한줄을 띄어쓰기로 나눠둔 vector<string>
 			str = StrtokString((char*)line.substr(START_CONTEXT, len - START_CONTEXT).c_str(), (char*)" ");
 			int verticesCnt = str.size();
-			m_primitiveCount += (verticesCnt - 2) ;		// f가 몇개인지 체크 (polygon 개수 = vertex 개수 - 2 )
 
 			CFace tmpFace;
 			// faceOrder : f 한줄 내에서 순서 번호
@@ -180,8 +179,6 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file, CDxDriver* pDriver)
 			m_verticesList.push_back(vertices);
 			m_indicesList.push_back(strip_indices);
 			m_list_indicesList.push_back(m_list_indices);
-			m_primCountList.push_back(m_primitiveCount);
-			m_primitiveCount = 0;
 			vertices.clear();
 			strip_indices.clear();
 			uMap.clear();
@@ -200,7 +197,6 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file, CDxDriver* pDriver)
 		m_verticesList.push_back(vertices);
 		m_indicesList.push_back(strip_indices);
 		m_list_indicesList.push_back(m_list_indices);
-		m_primCountList.push_back(m_primitiveCount);
 		vertices.clear();
 		strip_indices.clear();
 		uMap.clear();
@@ -268,20 +264,6 @@ OBJVERTEX CObjMgr::FaceToVertex(int num, CPoint3i tmp)
 
 VOID CObjMgr::SaveToListIndices(INDEXLIST list)
 {
-//	CCW
-//	-------------------------
-//  1     3     5     7     9
-// 	|   / |   / |   / |   / | 
-//	|  /  |  /  |  /  |  /  |
-//	| /   | /   | /   | /   |
-//  |/    |/    |/    |/    |
-//  2     4     6     8     10
-//  -------------------------
-// STRIP : { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }
-// LIST  : { {1,2,3}, {3,2,4}, {3,4,5}, {5,4,6}, {5,6,7}, {7,6,8}, {7,8,9}, {9,8,10} }
-	
-// TO DO : 받아온 list -> list_indices 에 triangle_list 에 맞게 조합.
-
 	INDEXLIST::iterator indiceIter;
 	INDEXLIST::iterator tmpIter;
 	INDEXLIST::iterator checkIter;
@@ -293,6 +275,19 @@ VOID CObjMgr::SaveToListIndices(INDEXLIST list)
 	indiceIter = list.begin();
 	tmpIter = indiceIter;
 
+	//	CCW
+//	-------------------------
+//  1     3     5     7     9
+// 	|   / |   / |   / |   / | 
+//	|  /  |  /  |  /  |  /  |
+//	| /   | /   | /   | /   |
+//  |/    |/    |/    |/    |
+//  2     4     6     8     10
+//  -------------------------
+// STRIP : { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }
+// LIST  : { {1,2,3}, {3,2,4}, {3,4,5}, {5,4,6}, {5,6,7}, {7,6,8}, {7,8,9}, {9,8,10} }
+
+// TO DO : 받아온 list -> list_indices 에 triangle_list 에 맞게 조합.
 // 	for (; list.end() != indiceIter; indiceIter++)
 // 	{
 // 		indiceIter = tmpIter;
@@ -315,23 +310,31 @@ VOID CObjMgr::SaveToListIndices(INDEXLIST list)
 // 			break;
 // 	}
 
-	for (; list.end() != indiceIter; indiceIter++)
+//	CCW
+//	-------------------------
+//  0     3 
+// 	|\    |   
+//	| \   |  
+//	|  \  | 
+//  |   \ |
+//  1     2 
+//  -------------------------
+// STRIP : { 0, 1, 2, 3 }
+// LIST  : { {0,1,2}, {0,2,3} }
+
+	tmpIter++;		// 두번째부터
+
+	for (; list.end() != indiceIter;)
 	{
-		//tmpIter = indiceIter;
-
-		list_indices.push_back(*indiceIter);
-		list_indices.push_back(*(++indiceIter));
-		list_indices.push_back(*(++indiceIter));
-
+		checkIter = indiceIter;
 		indiceIter = tmpIter;
-		checkIter = tmpIter;
-		
-		if (++tmpIter != list.end())
+
+		if (++checkIter != list.end())
 		{
-			list_indices.push_back(*indiceIter);
-			++indiceIter;
+			list_indices.push_back(*list.begin());
+			list_indices.push_back(*(tmpIter));
 			list_indices.push_back(*(++indiceIter));
-			list_indices.push_back(*(++indiceIter));
+			tmpIter = indiceIter;
 		}
 		else
 			break;
@@ -346,54 +349,50 @@ VOID CObjMgr::SaveToListIndices(INDEXLIST list)
 // To Create Obj Buffer. each obj.
 VOID CObjMgr::CreateObjBuffer(CDxDriver* pDriver)
 {
-
-	//	if (!vtxVec.empty())
+	for (int i = 0; i < m_verticesList.size(); i++)
 	{
-		for (int i = 0; i < m_verticesList.size(); i++)
-		{
-			DWORD dwFVF;
+		DWORD dwFVF;
 
-			if (m_bIsTexturingList[i])
-				dwFVF = D3DFVF_TEXTUREVERTEX;
-			else
-				dwFVF = D3DFVF_NOTEXTUREVERTEX;
+		if (m_bIsTexturingList[i])
+			dwFVF = D3DFVF_TEXTUREVERTEX;
+		else
+			dwFVF = D3DFVF_NOTEXTUREVERTEX;
+	
+		UINT index = pDriver->CreateObjVertexBuffer(m_verticesList[i].size() * m_vtxSize, 0, dwFVF, D3DPOOL_MANAGED);
+		if (index == (UINT)-1)
+			return;
 
-			UINT index = pDriver->CreateObjVertexBuffer(m_verticesList[i].size() * m_vtxSize, 0, dwFVF, D3DPOOL_MANAGED);
-			if (index == (UINT)-1)
-				return;
+		HRESULT hr = pDriver->CopyObjVertexBuffer(index, &m_verticesList[i][0], m_vtxSize * m_verticesList[i].size());
+		if (FAILED(hr))
+			return;
+	
+		// List
+		index = pDriver->CreateObjIndexBuffer((m_list_indicesList[i].size()) * m_indexSize, 0, m_vFormat, D3DPOOL_MANAGED);
+		if (index == (UINT)-1)
+			return;
 
-			HRESULT hr = pDriver->CopyObjVertexBuffer(index, &m_verticesList[i][0], m_vtxSize * m_verticesList[i].size());
-			if (FAILED(hr))
-				return;
+		hr = pDriver->CopyObjIndexBuffer(index, &m_list_indicesList[i][0], m_indexSize * m_list_indicesList[i].size() );
+		if (FAILED(hr))
+			return;
 
-			// List
-			index = pDriver->CreateObjIndexBuffer((m_list_indicesList[i].size()) * m_indexSize, 0, m_vFormat, D3DPOOL_MANAGED);
-			if (index == (UINT)-1)
-				return;
+		// Test Code
+// 		std::cout << "vertex ***************************" << std::endl;
+// 		for (auto& v : m_verticesList[i])
+// 		{
+// 			std::cout << "v: " << v.x << "/" << v.y << "/" << v.z << std::endl;
+// 		}
+// 
+// 		std::cout << "indices ****************************" << std::endl;
+// 		for (auto& indes : m_list_indicesList[i])
+// 		{
+// 			std::cout << "i: " << indes << std::endl;
+// 		}
 
-			hr = pDriver->CopyObjIndexBuffer(index, &m_list_indicesList[i][0], m_indexSize * m_list_indicesList[i].size() );
-			if (FAILED(hr))
-				return;
-
-			std::cout << "vertex ***************************" << std::endl;
-			for (auto& v : m_verticesList[i])
-			{
-				std::cout << "v: " << v.x << "/" << v.y << "/" << v.z << std::endl;
-			}
-
-			std::cout << "indices ****************************" << std::endl;
-			for (auto& indes : m_list_indicesList[i])
-			{
-				std::cout << "i: " << indes << std::endl;
-			}
-
-			//pDriver->m_pD3DDevice->SetIndices(pDriver->m_pIndexBufferList[i]);
-			// Strip
-// 			index = pDriver->CreateObjIndexBuffer(m_indicesList[i].size() * m_indexSize, 0, m_vFormat, D3DPOOL_MANAGED);
-// 			hr = pDriver->CopyObjIndexBuffer(index, &m_indicesList[i].begin(), sizeof(m_indicesList[i]));
-		}
-		
-	}
+		// Strip
+// 		index = pDriver->CreateObjIndexBuffer(m_indicesList[i].size() * m_indexSize, 0, m_vFormat, D3DPOOL_MANAGED);
+// 		hr = pDriver->CopyObjIndexBuffer(index, &m_indicesList[i].begin(), sizeof(m_indicesList[i]));
+	}	
+	
 }
 
 
@@ -401,9 +400,8 @@ VOID CObjMgr::CreateObjBuffer(CDxDriver* pDriver)
 VOID CObjMgr::ObjDraw(CDxDriver* pDriver)
 {
 	// Culling CCW (반시계)
-	pDriver->m_pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);		// 안나오면 D3DCULL_NONE 로 확인
+	pDriver->m_pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);		// 안나오면 D3DCULL_NONE 로 확인
 	//pDriver->m_pD3DDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
-	//pDriver->m_pD3DDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
 	
 // Drawing
 	pDriver->DrawObjListModel(this);
@@ -412,12 +410,6 @@ VOID CObjMgr::ObjDraw(CDxDriver* pDriver)
 // TO DO : Set Texture
 	// 한 번 더 Load File 하던가 material 파일 읽어오던가.
 
-// TO DO : Texture 있을 경우 - 좌표에 맞게 텍스쳐 입히기.
-//pDriver->SetTexture(texture...);
-
-// No Texturing.
-	//pDriver->SetTexture(NO_TEXTURE);
-// TO DO :  Texture 없을 경우 -회색으로 Shading.
 }
 
 std::vector <FLOAT> CObjMgr::StrtokFloat(char* str, char* delimeter)
@@ -475,7 +467,52 @@ std::wstring CObjMgr::StringToLPCWSTR(const std::string& str)
 	return r;
 }
 
+VOID CObjMgr::Term()
+{
+	m_vertices.clear();
+	m_list_indices.clear();
+	m_bIsTexturingList.clear();
 
+	for (int i = 0; i < m_verticesList.size(); i++)
+	{
+		m_verticesList[i].clear();
+	}
+	m_verticesList.clear();
+
+	for (int i = 0; i < m_indicesList.size(); i++)
+	{
+		m_indicesList[i].clear();
+	}
+	m_indicesList.clear();
+
+	for (int i = 0; i < m_list_indicesList.size(); i++)
+	{
+		m_list_indicesList[i].clear();
+	}
+	m_list_indicesList.clear();
+
+	for (int i = 0; i < m_objs.size(); i++)
+	{
+		m_objs[i].name.clear();
+		m_objs[i].v.clear();
+		m_objs[i].vt.clear();
+		m_objs[i].vn.clear();
+		m_objs[i].f.clear();
+	}
+	m_objs.clear();
+
+	std::unordered_map<std::string, DWORD>::iterator u_mapIter;
+	for (u_mapIter = m_uMap.begin(); u_mapIter != m_uMap.end(); )
+	{
+		if (u_mapIter->second != NULL)
+		{
+			m_uMap.erase(++u_mapIter);
+		}
+		else
+			++u_mapIter;
+	}
+	m_uMap.clear();
+}
 
 
 

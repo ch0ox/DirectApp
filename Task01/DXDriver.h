@@ -89,7 +89,6 @@ public:
 	CDraw* m_pDraw;
 	CMouse* m_pMouse;
 	App* m_pApp;
-	CObjMgr* m_pObjMgr;
 
 	LPDIRECT3D9					m_pD3D = nullptr;
 	LPDIRECT3DDEVICE9			m_pD3DDevice = nullptr;
