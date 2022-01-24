@@ -17,9 +17,7 @@ public:
 	CKeyboard();
 	virtual ~CKeyboard();
 
-	VOID KeyManager(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, CDxDriver* pDriver);
-	VOID						InitializeKeyboard();
-	BOOL						KeyDown(char key);
+	BOOL						IsKeyDown(char key);
 	VOID						Toggle(CDxDriver* pDriver);
 	VOID						GetDevice();
 	VOID						ShutDown();
@@ -28,7 +26,7 @@ public:
 	char						m_keyboardState[256];
 
 private:
-	CDxDriver*					m_pDriver = nullptr;
+
 
 protected:
 

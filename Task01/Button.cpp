@@ -15,112 +15,74 @@ CButton::CButton()
 
 }
 
-CButton::CButton(char* imgName_1, char* imgName_2, char* imgName_3, char* btnName)
+CButton::CButton(int action, float posX, float posY, UINT16 width, UINT16 height)
 {
-	m_textureCount = 3;
-	m_ppTexture = nullptr;
-
-	LoadIniFile(imgName_1, imgName_2, imgName_3, btnName);
+	m_action = action;
+	m_posX = posX;
+	m_posY = posY;
+	m_width = width;
+	m_height = height;
 }
-
-
 
 CButton::~CButton()
 {
-	if (m_ppTexture)
+
+}
+
+VOID CButton::SetTexPath(char* normalPath, char* overPath, char* clickPath)
+{
+	m_normal_path = normalPath;
+	m_over_path = overPath;
+	m_click_path = clickPath;
+}
+
+VOID CButton::TextureInit(CDxDriver* pDriver)
+{
+	if (pDriver == nullptr)
 	{
-		for (int i = 0; i < m_textureCount; i++)
+		MessageBox(NULL, TEXT("Texture Load Driver Error!"), TEXT("Texture Error"), MB_OK);
+		return;
+	}
+
+	m_iTexture[0] = pDriver->CreateTexture(m_normal_path.c_str());
+	m_iTexture[1] = pDriver->CreateTexture(m_over_path.c_str());
+	m_iTexture[2] = pDriver->CreateTexture(m_click_path.c_str());
+}
+
+VOID CButton::Draw(CDxDriver* pDriver)
+{
+	if (pDriver == nullptr)
+	{
+		MessageBox(NULL, TEXT("Draw Button Driver Error!"), TEXT("Drawing Error"), MB_OK);
+		return;
+	}
+
+	pDriver->SetTexture(m_iTexture[m_state]);
+}
+
+VOID CButton::Check(bool isWindow, bool bState, int x, int y)
+{
+	if (IsOnMe(x, y, isWindow))
+	{
+		// click
+		if (bState)
 		{
-			m_ppTexture[i]->Release();
+			m_state = click;
 		}
-		delete[] m_ppTexture;
-		m_ppTexture = nullptr;
+		// click -> over
+		else
+		{
+			m_state = over;
+		}
 	}
+	// normal
+	else
+	{
+		m_state = idle;
+	}
+
+
 }
-
-VOID CButton::LinkD3D(CDxDriver* pDriver)
-{
-	m_pDriver = pDriver;
-}
-
-VOID CButton::LoadIniFile(char* imgName_1, char* imgName_2, char* imgName_3, char* btnName)
-{
-	// 	USES_CONVERSION;
- 	m_btnName = btnName;
-	m_normal_path = imgName_1;
-	m_over_path = imgName_2;
-	m_click_path = imgName_3;
-
-	// ini file read
-	LPCSTR szp = "\\\\ifs01\\서든어택1실\\SA_Depts\\클라이언트팀\\99. 공유\\김채원\\Study_Git\\directApp\\button.ini";
-	UINT16 posX, posY, width, height;
-	UINT default = -1;
-
-	m_action = GetPrivateProfileIntA(m_btnName, "action", default, szp);
-	m_posX = (FLOAT)GetPrivateProfileIntA(m_btnName, "posX", default, szp);
-	m_posY = (FLOAT)GetPrivateProfileIntA(m_btnName, "posY", default, szp);
-	m_width = GetPrivateProfileIntA(m_btnName, "width", default, szp);
-	m_height = GetPrivateProfileIntA(m_btnName, "height", default, szp);
-
-	SetWideInit();
-}
-
-VOID CButton::SetTexture()
-{
-	switch (m_state)
-	{
-	case idle:
-	{
-		m_pTexture = m_ppTexture[0];
-		break;
-	}
-
-	case over:
-	{
-		m_pTexture = m_ppTexture[1];
-		break;
-	}
-
-	case click:
-	{
-		m_pTexture = m_ppTexture[2];
-		break;
-	}
-	}
-}
-
-HRESULT CButton::CreateTexture(LPDIRECT3DDEVICE9 m_pD3DDevice)
-{
-	m_ppTexture = new LPDIRECT3DTEXTURE9[m_textureCount];
-
-	memset(m_ppTexture, 0, sizeof(LPDIRECT3DTEXTURE9) * m_textureCount);
-
-	CString psz = CString(m_normal_path);
-	D3DXCreateTextureFromFile(m_pD3DDevice, psz, &m_pTexture);
-
-	if (FAILED(D3DXCreateTextureFromFile(m_pD3DDevice, psz, &m_ppTexture[0])))
-	{
-		MessageBox(NULL, TEXT("Button Texture 1 Load Error"), TEXT("Texture Error"), MB_OK);
-		return E_FAIL;
-	}
-
-	psz = CString(m_over_path);
-	if (FAILED(D3DXCreateTextureFromFile(m_pD3DDevice, psz, &m_ppTexture[1])))
-	{
-		MessageBox(NULL, TEXT("Button Texture 2 Load Error"), TEXT("Texture Error"), MB_OK);
-		return E_FAIL;
-	}
-
-	psz = CString(m_click_path);
-	if (FAILED(D3DXCreateTextureFromFile(m_pD3DDevice, psz, &m_ppTexture[2])))
-	{
-		MessageBox(NULL, TEXT("Button Texture 3 Load Error"), TEXT("Texture Error"), MB_OK);
-		return E_FAIL;
-	}
-
-	return S_OK;
-}
-
 
 BOOL CButton::IsOnMe(int x, int y, bool windowmode)
 {
@@ -176,4 +138,37 @@ VOID CButton::SetScale(float scaleX, float scaleY)
 	m_wideHeight = scaleY * (float)m_height;
 	m_scaleX = scaleX;
 	m_scaleY = scaleY;
+}
+
+VOID CButton::RectangleInit(CDxDriver* pDriver)
+{
+	memset(m_vertex, 0, sizeof(RHWVERTEX) * 4);
+
+	POINT AnchorPoint;
+
+	// 버튼의 정보 가져오기
+
+	if (pDriver->WindowMode)
+	{
+		AnchorPoint = { nWidth / 2, nHeight / 2 };
+		m_vertex[0] = { m_posX, m_posY, 1.0f, 1.0f, 0xffffffff, 0.0f, 0.0f };
+		m_vertex[1] = { m_posX + m_width, m_posY, 1.0f, 1.0f, 0xffffffff, 1.0f, 0.0f };
+		m_vertex[2] = { m_posX, m_posY + m_height, 1.0f, 1.0f, 0xffffffff, 0.0f, 1.0f };
+		m_vertex[3] = { m_posX + m_width, m_posY + m_height, 1.0f, 1.0f, 0xffffffff, 1.0f, 1.0f };
+
+		SetScale(1.0f, 1.0f);
+	}
+	else
+	{
+		AnchorPoint = { static_cast<int>(GetSystemMetrics(SM_CXSCREEN) / 2), static_cast<int>(GetSystemMetrics(SM_CYSCREEN) / 2) };
+		float ratioX = static_cast<float>(GetSystemMetrics(SM_CXSCREEN) / nWidth);
+		float ratioY = static_cast<float>(GetSystemMetrics(SM_CYSCREEN) / nHeight);
+
+		m_vertex[0] = { m_posX * ratioX, m_posY * ratioY, 1.0f, 1.0f, 0xffffffff, 0.0f, 0.0f };
+		m_vertex[1] = { (m_posX + m_width) * ratioX, m_posY * ratioY, 1.0f, 1.0f, 0xffffffff, 1.0f, 0.0f };
+		m_vertex[2] = { m_posX * ratioX, (m_posY + m_height) * ratioY, 1.0f, 1.0f, 0xffffffff, 0.0f, 1.0f };
+		m_vertex[3] = { (m_posX + m_width) * ratioX, (m_posY + m_height) * ratioY, 1.0f, 1.0f, 0xffffffff, 1.0f, 1.0f };
+
+		SetScale(ratioX, ratioY);
+	}
 }

@@ -7,12 +7,12 @@
 #define __CHAE_DxDriver_H
 
 class CDxDriver;
-
 class App;
 class CKeyboard;
 class CDraw;
 class CMouse;
 class CObjMgr;
+class CButton;
 
 #include <windows.h>
 #include <vector>
@@ -49,7 +49,7 @@ class CObjMgr;
 #pragma warning (disable: 28251)
 
 
-class CDxDriver 
+class CDxDriver
 {
 	typedef std::vector<LPDIRECT3DVERTEXBUFFER9>			VERTEXBUFFERLIST;
 	typedef std::vector<LPDIRECT3DVERTEXBUFFER9>::iterator	VERTEXBUFFERLISTItr;
@@ -74,20 +74,28 @@ public:
 	VOID SetPosition(D3DXVECTOR3 pos);
 
 	HRESULT SetTexture(UINT texture);
+	UINT CreateTexture(const char* psz);
 
 	UINT CreateObjVertexBuffer(UINT length, DWORD usage, DWORD fvf, D3DPOOL pool);
 	UINT CreateObjIndexBuffer(UINT length, DWORD usage, D3DFORMAT format, D3DPOOL pool);
 	HRESULT CopyObjVertexBuffer(UINT index, const void* p_src, int size);
 	HRESULT CopyObjIndexBuffer(UINT index, const void* p_src, int p_size);
 
+	VOID DrawRect(CButton* pButton);
 	VOID DrawObjStripModel(CObjMgr* p_ObjMgr);
 	VOID DrawObjListModel(CObjMgr* p_ObjMgr);
 	VOID SetWorldMatrix(D3DXMATRIXA16& matWorld);
-	VOID SetProjMatrix(D3DXMATRIXA16& matCamera);
+	VOID SetProjMatrix(D3DXMATRIXA16& matProj);
 	VOID SetCameraMatrix(D3DXMATRIXA16& matView, D3DXVECTOR3 p_eye, D3DXVECTOR3 p_at, D3DXVECTOR3 p_up);
+	D3DXVECTOR3 GetEye() { return m_eye; }
+	D3DXVECTOR3 GetAt() { return m_at; }
+	D3DXVECTOR3 GetUp() { return m_up; }
+	VOID SetEye(D3DXVECTOR3 p_eye) { m_eye = p_eye; }
+	VOID SetAt(D3DXVECTOR3 p_at) { m_at = p_at; }
+	VOID SetUp(D3DXVECTOR3 p_up) { m_up = p_up; }
+
 
 	CDraw* m_pDraw;
-	CMouse* m_pMouse;
 	App* m_pApp;
 
 	LPDIRECT3D9					m_pD3D = nullptr;
@@ -100,11 +108,7 @@ public:
 	LPDIRECT3DVERTEXBUFFER9		m_pVB_Btn = nullptr;						// Button 정점 버퍼
 	LPDIRECT3DVERTEXBUFFER9		m_pVB_Tri = nullptr;						// Triangle 정점 버퍼
 	LPDIRECT3DINDEXBUFFER9		m_pIB_Tri = nullptr;						// 인덱스 버퍼
-	LPDIRECT3DTEXTURE9			m_pTexture = nullptr;						// 사용할 텍스쳐
-
-	// Test
-	LPDIRECT3DVERTEXBUFFER9		m_pVB_Test = nullptr;						
-	LPDIRECT3DINDEXBUFFER9		m_pIB_Test = nullptr;						
+	LPDIRECT3DTEXTURE9			m_pTexture = nullptr;						// 사용할 텍스쳐					
 
 	VERTEXBUFFERLIST			m_pVertexBufferList;
 	INDEXBUFFERLIST				m_pIndexBufferList;

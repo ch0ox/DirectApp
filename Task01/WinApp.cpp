@@ -14,7 +14,7 @@
 #include "MouseMgr.h"
 #include "Draw.h"
 #include "Menu.h"
-#include "Button.h"
+#include "ButtonMgr.h"
 #include "Timer.h"
 #include "ObjMgr.h"
 #include <fstream>
@@ -42,7 +42,7 @@ BOOL App::Initialize()
 {
 	InitWindow();									// Window 생성 초기화
 
-	m_pDxInput = new CDxInput;						// Input 객체
+	m_pDxInput = new CDxInput();						// Input 객체
 	if (!m_pDxInput)
 		return FALSE;
 
@@ -50,15 +50,15 @@ BOOL App::Initialize()
 	if (!m_pDXDriver)
 		return FALSE;
 
-	m_pButton = new CButton;
-	if (!m_pButton)
+	m_pButtonMgr = new CButtonMgr();
+	if (!m_pButtonMgr)
 		return FALSE;
 
-	m_pTimer = new CTimer;
+	m_pTimer = new CTimer();
 	if (!m_pTimer)
 		return FALSE;
 
-	m_pObjMgr = new CObjMgr;
+	m_pObjMgr = new CObjMgr();
 	if (!m_pObjMgr)
 		return FALSE;
 
@@ -71,8 +71,21 @@ BOOL App::Initialize()
 		return FALSE;
 	}
 
+	if (!m_pButtonMgr->LoadIniFile("\\\\ifs01\\서든어택1실\\SA_Depts\\클라이언트팀\\99. 공유\\김채원\\Study_Git\\directApp\\button.ini"))
+	{
+		MessageBox(NULL, TEXT("Btn Load Error"), TEXT("Error"), MB_OK);
+		return FALSE;
+	}
+
+	else
+	{
+		m_pButtonMgr->Initialize(m_pDXDriver);
+	}
+
 	m_pDXDriver->SetLight(TRUE);
 	m_pDXDriver->SetMaterial();
+
+
 
 	return TRUE;
 }
@@ -97,10 +110,10 @@ VOID App::Term()
 		m_pTimer = nullptr;
 	}
 
-	if (m_pButton)
+	if (m_pButtonMgr)
 	{
-		delete m_pButton;
-		m_pButton = nullptr;
+		delete m_pButtonMgr;
+		m_pButtonMgr = nullptr;
 	}
 
 	if (m_pDXDriver)
@@ -211,7 +224,6 @@ VOID App::FileLoad(HWND hWnd)
 		std::ifstream file(filepath);
 		MessageBox(hWnd, ofn.lpstrFile, TEXT("파일 열기 성공"), MB_OK);
 
-//		if (!m_pDXDriver->m_pObjMgr->ObjLoad(file))
 		if (!m_pObjMgr->ObjLoad(file, m_pDXDriver))
 		{
 			MessageBox(hWnd, TEXT("Obj Load Failed!"), TEXT("Error"), MB_OK);
@@ -229,7 +241,7 @@ VOID App::FileLoad(HWND hWnd)
 
 LRESULT CALLBACK App::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IParam)
 {
-	HMENU hMenu, hSubMenu; 
+	HMENU hMenu, hSubMenu;
 
 	switch (msg)
 	{
@@ -238,9 +250,8 @@ LRESULT CALLBACK App::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IPar
 
 		hSubMenu = CreatePopupMenu();
 		AppendMenuW(hSubMenu, MF_STRING, ID_FILE_LOAD, TEXT("L&oad"));
-		//AppendMenuW(hSubMenu, MF_STRING, ID_FILE_CANCLE, TEXT("C&ancel"));
 		AppendMenuW(hSubMenu, MF_STRING, ID_FILE_EXIT, TEXT("E&xit"));
-		AppendMenuW(hMenu, MF_STRING | MF_POPUP, (UINT)hSubMenu,TEXT("&File"));
+		AppendMenuW(hMenu, MF_STRING | MF_POPUP, (UINT)hSubMenu, TEXT("&File"));
 
 		hSubMenu = CreatePopupMenu();
 		AppendMenuW(hSubMenu, MF_STRING, ID_ABOUT, TEXT("&About"));
@@ -248,18 +259,6 @@ LRESULT CALLBACK App::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IPar
 
 		SetMenu(hWnd, hMenu);
 
-		break;
-
-	case WM_LBUTTONDOWN:
-		m_pDXDriver->m_pMouse->MouseManager(hWnd, msg, wParam, IParam, down);
-		break;
-
-	case WM_LBUTTONUP:
-		m_pDXDriver->m_pMouse->MouseManager(hWnd, msg, wParam, IParam, up);
-		break;
-
-	case WM_MOUSEMOVE:
-		m_pDXDriver->m_pMouse->MouseManager(hWnd, msg, wParam, IParam, move);
 		break;
 
 	case WM_COMMAND:
@@ -274,12 +273,7 @@ LRESULT CALLBACK App::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM IPar
 
 		case ID_FILE_LOAD:
 			// Menu Load Click ?
-			// Load Action Code
 			FileLoad(hWnd);
-			break;
-
-		case ID_FILE_CANCLE:
-			MessageBox(hWnd, TEXT("Obj Cancel"), TEXT("Cancel"), MB_OK);
 			break;
 
 		case ID_ABOUT:

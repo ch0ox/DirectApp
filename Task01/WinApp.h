@@ -47,13 +47,16 @@
 #include "DXDriver.h"
 #include "DXInput.h"
 #include "ObjMgr.h"
+#include "ButtonMgr.h"
 
 class CDxDriver;
 class CDxInput;
+class CButtonMgr;
 class CButton;
 class CTimer;
 class CObjMgr;
 class CObjModel;
+
 
 /*------------------------------------------------------------------------*/
 //								
@@ -78,7 +81,7 @@ public:
 	BOOL m_bObjLoad = FALSE;
 	HWND m_hWnd = nullptr;
 
-	CButton* GetButton() const { return m_pButton; }
+	CButtonMgr* GetButtonMgr() const { return m_pButtonMgr; }
 	CTimer* GetTimer() const { return m_pTimer; }
 	CObjMgr* GetObjMgr() const { return m_pObjMgr; }
 
@@ -103,7 +106,7 @@ private:
 protected:
 	CDxDriver* m_pDXDriver = nullptr;
 	CDxInput* m_pDxInput = nullptr;
-	CButton* m_pButton = nullptr;
+	CButtonMgr* m_pButtonMgr = nullptr;
 	CTimer* m_pTimer = nullptr;
 	CObjMgr* m_pObjMgr = nullptr;
 	CObjModel* m_pObjModel = nullptr;

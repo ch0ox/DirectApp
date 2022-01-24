@@ -12,21 +12,14 @@
 #include "Button.h"
 #include <algorithm>
 
-
-
 CDraw::CDraw()
 {
-	MatrixInit();
+
 }
 
 CDraw::~CDraw()
 {
-	m_btnIter = this->m_btnVector.begin();
-	for (; this->m_btnVector.end() != m_btnIter; ++m_btnIter)
-	{
-		delete (*m_btnIter);
-	}
-	m_btnVector.clear();
+	//m_pTexture->Release();
 }
 
 VOID CDraw::LinkD3D(CDxDriver* pDriver)
@@ -88,60 +81,6 @@ VOID CDraw::DrawTextFPS()
 	return;
 }
 
-
-VOID CDraw::DrawTexture()
-{
-	m_pDriver->m_pD3DDevice->SetTexture(0, m_pDriver->m_pTexture);
-	/*
-		m_pDriver->m_pD3DDevice->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
-		m_pDriver->m_pD3DDevice->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
-		m_pDriver->m_pD3DDevice->SetTextureStageState(0, D3DTSS_COLORARG2, D3DTA_DIFFUSE);
-		m_pDriver->m_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_DISABLE);*/
-
-	m_pDriver->m_pD3DDevice->SetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_BORDER);
-	m_pDriver->m_pD3DDevice->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_BORDER);
-	m_pDriver->m_pD3DDevice->SetSamplerState(0, D3DSAMP_BORDERCOLOR, 0xff000000);
-
-	return;
-}
-
-
-VOID CDraw::SetupMatrices()
-{
-
-	D3DXMatrixRotationY(&m_matWorld, m_fAngle);
-	m_pDriver->m_pD3DDevice->SetTransform(D3DTS_WORLD, &m_matWorld);
-
-	D3DXMatrixLookAtLH(&m_matView, &m_eye, &m_at, &m_up);	// Camera 변환 행렬 계산
-	m_pDriver->m_pD3DDevice->SetTransform(D3DTS_VIEW, &m_matView);
-
-	D3DXMatrixPerspectiveFovLH(&m_matProj, D3DX_PI / 4, 1.0f, 1.0f, 100.f);
-	m_pDriver->m_pD3DDevice->SetTransform(D3DTS_PROJECTION, &m_matProj);
-
-	D3DXMATRIX matTranslation, matScale, matRotation;
-	D3DXQUATERNION vQuatenion;
-
-	FLOAT fRotX = D3DXToRadian(m_anglePitch);
-	FLOAT fRotY = D3DXToRadian(m_angleYaw);
-	FLOAT fRotZ = D3DXToRadian(m_angleRoll);
-
-	//	D3DXMatrixScaling(&matScale, m_fScale, m_fScale, m_fScale);
-	D3DXQuaternionRotationYawPitchRoll(&vQuatenion, fRotY, fRotX, fRotZ);
-	D3DXMatrixTranslation(&matTranslation, m_posX, m_posY, m_posZ);
-
-	m_matWorld = matTranslation /* matScale */ * matRotation;
-}
-
-VOID CDraw::SetupOrthogonal()
-{
-	D3DXMATRIX matWorld, matView, matProj;
-	// 항등행렬 변환
-	D3DXMatrixIdentity(&matWorld);
-	D3DXMatrixIdentity(&matView);
-	D3DXMatrixIdentity(&matProj);
-
-}
-
 // Use D3DFVF_XYZ and DrawIndexedPrimitive.
 VOID CDraw::DrawTriangle()
 {
@@ -154,85 +93,6 @@ VOID CDraw::DrawTriangle()
 		MessageBox(NULL, TEXT("DrawIndexedPrimitive Error"), TEXT("DrawIndexedPrimitive Error"), MB_OK);
 }
 
-/*/////////////////////////////////////////*/
-// Test Code
-VOID CDraw::DrawCube()
-{
-	m_pDriver->m_pD3DDevice->SetStreamSource(0, m_pDriver->m_pVB_Test, 0, sizeof(NVERTEX));
-	m_pDriver->m_pD3DDevice->SetFVF(D3DFVF_COLORVERTEX);
-	// SetIndices
-	m_pDriver->m_pD3DDevice->SetIndices(m_pDriver->m_pIB_Test);
-	HRESULT hr = m_pDriver->m_pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 8, 0, 12);
-	if (FAILED(hr))
-		MessageBox(NULL, TEXT("DrawIndexedPrimitive Error"), TEXT("DrawIndexedPrimitive Error"), MB_OK);
-}
-
-// Test Code
-HRESULT CDraw::CreateCubeBuffer()
-{
-	// Culling OFF.
-	m_pDriver->m_pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
-	m_pDriver->m_pD3DDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
-
-	if (FAILED(m_pDriver->m_pD3DDevice->CreateVertexBuffer(8 * sizeof(NVERTEX), 0, D3DFVF_NVERTEX, D3DPOOL_MANAGED, &(m_pDriver->m_pVB_Test), NULL)))
-	{
-		MessageBox(NULL, TEXT("Vertex Buffer Error"), TEXT("Vertex Buffer Error"), MB_OK);
-		return E_FAIL;
-	}
-
-	if (FAILED(m_pDriver->m_pD3DDevice->CreateIndexBuffer(12 * iTriSize, 0, vFormat, D3DPOOL_MANAGED, &(m_pDriver->m_pIB_Test), NULL)))
-	{
-		MessageBox(NULL, TEXT("Index Buffer Error"), TEXT("Index Buffer Error"), MB_OK);
-		return E_FAIL;
-	}
-
-	NVERTEX cube[] =
-	{
-				{ -1.0f, -1.0f, 1.0f, 0xffffffff, -0.5f, -0.5f, 0.5f },
-				{ -1.0f, 1.0f, 1.0f, 0xffffffff, -0.5f, 0.5f, 0.5f },
-				{ 1.0f, 1.0f, 1.0f, 0xffffffff, 0.5f, 0.5f, 0.5f },
-				{ 1.0f, -1.0f, 1.0f, 0xffffffff, 0.5f, -0.5f, 0.5f },
-				{ -1.0f, -1.0f, -1.0f, 0xffffffff, -0.5f, -0.5f, -0.5f },
-				{ -1.0f, 1.0f, -1.0f, 0xffffffff, -0.5f, 0.5f, -0.5f },
-				{ 1.0f, 1.0f, -1.0f, 0xffffffff, 0.5f, 0.5f, -0.5f },
-				{ 1.0f, -1.0f, -1.0f, 0xffffffff, 0.5f, -0.5f, -0.5f },
-	};
-
-	UINT cubeIndex[36] =
-	{
-		0,3,2,
-		2,3,1,
-		0,4,7,
-		7,4,3,
-		1,5,4,
-		4,5,0,
-		2,6,5,
-		5,6,1,
-		3,7,6,
-		6,7,2,
-		5,6,7,
-		7,6,4,
-	};
-
-	// Triangle
-	VOID* pVertices;
-	m_pDriver->m_pVB_Test->Lock(0, sizeof(cube), &pVertices, 0);
-	memcpy(pVertices, cube, sizeof(cube));
-	m_pDriver->m_pVB_Test->Unlock();
-
-	VOID* pIndices;
-	m_pDriver->m_pIB_Test->Lock(0, sizeof(cubeIndex), &pIndices, 0);
-	memcpy(pIndices, cubeIndex, sizeof(cubeIndex));
-	m_pDriver->m_pIB_Test->Unlock();
-
-	//D3DXCreateTextureFromFile(m_pDriver->m_pD3DDevice, TEXT("tree2.png"), &m_pTexture);
-
-	return S_OK;
-
-}
-
-/*/////////////////////////////////////////*/
-
 // Use D3DFVF_XYZRHW and DrawPrimitiveUp.
 VOID CDraw::DrawRect(CButton* pButton)
 {
@@ -241,30 +101,6 @@ VOID CDraw::DrawRect(CButton* pButton)
 
 	if (FAILED(hr))
 		MessageBox(NULL, TEXT("DrawPrimitiveUp Error"), TEXT("DrawPrimitiveUp Error"), MB_OK);
-}
-
-VOID CDraw::MatrixInit()
-{
-	m_anglePitch = 0;
-	m_angleYaw = 0;
-	m_angleRoll = 0;
-	m_posX = 0;
-	m_posY = 0;
-	m_posZ = 0;
-
-	m_eye.x = 0.0f;
-	m_eye.y = 0.0f;
-	m_eye.z = -10.0f;
-
-	m_at.x = 0.0f;
-	m_at.y = 0.0f;
-	m_at.z = 0.0f;
-
-	m_up.x = 0.0f;
-	m_up.y = 1.0f;
-	m_up.z = 0.0f;
-
-	m_fAngle = 0.0f;
 }
 
 HRESULT CDraw::CreateTriangleBuffer()
@@ -311,9 +147,7 @@ HRESULT CDraw::CreateTriangleBuffer()
 	D3DXCreateTextureFromFile(m_pDriver->m_pD3DDevice, TEXT("tree2.png"), &m_pTexture);
 
 	return S_OK;
-
 }
-
 
 
 HRESULT CDraw::CreateRectBuffer()
@@ -327,60 +161,3 @@ HRESULT CDraw::CreateRectBuffer()
 	};
 	return S_OK;
 }
-
-
-
-VOID CDraw::RectangleInit(CButton* pButton)
-{
-	memset(pButton->m_vertex, 0, sizeof(RHWVERTEX) * 4);
-
-	POINT AnchorPoint;
-
-	// 버튼의 정보 가져오기
-
-	if (m_pDriver->WindowMode)
-	{
-		AnchorPoint = { nWidth / 2, nHeight / 2 };
-		pButton->m_vertex[0] = { pButton->m_posX, pButton->m_posY, 1.0f, 1.0f, 0xffffffff, 0.0f, 0.0f };
-		pButton->m_vertex[1] = { pButton->m_posX + pButton->m_width, pButton->m_posY, 1.0f, 1.0f, 0xffffffff, 1.0f, 0.0f };
-		pButton->m_vertex[2] = { pButton->m_posX, pButton->m_posY + pButton->m_height, 1.0f, 1.0f, 0xffffffff, 0.0f, 1.0f };
-		pButton->m_vertex[3] = { pButton->m_posX + pButton->m_width, pButton->m_posY + pButton->m_height, 1.0f, 1.0f, 0xffffffff, 1.0f, 1.0f };
-
-		pButton->SetScale(1.0f, 1.0f);
-	}
-	else
-	{	
-		AnchorPoint = { static_cast<int>(GetSystemMetrics(SM_CXSCREEN) / 2), static_cast<int>(GetSystemMetrics(SM_CYSCREEN) / 2) };
-		float ratioX = static_cast<float>(GetSystemMetrics(SM_CXSCREEN) / nWidth);
-		float ratioY = static_cast<float>(GetSystemMetrics(SM_CYSCREEN) / nHeight);
-
-		pButton->m_vertex[0] = { (pButton->m_posX) * ratioX, (pButton->m_posY) * ratioY, 1.0f, 1.0f, 0xffffffff, 0.0f, 0.0f };
-		pButton->m_vertex[1] = { (pButton->m_posX + pButton->m_width) * ratioX, (pButton->m_posY) * ratioY, 1.0f, 1.0f, 0xffffffff, 1.0f, 0.0f };
-		pButton->m_vertex[2] = { (pButton->m_posX) * ratioX, (pButton->m_posY + pButton->m_height) * ratioY, 1.0f, 1.0f, 0xffffffff, 0.0f, 1.0f };
-		pButton->m_vertex[3] = { (pButton->m_posX + pButton->m_width) * ratioX, (pButton->m_posY + pButton->m_height) * ratioY, 1.0f, 1.0f, 0xffffffff, 1.0f, 1.0f };
-
-		pButton->SetScale(ratioX, ratioY);
-	}
-}
-
-
-
-VOID CDraw::CreateButton()
-{
-	// 버튼 인스턴스 3개
-	CButton* pCloseBtn = new CButton("normal.png", "over.png", "click.png", "CloseButton");
-	CButton* pLeftBtn = new CButton("left_normal.png", "left_over.png", "left_click.png", "LeftButton");
-	CButton* pRightBtn = new CButton("right_normal.png", "right_over.png", "right_click.png", "RightButton");
-
-	m_btnVector.push_back(pCloseBtn);
-	m_btnVector.push_back(pLeftBtn);
-	m_btnVector.push_back(pRightBtn);
-
-	m_btnIter = this->m_btnVector.begin();
-	for (; this->m_btnVector.end() != m_btnIter; ++m_btnIter)
-	{
-		RectangleInit(*m_btnIter);
-	}
-}
-
-

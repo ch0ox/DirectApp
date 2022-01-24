@@ -21,11 +21,6 @@ CKeyboard::~CKeyboard()
 
 }
 
-VOID CKeyboard::InitializeKeyboard()
-{
-
-}
-
 VOID CKeyboard::GetDevice()
 {
 	HRESULT hr = m_pKeyDevice->GetDeviceState(sizeof(m_keyboardState), (void**)&m_keyboardState);
@@ -46,9 +41,10 @@ VOID CKeyboard::ShutDown()
 	}
 }
 
-BOOL CKeyboard::KeyDown(char key)
+BOOL CKeyboard::IsKeyDown(char key)
 {
-	return (m_keyboardState[key] & 0x80) != 0;
+	bool b = (m_keyboardState[key] & 0x80) ? true : false;
+	return b;
 }
 
 VOID CKeyboard::Toggle(CDxDriver* pDriver)
@@ -69,20 +65,4 @@ VOID CKeyboard::Toggle(CDxDriver* pDriver)
 	}
 
 	pDriver->DeviceLostRecovery();
-}
-
-VOID CKeyboard::KeyManager(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, CDxDriver* pDriver)
-{
-	m_pDriver = pDriver;
-	switch (wParam)
-	{
-	case VK_LEFT:
-	{
-		m_pDriver->m_fAngle += 0.2f;
-	}break;
-	case VK_RIGHT:
-	{
-		m_pDriver->m_fAngle -= 0.2f;
-	}break;
-	}
 }

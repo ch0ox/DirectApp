@@ -24,13 +24,13 @@ public:
 	VOID			GetDevice();
 	BOOL			Render();
 
-	CMouse*			GetMouseMgr() const			{ return m_pMouse; }
-	CKeyboard*		GetKeyboardMgr() const		{ return pKey; }
+	CMouse* GetMouseMgr() const { return m_pMouse; }
+	CKeyboard* GetKeyboardMgr() const { return m_pKey; }
 
-	HWND			GetHwnd() const				{ return m_hWnd; }
+	HWND			GetHwnd() const { return m_hWnd; }
 
-	CMouse*			m_pMouse;
-	CKeyboard*		pKey;
+	CMouse* m_pMouse;
+	CKeyboard* m_pKey;
 
 private:
 	LPDIRECTINPUT8	m_inputMgr = nullptr;
@@ -38,6 +38,6 @@ private:
 
 
 
-};	
+};
 
 #endif //__CHAE_DxInput_H

@@ -18,9 +18,9 @@ class CButton;
 #define D3DFVF_COLORVERTEX (D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX1)
 #define D3DFVF_NVERTEX (D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_NORMAL)	// Test
 
-#define idle 1
-#define over 2
-#define click 3
+#define idle 0
+#define over 1
+#define click 2
 
 typedef struct NVERTEX
 {
@@ -58,25 +58,14 @@ public:
 
 	HRESULT CreateTriangleBuffer();
 	HRESULT CreateRectBuffer();
-	VOID CreateButton();
-	VOID RectangleInit(CButton* pButton);
 	VOID DrawRect(CButton* pButton);
 	VOID LinkD3D(CDxDriver* pDriver);
 	VOID TextInit();
-	VOID MatrixInit();
 
 	VOID DrawTextFPS();
-	VOID DrawTexture();
 	VOID DrawTriangle();
 
 	VOID SetDuringTime(FLOAT time);
-	VOID SetupMatrices();
-	VOID SetupOrthogonal();
-
-	// Test
-	VOID DrawCube();
-	HRESULT CreateCubeBuffer();
-
 
 	std::vector<CButton*>				m_btnVector;
 	std::vector<CButton*>::iterator		m_btnIter;
@@ -84,18 +73,10 @@ public:
 	RHWVERTEX vertices[4];
 	COLORVERTEX textureVertices[4];
 
-	RHWVERTEX rectangle[4];					// 사각형. 정점 4개
-	COLORVERTEX triangle[3];				// 삼각형. 정점 3개
-
 	// Triangle
 	FLOAT m_fAngle = 0.0f;
 	FLOAT m_fScale = 1.0f;
-	D3DXMATRIXA16 m_matWorld;
-	D3DXMATRIXA16 m_matView;
-	D3DXMATRIXA16 m_matProj;
-	D3DXVECTOR3 m_eye, m_at, m_up;
-	FLOAT m_anglePitch, m_angleYaw, m_angleRoll;		// X축, Y축, Z축
-	FLOAT m_posX, m_posY, m_posZ;
+
 	LPDIRECT3DTEXTURE9 m_pTexture;
 
 private:

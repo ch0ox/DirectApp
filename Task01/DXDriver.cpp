@@ -15,15 +15,11 @@
 #include "Timer.h"
 #include "DXInput.h"
 
-CDxDriver::CDxDriver(App* app)	:	m_pApp(app)
+CDxDriver::CDxDriver(App* app) : m_pApp(app)
 {
 	m_pDraw = nullptr;
 	m_pDraw = new CDraw();
 	m_pDraw->LinkD3D(this);
-
-	m_pMouse = nullptr;
-	m_pMouse = new CMouse();
-	m_pMouse->LinkD3D(this);
 
 	m_eye.x = 0.0f;
 	m_eye.y = 2.0f;
@@ -121,9 +117,7 @@ HRESULT CDxDriver::InitD3D()
 HRESULT CDxDriver::InitVB()
 {
 	// Triangle
-	m_pDraw->CreateTriangleBuffer();
-	// Test
-//	m_pDraw->CreateCubeBuffer();
+	//m_pDraw->CreateTriangleBuffer();
 
 	m_pDraw->TextInit();
 
@@ -132,23 +126,14 @@ HRESULT CDxDriver::InitVB()
 	{
 		m_pApp->GetObjMgr()->CreateObjBuffer(this);
 	}
-	
+
 	return S_OK;
 }
 
-
-
 HRESULT CDxDriver::InitGeometry()
 {
-	m_pDraw->CreateButton();
-	//m_pDraw->MatrixInit();
-
-	for (int i = 0; i < static_cast<int>(m_pDraw->m_btnVector.size()); i++)
-	{
-		m_pDraw->m_btnVector[i]->CreateTexture(m_pD3DDevice);
-	}
-
-	m_pMouse->LinkButton(m_pDraw->m_btnVector);
+	//m_pTextureList.push_back(m_pDraw->m_pTexture);
+	m_pTextureList.push_back(nullptr);
 
 	return S_OK;
 }
@@ -159,66 +144,86 @@ VOID CDxDriver::Drawing()
 	m_pDraw->SetDuringTime(static_cast<float>(m_pApp->GetTimer()->GetFPS()));
 	m_pDraw->DrawTextFPS();
 
-	// Button
-	for (int i = 0; i < static_cast<int>(m_pDraw->m_btnVector.size()); i++)
-	{
-		m_pD3DDevice->SetTexture(0, m_pDraw->m_btnVector[i]->m_pTexture);
-		m_pDraw->m_btnVector[i]->SetTexture();
-		m_pDraw->DrawRect(m_pDraw->m_btnVector[i]);
-	}
-
 	// Matrix
 	SetWorldMatrix(m_matWorld);
 	SetCameraMatrix(m_matView, m_eye, m_at, m_up);
 	SetProjMatrix(m_matProj);
-//	m_pDraw->SetupMatrices();
 
 	// Object Model
 	if (m_pApp->m_bObjLoad)		// obj file 이 Load 된 후에만 Drawing.
 	{
 		m_pApp->GetObjMgr()->ObjDraw(this);
 	}
+	// Triangle
 	else
 	{
-		// Test Cube
-//		m_pDraw->DrawCube();
-
-		// Triangle
-		m_pD3DDevice->SetTexture(0, m_pDraw->m_pTexture);
-		m_pDraw->DrawTriangle();
+		//m_pD3DDevice->SetTexture(0, m_pDraw->m_pTexture);
+		//m_pDraw->DrawTriangle();
 	}
+
+	// button
+	m_pApp->GetButtonMgr()->Draw(this);
 }
 
 
 VOID CDxDriver::InputRender(CDxInput* pInput)
 {
 	pInput->GetDevice();
+	D3DXVECTOR3 p_eye = GetEye();
+	D3DXVECTOR3 p_at = GetAt();
+	D3DXVECTOR3 p_up = GetUp();
+
+	if (!pInput->m_pKey)
+		return;
+	if (!pInput->m_pMouse)
+		return;
 
 	// KeyBoard
-	if (pInput->pKey->KeyDown(DIK_ESCAPE))
+	if (pInput->m_pKey->IsKeyDown(DIK_A))		// <-
+	{
+		p_eye.x += 0.02f;
+		p_at.x += 0.01f;
+	}
+	else if (pInput->m_pKey->IsKeyDown(DIK_D))	// ->
+	{
+		p_eye.x -= 0.02f;
+		p_at.x -= 0.01f;
+	}
+	else if (pInput->m_pKey->IsKeyDown(DIK_S))
+	{
+		p_eye.z += 0.02f;
+		p_at.z -= 0.01f;
+	}
+	else if (pInput->m_pKey->IsKeyDown(DIK_W))
+	{
+		p_eye.z -= 0.02f;
+		p_at.z += 0.01f;
+	}
+	else if (pInput->m_pKey->IsKeyDown(DIK_ESCAPE))
 	{
 		if (ExitMessageBox() == IDYES)
 			PostMessage(pInput->GetHwnd(), WM_DESTROY, 0, 0);
 		else
 			return;
 	}
-	else if (pInput->pKey->KeyDown(DIK_SPACE))
+	else if (pInput->m_pKey->IsKeyDown(DIK_SPACE))
 	{
 		MessageBox(NULL, TEXT("Space Key Success"), TEXT("Yeahhhh"), MB_OK);
-		pInput->pKey->Toggle(this);
+		pInput->m_pKey->Toggle(this);
 	}
-	else if (pInput->pKey->KeyDown(DIK_LEFT))
-	{
 
-	}
-	else if (pInput->pKey->KeyDown(DIK_RIGHT))
-	{
+	SetEye(p_eye);
+	SetAt(p_at);
+	SetUp(p_up);
 
-	}
 
 	// Mouse
 	POINT pt;
 	pt = pInput->m_pMouse->ClientCursorPos(m_hWnd);
+
+	m_pApp->GetButtonMgr()->Check(this, pInput, pInput->m_pMouse->IsMouseDown(0), pt.x, pt.y);
+
+
 }
 
 BOOL CDxDriver::Render(CDxInput* pInput)
@@ -253,7 +258,8 @@ BOOL CDxDriver::Render(CDxInput* pInput)
 		}
 	}
 
-	InputRender(pInput);
+	if (pInput)
+		InputRender(pInput);
 
 	m_pD3DDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 255), 1.0f, 0);
 
@@ -275,21 +281,33 @@ BOOL CDxDriver::Render(CDxInput* pInput)
 
 HRESULT CDxDriver::SetTexture(UINT texture)
 {
-	if (texture == 0)
+	if (texture == -1)
 	{
+		MessageBox(NULL, TEXT("Texture 실패"), TEXT("Error"), MB_OK);
 		return m_pD3DDevice->SetTexture(0, nullptr);
 	}
 	return m_pD3DDevice->SetTexture(0, m_pTextureList[texture]);
 }
 
-VOID CDxDriver::Term()
+UINT CDxDriver::CreateTexture(const char* psz)
 {
-	if (m_pMouse)
+	UINT texture = -1;
+	LPDIRECT3DTEXTURE9 pTex = nullptr;
+
+	if (FAILED(D3DXCreateTextureFromFileA(m_pD3DDevice, psz, &pTex)))
 	{
-		delete m_pMouse;
-		m_pMouse = nullptr;
+		MessageBox(NULL, TEXT("CreateTexture Failed!"), TEXT("Error"), MB_OK);
+		return texture;
 	}
 
+	texture = (UINT)m_pTextureList.size();
+	m_pTextureList.push_back(pTex);
+
+	return texture;
+}
+
+VOID CDxDriver::Term()
+{
 	if (m_pDraw)
 	{
 		delete m_pDraw;
@@ -411,7 +429,7 @@ VOID CDxDriver::DeviceLostRecovery()
 }
 
 // Obj 의 정보를 가지고 Create Buffers
-UINT CDxDriver::CreateObjVertexBuffer(UINT length, DWORD usage,DWORD fvf, D3DPOOL pool)
+UINT CDxDriver::CreateObjVertexBuffer(UINT length, DWORD usage, DWORD fvf, D3DPOOL pool)
 {
 	UINT index = (UINT)-1;
 
@@ -506,7 +524,7 @@ VOID CDxDriver::DrawObjListModel(CObjMgr* pObjMgr)
 		else
 		{
 			dwFVF = D3DFVF_NOTEXTUREVERTEX;
-			
+
 		}
 
 		SetTexture(NO_TEXTURE);
@@ -514,20 +532,16 @@ VOID CDxDriver::DrawObjListModel(CObjMgr* pObjMgr)
 		m_pD3DDevice->SetStreamSource(0, m_pVertexBufferList[i], 0, sizeof(OBJVERTEX));
 		m_pD3DDevice->SetFVF(dwFVF);
 
-// 		D3DXMATRIXA16 matTrans;
-// 		D3DXMatrixTranslation(&matTrans, 0.0f, 0.0f, 0.0f);
-// 		m_pD3DDevice->SetTransform(D3DTS_WORLDMATRIX(0), &matTrans);
-
 		m_pD3DDevice->SetIndices(m_pIndexBufferList[i]);
 		// Drawing
 		HRESULT hr = m_pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0,
-														pObjMgr->m_verticesList[i].size(), 0,
-														pObjMgr->m_list_indicesList[i].size() / 3);
+			pObjMgr->m_verticesList[i].size(), 0,
+			pObjMgr->m_list_indicesList[i].size() / 3);
 
 		if (FAILED(hr))
 			MessageBox(NULL, TEXT("DrawIndexedPrimitive Error"), TEXT("DrawIndexedPrimitive Error"), MB_OK);
-//		else
-//			MessageBox(NULL, TEXT("DrawIndexedPrimitive Success"), TEXT("Success"), MB_OK);
+		//		else
+		//			MessageBox(NULL, TEXT("DrawIndexedPrimitive Success"), TEXT("Success"), MB_OK);
 	}
 }
 
@@ -550,8 +564,8 @@ VOID CDxDriver::DrawObjStripModel(CObjMgr* pObjMgr)
 		m_pD3DDevice->SetStreamSource(i, m_pVertexBufferList[i], 0, sizeof(OBJVERTEX));
 		m_pD3DDevice->SetIndices(m_pIndexBufferList[i]);
 		HRESULT hr = m_pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP, 0, 0,
-														pObjMgr->m_verticesList[i].size(), 0,
-														pObjMgr->m_list_indicesList[i].size() / 3);
+			pObjMgr->m_verticesList[i].size(), 0,
+			pObjMgr->m_list_indicesList[i].size() / 3);
 		if (FAILED(hr))
 			MessageBox(NULL, TEXT("DrawIndexedPrimitive Error"), TEXT("DrawIndexedPrimitive Error"), MB_OK);
 	}
@@ -564,8 +578,8 @@ VOID CDxDriver::SetWorldMatrix(D3DXMATRIXA16& matWorld)
 
 	if (FAILED(m_pD3DDevice->SetTransform(D3DTS_WORLDMATRIX(0), &matWorld)))
 		MessageBox(NULL, TEXT("Set World Matrix Error"), TEXT("Matrix Error"), MB_OK);
-//	else
-//		MessageBox(NULL, TEXT("Set World Matrix Success"), TEXT("Success"), MB_OK);
+	//	else
+	//		MessageBox(NULL, TEXT("Set World Matrix Success"), TEXT("Success"), MB_OK);
 }
 
 VOID CDxDriver::SetCameraMatrix(D3DXMATRIXA16& matView, D3DXVECTOR3 p_eye, D3DXVECTOR3 p_at, D3DXVECTOR3 p_up)
@@ -574,8 +588,8 @@ VOID CDxDriver::SetCameraMatrix(D3DXMATRIXA16& matView, D3DXVECTOR3 p_eye, D3DXV
 	D3DXMatrixLookAtLH(&matView, &p_eye, &p_at, &p_up);	// Camera 변환 행렬 계산
 	if (FAILED(m_pD3DDevice->SetTransform(D3DTS_VIEW, &matView)))
 		MessageBox(NULL, TEXT("Set VIEW Matrix Error"), TEXT("Matrix Error"), MB_OK);
-//	else
-//		MessageBox(NULL, TEXT("Set VIEW Matrix Success"), TEXT("Success"), MB_OK);
+	//	else
+	//		MessageBox(NULL, TEXT("Set VIEW Matrix Success"), TEXT("Success"), MB_OK);
 }
 
 VOID CDxDriver::SetProjMatrix(D3DXMATRIXA16& matProj)		// 원근행렬
@@ -584,14 +598,14 @@ VOID CDxDriver::SetProjMatrix(D3DXMATRIXA16& matProj)		// 원근행렬
 	D3DXMatrixPerspectiveFovLH(&matProj, D3DX_PI / 3.0f, 1.0f, 1.0f, 1000.f);
 	if (FAILED(m_pD3DDevice->SetTransform(D3DTS_PROJECTION, &matProj)))
 		MessageBox(NULL, TEXT("Set PROJ Matrix Error"), TEXT("Matrix Error"), MB_OK);
-//	else
-//		MessageBox(NULL, TEXT("Set PROJ Matrix Success"), TEXT("Success"), MB_OK);
+	//	else
+	//		MessageBox(NULL, TEXT("Set PROJ Matrix Success"), TEXT("Success"), MB_OK);
 }
 
 
 VOID CDxDriver::SetLight(BOOL bLight)
 {
-	if(m_pD3DDevice == nullptr)
+	if (m_pD3DDevice == nullptr)
 		MessageBox(NULL, TEXT("No D3DDevice"), TEXT("Set Error"), MB_OK);
 
 	D3DLIGHT9 light;
@@ -630,3 +644,12 @@ VOID CDxDriver::SetPosition(D3DXVECTOR3 pos)
 	D3DXMatrixTranslation(&m_matWorld, pos.x, pos.y, pos.z);
 }
 
+// Use D3DFVF_XYZRHW and DrawPrimitiveUp.
+VOID CDxDriver::DrawRect(CButton* pButton)
+{
+	m_pD3DDevice->SetFVF(D3DFVF_BOXVERTEX);
+	HRESULT hr = m_pD3DDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, pButton->m_vertex, sizeof(RHWVERTEX));
+
+	if (FAILED(hr))
+		MessageBox(NULL, TEXT("DrawPrimitiveUp Error"), TEXT("DrawPrimitiveUp Error"), MB_OK);
+}
