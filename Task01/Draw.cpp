@@ -19,7 +19,7 @@ CDraw::CDraw()
 
 CDraw::~CDraw()
 {
-	//m_pTexture->Release();
+
 }
 
 VOID CDraw::LinkD3D(CDxDriver* pDriver)

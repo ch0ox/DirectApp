@@ -1,1 +1,65 @@
-﻿  Task01.vcxproj -> \\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Debug\Task01.exe
+﻿  WinApp.cpp
+  C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\DXDriver.h(46,1): warning C4005: 'SAFE_RELEASE': 매크로 재정의
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.h(40): message : 'SAFE_RELEASE'의 이전 정의를 참조하십시오.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\DXDriver.h(120,29): warning C4324: 'CDxDriver': 맞춤 지정자 때문에 구조체가 채워졌습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\Button.h(48,19): warning C4245: '초기화 중': 'int'에서 'UINT'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.cpp(49,35): warning C4316: 'CDxDriver': 힙에 할당된 개체가 16에 맞추어져 있지 않을 수도 있습니다
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.cpp(97,21): warning C4150: 불완전한 형식 'CObjModel'에 대한 포인터를 삭제했습니다. 소멸자가 호출되지 않습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.h(58): message : 'CObjModel' 선언을 참조하십시오.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.cpp(182,8): warning C4189: 'd': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\xstring(2575,23): warning C4244: '인수': '_Elem'에서 'const _Elem'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Elem=wchar_t
+          ]
+          and
+          [
+              _Elem=char
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\xstring(2586): message : 컴파일되는 함수 템플릿 인스턴스화 'void std::basic_string<char,std::char_traits<char>,std::allocator<char>>::_Construct<_Iter>(_Iter,const _Iter,std::input_iterator_tag)'에 대한 참조를 확인하세요.
+          with
+          [
+              _Iter=wchar_t *
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\xstring(2586): message : 컴파일되는 함수 템플릿 인스턴스화 'void std::basic_string<char,std::char_traits<char>,std::allocator<char>>::_Construct<_Iter>(_Iter,const _Iter,std::input_iterator_tag)'에 대한 참조를 확인하세요.
+          with
+          [
+              _Iter=wchar_t *
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\xstring(2566): message : 컴파일되는 함수 템플릿 인스턴스화 'void std::basic_string<char,std::char_traits<char>,std::allocator<char>>::_Construct<_Iter>(const _Iter,const _Iter,std::forward_iterator_tag)'에 대한 참조를 확인하세요.
+          with
+          [
+              _Iter=wchar_t *
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\xstring(2566): message : 컴파일되는 함수 템플릿 인스턴스화 'void std::basic_string<char,std::char_traits<char>,std::allocator<char>>::_Construct<_Iter>(const _Iter,const _Iter,std::forward_iterator_tag)'에 대한 참조를 확인하세요.
+          with
+          [
+              _Iter=wchar_t *
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\xstring(3294): message : 컴파일되는 함수 템플릿 인스턴스화 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string<wchar_t*,0>(_Iter,_Iter,const _Alloc &)'에 대한 참조를 확인하세요.
+          with
+          [
+              _Iter=wchar_t *,
+              _Alloc=std::allocator<char>
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\xstring(3294): message : 컴파일되는 함수 템플릿 인스턴스화 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string<wchar_t*,0>(_Iter,_Iter,const _Alloc &)'에 대한 참조를 확인하세요.
+          with
+          [
+              _Iter=wchar_t *,
+              _Alloc=std::allocator<char>
+          ]
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.cpp(221): message : 컴파일되는 함수 템플릿 인스턴스화 'std::basic_string<char,std::char_traits<char>,std::allocator<char>> &std::basic_string<char,std::char_traits<char>,std::allocator<char>>::assign<std::_String_iterator<std::_String_val<std::_Simple_types<_Elem>>>,0>(const _Iter,const _Iter)'에 대한 참조를 확인하세요.
+          with
+          [
+              _Elem=wchar_t,
+              _Iter=std::_String_iterator<std::_String_val<std::_Simple_types<wchar_t>>>
+          ]
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.cpp(221): message : 컴파일되는 함수 템플릿 인스턴스화 'std::basic_string<char,std::char_traits<char>,std::allocator<char>> &std::basic_string<char,std::char_traits<char>,std::allocator<char>>::assign<std::_String_iterator<std::_String_val<std::_Simple_types<_Elem>>>,0>(const _Iter,const _Iter)'에 대한 참조를 확인하세요.
+          with
+          [
+              _Elem=wchar_t,
+              _Iter=std::_String_iterator<std::_String_val<std::_Simple_types<wchar_t>>>
+          ]
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.cpp(201): warning C4715: 'App::Render': 모든 제어 경로에서 값을 반환하지는 않습니다.
+  Task01.vcxproj -> \\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Debug\Task01.exe

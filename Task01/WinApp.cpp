@@ -62,8 +62,6 @@ BOOL App::Initialize()
 	if (!m_pObjMgr)
 		return FALSE;
 
-	//m_pObjModel->AddObjModel(m_pDXDriver);
-
 	m_pDxInput->Initialize(g_hInstance, m_hWnd);
 	if (!m_pDXDriver->Initialize(m_hWnd))
 	{
@@ -71,7 +69,7 @@ BOOL App::Initialize()
 		return FALSE;
 	}
 
-	if (!m_pButtonMgr->LoadIniFile("\\\\ifs01\\서든어택1실\\SA_Depts\\클라이언트팀\\99. 공유\\김채원\\Study_Git\\directApp\\button.ini"))
+	if (!m_pButtonMgr->LoadIniFile("..\\button.ini"))
 	{
 		MessageBox(NULL, TEXT("Btn Load Error"), TEXT("Error"), MB_OK);
 		return FALSE;

@@ -18,6 +18,7 @@ CButtonMgr::~CButtonMgr()
 	for (; m_btnIter != m_btnVector.end(); ++m_btnIter)
 	{
 		delete (*m_btnIter);
+		*m_btnIter = nullptr;
 	}
 }
 
