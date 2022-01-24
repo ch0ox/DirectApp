@@ -13,7 +13,12 @@ CButtonMgr::CButtonMgr()
 
 CButtonMgr::~CButtonMgr()
 {
+	m_btnIter = m_btnVector.begin();
 
+	for (; m_btnIter != m_btnVector.end(); ++m_btnIter)
+	{
+		delete (*m_btnIter);
+	}
 }
 
 BOOL CButtonMgr::LoadIniFile(char* szFilePath)
