@@ -149,6 +149,14 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file, CDxDriver* pDriver)
 
 			}
 		}
+
+		// mtllib
+		else if (line[0] == 'm' && line[1] == 't' && line[2] == 'l' && line[3] == 'l' && line[4] == 'i' && line[5] == 'b' && line[6] == ' ')
+		{
+			m_mtl_str = line.substr(7, len - 7);
+		}
+
+
 		// o, v, vt, vn, f 이외의 Line
 		else
 		{
@@ -216,6 +224,51 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file, CDxDriver* pDriver)
 	CreateObjBuffer(pDriver);
 
 	return TRUE;
+}
+
+// Read Obj Material File and Load
+BOOL CObjMgr::ObjMtlLoad()
+{
+	std::ifstream file(m_mtl_str);
+	std::string line = "";
+
+	while (std::getline(file, line))
+	{
+		if (file.fail())
+		{
+			MessageBox(NULL, TEXT("Mtl File Load Failed."), TEXT("Error"), MB_OK);
+		}
+
+		if (line[0] == 'n' && line[1] == 'e' && line[2] == 'w' && line[3] == 'm' && line[4] == 't' && line[5] == 'l' && line[6] == ' ')
+		{
+
+		}
+
+		// map_ 으로 시작하는 라인
+		else if (line[0] == 'm' && line[1] == 'a' && line[2] == 'p' && line[3] == '_')
+		{
+			// map_Kd : diffuse
+			if (line[4] == 'K' && line[5] == 'd' && line[6] == ' ')
+			{
+
+			}
+
+			// map_Bump : implementation
+			else if (line[4] == 'B' && line[5] == 'u' && line[6] == 'm' && line[7] == 'p' && line[8] == ' ')
+			{
+
+			}
+
+			// map_Ks : specular color
+			else if (line[4] == 'K' && line[5] == 's' && line[6] == ' ')
+			{
+
+			}
+		}
+
+	}
+
+	file.close();
 }
 
 // Save Obj File Data.

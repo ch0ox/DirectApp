@@ -96,6 +96,7 @@ public:
 	virtual ~CObjMgr();
 
 	BOOL ObjLoad(std::ifstream&, CDxDriver* pDriver);
+	BOOL ObjMtlLoad();
 	OBJVERTEX FaceToVertex(int, CPoint3i);
 	VOID SaveToListIndices(INDEXLIST list);
 
@@ -125,6 +126,7 @@ private:
 	
 	bool m_bIsTexturing = FALSE;
 	VOID Term();
+	std::string m_mtl_str = "";
 
 protected:
 	UINT m_vtxSize = sizeof(OBJVERTEX);											// 정점 정보 구조체 사이즈
