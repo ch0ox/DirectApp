@@ -56,14 +56,12 @@ public:
 	CDraw();
 	virtual ~CDraw();
 
-	HRESULT CreateTriangleBuffer();
+	HRESULT CreateTriangleBuffer(CDxDriver* pDrive);
 	HRESULT CreateRectBuffer();
-	VOID DrawRect(CButton* pButton);
-	VOID LinkD3D(CDxDriver* pDriver);
-	VOID TextInit();
+	VOID TextInit(CDxDriver* pDriver);
 
-	VOID DrawTextFPS();
-	VOID DrawTriangle();
+	VOID DrawTextFPS(CDxDriver* pDriver);
+	VOID DrawTriangle(CDxDriver* pDriver);
 
 	VOID SetDuringTime(FLOAT time);
 
@@ -80,7 +78,6 @@ public:
 	LPDIRECT3DTEXTURE9 m_pTexture;
 
 private:
-	CDxDriver* m_pDriver = nullptr;
 	FLOAT m_duringTime = 0;
 
 protected:

@@ -237,6 +237,7 @@ BOOL CObjMgr::ObjMtlLoad()
 		if (file.fail())
 		{
 			MessageBox(NULL, TEXT("Mtl File Load Failed."), TEXT("Error"), MB_OK);
+			break;
 		}
 
 		if (line[0] == 'n' && line[1] == 'e' && line[2] == 'w' && line[3] == 'm' && line[4] == 't' && line[5] == 'l' && line[6] == ' ')
@@ -269,6 +270,7 @@ BOOL CObjMgr::ObjMtlLoad()
 	}
 
 	file.close();
+	return TRUE;
 }
 
 // Save Obj File Data.

@@ -73,6 +73,12 @@ BOOL CButtonMgr::LoadIniFile(char* szFilePath)
 
 VOID CButtonMgr::Initialize(CDxDriver* pDriver)
 {
+	if (pDriver == nullptr)
+	{
+		MessageBox(NULL, TEXT("No driver."), TEXT("Error"), MB_OK);
+		return;
+	}
+
 	for (int i = 0; i < m_btnVector.size(); i++)
 	{
 		m_btnVector[i]->RectangleInit(pDriver);
@@ -82,6 +88,17 @@ VOID CButtonMgr::Initialize(CDxDriver* pDriver)
 
 VOID CButtonMgr::Check(CDxDriver* pDriver, CDxInput* pInput, bool bState, int x, int y)
 {
+	if (pDriver == nullptr)
+	{
+		MessageBox(NULL, TEXT("No driver."), TEXT("Error"), MB_OK);
+		return;
+	}
+	if (pInput == nullptr)
+	{
+		MessageBox(NULL, TEXT("No input device."), TEXT("Error"), MB_OK);
+		return;
+	}
+
 	for (int i = 0; i < m_btnVector.size(); i++)
 	{
 		m_btnVector[i]->Check(pDriver->WindowMode, bState, x, y);
@@ -94,6 +111,12 @@ VOID CButtonMgr::Check(CDxDriver* pDriver, CDxInput* pInput, bool bState, int x,
 
 VOID CButtonMgr::Draw(CDxDriver* pDriver)
 {
+	if (pDriver == nullptr)
+	{
+		MessageBox(NULL, TEXT("No driver."), TEXT("Error"), MB_OK);
+		return;
+	}
+
 	for (int i = 0; i < m_btnVector.size(); i++)
 	{
 		pDriver->DrawRect(m_btnVector[i]);
@@ -103,6 +126,17 @@ VOID CButtonMgr::Draw(CDxDriver* pDriver)
 
 VOID CButtonMgr::Action(CDxDriver* pDriver, CDxInput* pInput, int buttonAction)
 {
+	if (pDriver == nullptr)
+	{
+		MessageBox(NULL, TEXT("No driver."), TEXT("Error"), MB_OK);
+		return;
+	}
+	if (pInput == nullptr)
+	{
+		MessageBox(NULL, TEXT("No input device."), TEXT("Error"), MB_OK);
+		return;
+	}
+
 	switch (buttonAction)
 	{
 	case 0:

@@ -19,7 +19,6 @@ CDxDriver::CDxDriver(App* app) : m_pApp(app)
 {
 	m_pDraw = nullptr;
 	m_pDraw = new CDraw();
-	m_pDraw->LinkD3D(this);
 
 	m_eye.x = 0.0f;
 	m_eye.y = 2.0f;
@@ -119,7 +118,7 @@ HRESULT CDxDriver::InitVB()
 	// Triangle
 	//m_pDraw->CreateTriangleBuffer();
 
-	m_pDraw->TextInit();
+	m_pDraw->TextInit(this);
 
 	// After Obj file Load ( for Toggle )
 	if (m_pApp->m_bObjLoad)
@@ -142,7 +141,7 @@ VOID CDxDriver::Drawing()
 {
 	// Text
 	m_pDraw->SetDuringTime(static_cast<float>(m_pApp->GetTimer()->GetFPS()));
-	m_pDraw->DrawTextFPS();
+	m_pDraw->DrawTextFPS(this);
 
 	// Matrix
 	SetWorldMatrix(m_matWorld);

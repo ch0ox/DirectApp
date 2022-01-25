@@ -20,7 +20,6 @@ public:
 	virtual ~CButton();
 
 	VOID Draw(CDxDriver* pDriver);
-	VOID ButtonAction();
 	BOOL IsOnMe(int x, int y, bool);
 	VOID RectangleInit(CDxDriver* pDriver);
 	VOID TextureInit(CDxDriver* pDriver);

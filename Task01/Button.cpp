@@ -125,11 +125,6 @@ BOOL CButton::IsOnMe(int x, int y, bool windowmode)
 	return FALSE;
 }
 
-VOID CButton::ButtonAction()
-{
-
-}
-
 VOID CButton::SetScale(float scaleX, float scaleY)
 {
 	m_widePosX = scaleX * m_posX;
