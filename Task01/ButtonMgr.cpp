@@ -119,7 +119,7 @@ VOID CButtonMgr::Draw(CDxDriver* pDriver)
 
 	for (int i = 0; i < m_btnVector.size(); i++)
 	{
-		m_btnVector[i]->Draw(pDriver);
+		m_btnVector[i]->SetTexture(pDriver);
 		pDriver->DrawRect(m_btnVector[i]);
 	}
 }

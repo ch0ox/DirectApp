@@ -551,10 +551,10 @@ VOID CObjMgr::ObjDraw(CDxDriver* pDriver)
 	pDriver->m_pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);		// 안나오면 D3DCULL_NONE 로 확인
 	
 // TO DO : Set Texture
-	if (m_bObjTexLoad)
-	{
-
-	}
+// 	if (m_bObjTexLoad)
+// 	{
+// 		pDriver->SetTexture(m_mtls[0].texIndex);
+// 	}
 
 	// Drawing
 	pDriver->DrawObjListModel(this);

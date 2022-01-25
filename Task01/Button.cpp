@@ -49,7 +49,7 @@ VOID CButton::TextureInit(CDxDriver* pDriver)
 	m_iTexture[2] = pDriver->CreateTexture(m_click_path.c_str());
 }
 
-VOID CButton::Draw(CDxDriver* pDriver)
+VOID CButton::SetTexture(CDxDriver* pDriver)
 {
 	if (pDriver == nullptr)
 	{

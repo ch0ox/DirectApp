@@ -120,6 +120,8 @@ public:
 	VOID ObjDraw(CDxDriver* pDriver);
 	BOOL LoadTexture(CDxDriver* pDriver);
 	DWORD GetFVF() { return m_dwFVF; }
+	BOOL GetObjTex() { return m_bObjTexLoad; }
+	VOID SetObjTex(BOOL b) { m_bObjTexLoad = b; }
 
 	std::vector <CObj> m_objs;								// Objects Vector
 	std::vector <CMtl> m_mtls;								// Material Vector
@@ -141,11 +143,11 @@ public:
 
 
 private:
-	BOOL									m_bObjTexLoad = FALSE;
-	VOID SetObjTex(BOOL b)					{ m_bObjTexLoad = b; }
-	bool m_bIsTexturing = FALSE;
-	VOID Term();
 	std::string m_mtl_str = "";
+	BOOL m_bIsTexturing = FALSE;
+	BOOL									m_bObjTexLoad = FALSE;
+
+	VOID Term();
 
 protected:
 	UINT m_vtxSize = sizeof(OBJVERTEX);											// 정점 정보 구조체 사이즈

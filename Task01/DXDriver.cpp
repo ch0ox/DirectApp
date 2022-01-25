@@ -514,17 +514,29 @@ VOID CDxDriver::DrawObjListModel(CObjMgr* pObjMgr)
 {
 	DWORD dwFVF;
 
+	if (pObjMgr->GetObjTex())
+	{
+		for (int i = 0; i < pObjMgr->m_mtls.size(); i++)
+		{
+			if (pObjMgr->m_mtls[i].texIndex != (UINT)-1) 
+				SetTexture(pObjMgr->m_mtls[i].texIndex);
+		}
+	}
+
 	for (int i = 0; i < m_pVertexBufferList.size(); i++)
 	{
 		if (pObjMgr->m_bIsTexturingList[i])
+		{
 			dwFVF = D3DFVF_TEXTUREVERTEX;
+			
+		}
+			
 		else
 		{
 			dwFVF = D3DFVF_NOTEXTUREVERTEX;
-
+			SetTexture(NO_TEXTURE);
 		}
 
-		SetTexture(NO_TEXTURE);
 
 		// Drawing Preparation
 		m_pD3DDevice->SetStreamSource(0, m_pVertexBufferList[i], 0, sizeof(OBJVERTEX));
