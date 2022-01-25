@@ -550,20 +550,21 @@ VOID CObjMgr::ObjDraw(CDxDriver* pDriver)
 	// Culling CCW (반시계)
 	pDriver->m_pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);		// 안나오면 D3DCULL_NONE 로 확인
 	
-// Drawing
-	pDriver->DrawObjListModel(this);
-	//pDriver->DrawObjStripModel(this);
-
 // TO DO : Set Texture
 	if (m_bObjTexLoad)
 	{
 
 	}
+
+	// Drawing
+	pDriver->DrawObjListModel(this);
+	//pDriver->DrawObjStripModel(this);
 }
 
 // Create Obj Texture
 BOOL CObjMgr::LoadTexture(CDxDriver* pDriver)
 {
+	int noFileCnt = 0;
 	if (!m_mtls.empty())
 	{
 		for (int i = 0; i < m_mtls.size(); i++)
@@ -572,12 +573,20 @@ BOOL CObjMgr::LoadTexture(CDxDriver* pDriver)
 			{
 				std::cout << m_mtls[i].map_Kd << std::endl;
 				m_mtls[i].texIndex = pDriver->CreateTexture(m_mtls[i].map_Kd.c_str());
-				//m_mtls[i].texIndex = pDriver->CreateTextureLPCWSTR(StringToWstring(m_mtls[i].map_Kd).c_str());
 				if (m_mtls[i].texIndex == (UINT)-1)
 					return FALSE;
 			}
 			else
-				std::cout << i << "번째 mtl texture 정보가 없습니다. " << std::endl;
+			{
+				noFileCnt++;
+				std::cout << i + 1 << "번째 mtl texture 정보가 없습니다. " << std::endl;
+			}
+
+		}
+		if (noFileCnt == m_mtls.size())
+		{
+			std::cout << "No Resource File." << std::endl;
+			return FALSE;
 		}
 	}
 	else

@@ -70,7 +70,6 @@ public:
 	VOID DeviceLostRecovery();
 	VOID InputRender(class CDxInput* pInput);
 
-	UINT CreateTextureLPCWSTR(LPCWSTR psz);
 	UINT CreateTexture(const char* psz);
 	UINT CreateObjVertexBuffer(UINT length, DWORD usage, DWORD fvf, D3DPOOL pool);
 	UINT CreateObjIndexBuffer(UINT length, DWORD usage, D3DFORMAT format, D3DPOOL pool);
