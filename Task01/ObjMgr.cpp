@@ -242,7 +242,7 @@ BOOL CObjMgr::ObjMtlLoad()
 {
 	std::ifstream file(m_mtl_str);
 	std::string line = "";
-	std::string originPath = "..\\";
+	std::string originPath = "..\\Resource\\";
 	std::vector<FLOAT> vf;
 	CMtl tmpMtl;
 	int mtlCnt = 0;
@@ -260,11 +260,6 @@ BOOL CObjMgr::ObjMtlLoad()
 
 		if (line[0] == 'n' && line[1] == 'e' && line[2] == 'w' && line[3] == 'm' && line[4] == 't' && line[5] == 'l' && line[6] == ' ')
 		{
-			if (mtlCnt > 0)
-			{
-
-			}
-
 			++mtlCnt;
 			tmpMtl.name = line.substr(7, len - 7);
 			m_mtls.push_back(tmpMtl);
@@ -319,7 +314,7 @@ BOOL CObjMgr::ObjMtlLoad()
 		// illum
 		else if (line[0] == 'i' && line[1] == 'l' && line[2] == 'l' && line[3] == 'u' && line[4] == 'm' && line[5] == ' ')
 		{
-			m_mtls[mtlCnt - 1].illum = std::stoi(line.substr(5, len - 5));
+			m_mtls[mtlCnt - 1].illum = std::stoi(line.substr(6, len - 6));
 		}
 
 		// map_ 으로 시작하는 라인
@@ -328,19 +323,23 @@ BOOL CObjMgr::ObjMtlLoad()
 			// map_Kd : diffuse
 			if (line[4] == 'K' && line[5] == 'd' && line[6] == ' ')
 			{
-				m_mtls[mtlCnt - 1].map_Kd = line.substr(6, len - 6);
+				std::string path = originPath + line.substr(7, len - 7);
+
+				m_mtls[mtlCnt - 1].map_Kd = path;
 			}
 
 			// map_Bump : implementation
 			else if (line[4] == 'B' && line[5] == 'u' && line[6] == 'm' && line[7] == 'p' && line[8] == ' ')
 			{
-				m_mtls[mtlCnt - 1].map_Bump = line.substr(8, len - 8);
+				std::string path = originPath + line.substr(9, len - 9);
+				m_mtls[mtlCnt - 1].map_Bump = path;
 			}
 
 			// map_Ks : specular color
 			else if (line[4] == 'K' && line[5] == 's' && line[6] == ' ')
 			{
-				m_mtls[mtlCnt - 1].map_Ks = line.substr(6, len - 6);
+				std::string path = originPath + line.substr(7, len - 7);
+				m_mtls[mtlCnt - 1].map_Ks = path;
 			}
 		}
 	}
@@ -538,8 +537,13 @@ VOID CObjMgr::ObjDraw(CDxDriver* pDriver)
 	//pDriver->DrawObjStripModel(this);
 
 // TO DO : Set Texture
-	// 한 번 더 Load File 하던가 material 파일 읽어오던가.
+	if (!m_mtls.empty())
+	{
+		for (int i = 0; i < m_mtls.size(); i++)
+		{
 
+		}
+	}
 }
 
 std::vector <FLOAT> CObjMgr::StrtokFloat(char* str, char* delimeter)
