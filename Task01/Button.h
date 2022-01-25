@@ -41,10 +41,10 @@ public:
 	VOID SetWideInit() { m_widePosX = m_posX; m_widePosY = m_posY; m_wideWidth = m_width; m_wideHeight = m_height; }
 	VOID SetTexPath(char* normalPath, char* overPath, char* clickPath);
 
-	INT					m_state = -1;
+	INT					m_state = idle;
 
 	char* m_btnName = { 0, };
-	UINT				m_action = -1;
+	UINT				m_action = 0;
 	FLOAT				m_scaleX = 1.0f;
 	FLOAT				m_scaleY = 1.0f;
 	FLOAT				m_posX = 0;
@@ -60,7 +60,7 @@ public:
 	RHWVERTEX			m_vertex[4];
 
 private:
-	UINT				m_iTexture[3];
+	UINT				m_iTexture[3] = { 0, };
 
 	std::string			m_normal_path;
 	std::string			m_over_path;

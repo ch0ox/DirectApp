@@ -47,6 +47,7 @@ BOOL CDxDriver::Initialize(HWND hWnd)												// App ÀÇ HWND ¹Þ¾Æ ¿È.
 	{
 		if (SUCCEEDED(InitVB()))
 		{
+			m_pTextureList.push_back(nullptr);
 			if (SUCCEEDED(InitGeometry()))
 			{
 				return TRUE;
@@ -132,7 +133,6 @@ HRESULT CDxDriver::InitVB()
 HRESULT CDxDriver::InitGeometry()
 {
 	//m_pTextureList.push_back(m_pDraw->m_pTexture);
-	m_pTextureList.push_back(nullptr);
 
 	return S_OK;
 }
@@ -142,6 +142,9 @@ VOID CDxDriver::Drawing()
 	// Text
 	m_pDraw->SetDuringTime(static_cast<float>(m_pApp->GetTimer()->GetFPS()));
 	m_pDraw->DrawTextFPS(this);
+
+	// button
+	m_pApp->GetButtonMgr()->Draw(this);
 
 	// Matrix
 	SetWorldMatrix(m_matWorld);
@@ -160,8 +163,7 @@ VOID CDxDriver::Drawing()
 		//m_pDraw->DrawTriangle();
 	}
 
-	// button
-	m_pApp->GetButtonMgr()->Draw(this);
+
 }
 
 
@@ -221,7 +223,6 @@ VOID CDxDriver::InputRender(CDxInput* pInput)
 	pt = pInput->m_pMouse->ClientCursorPos(m_hWnd);
 
 	m_pApp->GetButtonMgr()->Check(this, pInput, pInput->m_pMouse->IsMouseDown(0), pt.x, pt.y);
-
 
 }
 
@@ -330,9 +331,6 @@ VOID CDxDriver::Term()
 		SAFE_RELEASE(m_pVertexBufferList[i]);
 	}
 	m_pVertexBufferList.clear();
-
-	if (m_pTexture != nullptr)
-		SAFE_RELEASE(m_pTexture);
 
 	if (m_pFont != nullptr)
 	{
@@ -527,6 +525,7 @@ VOID CDxDriver::DrawObjListModel(CObjMgr* pObjMgr)
 		}
 
 		SetTexture(NO_TEXTURE);
+
 		// Drawing Preparation
 		m_pD3DDevice->SetStreamSource(0, m_pVertexBufferList[i], 0, sizeof(OBJVERTEX));
 		m_pD3DDevice->SetFVF(dwFVF);
@@ -556,7 +555,7 @@ VOID CDxDriver::DrawObjStripModel(CObjMgr* pObjMgr)
 		else
 		{
 			dwFVF = D3DFVF_NOTEXTUREVERTEX;
-			SetTexture(NO_TEXTURE);
+			//SetTexture(NO_TEXTURE);
 		}
 
 		m_pD3DDevice->SetFVF(dwFVF);

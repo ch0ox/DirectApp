@@ -99,7 +99,7 @@ VOID CButtonMgr::Check(CDxDriver* pDriver, CDxInput* pInput, bool bState, int x,
 		return;
 	}
 
-	for (int i = 0; i < m_btnVector.size(); i++)
+	for (int i = 0; i < m_btnVector.size(); ++i)
 	{
 		m_btnVector[i]->Check(pDriver->WindowMode, bState, x, y);
 		if (m_btnVector[i]->GetState() == click)
@@ -119,8 +119,8 @@ VOID CButtonMgr::Draw(CDxDriver* pDriver)
 
 	for (int i = 0; i < m_btnVector.size(); i++)
 	{
-		pDriver->DrawRect(m_btnVector[i]);
 		m_btnVector[i]->Draw(pDriver);
+		pDriver->DrawRect(m_btnVector[i]);
 	}
 }
 
