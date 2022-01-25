@@ -306,6 +306,23 @@ UINT CDxDriver::CreateTexture(const char* psz)
 	return texture;
 }
 
+UINT CDxDriver::CreateTextureLPCWSTR(LPCWSTR psz)
+{
+	UINT texture = -1;
+	LPDIRECT3DTEXTURE9 pTex = nullptr;
+
+	if (FAILED(D3DXCreateTextureFromFile(m_pD3DDevice, psz, &pTex)))
+	{
+		MessageBox(NULL, TEXT("CreateTexture Failed!"), TEXT("Error"), MB_OK);
+		return texture;
+	}
+
+	texture = (UINT)m_pTextureList.size();
+	m_pTextureList.push_back(pTex);
+
+	return texture;
+}
+
 VOID CDxDriver::Term()
 {
 	if (m_pDraw)

@@ -214,7 +214,7 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file, CDxDriver* pDriver)
 			m_bIsTexturingList.push_back(FALSE);
 	}
 
-	std::wstring tmp = StringToLPCWSTR(anotherLine);
+	std::wstring tmp = StringToWstring(anotherLine);
 	LPCWSTR elseLine = tmp.c_str();
 	if (elseLine != NULL)
 	{
@@ -233,6 +233,11 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file, CDxDriver* pDriver)
 	}
 
 	CreateObjBuffer(pDriver);
+	if (LoadTexture(pDriver))	// Success Load Texture 
+	{
+		SetObjTex(TRUE);
+		std::cout << "Obj Texture file Load Success." << std::endl;
+	}
 
 	return TRUE;
 }
@@ -242,7 +247,8 @@ BOOL CObjMgr::ObjMtlLoad()
 {
 	std::ifstream file(m_mtl_str);
 	std::string line = "";
-	std::string originPath = "..\\Resource\\";
+	//std::string originPath = "..\\Resource\\";
+	std::string originPath = "";
 	std::vector<FLOAT> vf;
 	CMtl tmpMtl;
 	int mtlCnt = 0;
@@ -479,6 +485,12 @@ VOID CObjMgr::SaveToListIndices(INDEXLIST list)
 // To Create Obj Buffer. each obj.
 VOID CObjMgr::CreateObjBuffer(CDxDriver* pDriver)
 {
+	if (pDriver == nullptr)
+	{
+		MessageBox(NULL, TEXT("No driver."), TEXT("Error"), MB_OK);
+		return;
+	}
+
 	for (int i = 0; i < m_verticesList.size(); i++)
 	{
 		DWORD dwFVF;
@@ -529,6 +541,12 @@ VOID CObjMgr::CreateObjBuffer(CDxDriver* pDriver)
 /* Draw 부분 */
 VOID CObjMgr::ObjDraw(CDxDriver* pDriver)
 {
+	if (pDriver == nullptr)
+	{
+		MessageBox(NULL, TEXT("No driver."), TEXT("Error"), MB_OK);
+		return;
+	}
+
 	// Culling CCW (반시계)
 	pDriver->m_pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);		// 안나오면 D3DCULL_NONE 로 확인
 	
@@ -537,13 +555,35 @@ VOID CObjMgr::ObjDraw(CDxDriver* pDriver)
 	//pDriver->DrawObjStripModel(this);
 
 // TO DO : Set Texture
+	if (m_bObjTexLoad)
+	{
+
+	}
+}
+
+// Create Obj Texture
+BOOL CObjMgr::LoadTexture(CDxDriver* pDriver)
+{
 	if (!m_mtls.empty())
 	{
 		for (int i = 0; i < m_mtls.size(); i++)
 		{
-
+			if (!m_mtls[i].map_Kd.empty())
+			{
+				std::cout << m_mtls[i].map_Kd << std::endl;
+				m_mtls[i].texIndex = pDriver->CreateTexture(m_mtls[i].map_Kd.c_str());
+				//m_mtls[i].texIndex = pDriver->CreateTextureLPCWSTR(StringToWstring(m_mtls[i].map_Kd).c_str());
+				if (m_mtls[i].texIndex == (UINT)-1)
+					return FALSE;
+			}
+			else
+				std::cout << i << "번째 mtl texture 정보가 없습니다. " << std::endl;
 		}
 	}
+	else
+		return FALSE;
+
+	return TRUE;
 }
 
 std::vector <FLOAT> CObjMgr::StrtokFloat(char* str, char* delimeter)
@@ -589,7 +629,7 @@ std::vector <INT> CObjMgr::StrtokInt(char* str, char* delimeter)
 }
 
 
-std::wstring CObjMgr::StringToLPCWSTR(const std::string& str)
+std::wstring CObjMgr::StringToWstring(const std::string& str)
 {
 	int length = (int)str.length() + 1;
 	int len = MultiByteToWideChar(CP_ACP, 0, str.c_str(), length, 0, 0);

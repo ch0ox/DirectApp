@@ -69,13 +69,9 @@ public:
 	VOID ChangeDisplayMode(int mode);
 	VOID DeviceLostRecovery();
 	VOID InputRender(class CDxInput* pInput);
-	VOID SetLight(BOOL bLight);
-	VOID SetMaterial();
-	VOID SetPosition(D3DXVECTOR3 pos);
 
-	HRESULT SetTexture(UINT texture);
+	UINT CreateTextureLPCWSTR(LPCWSTR psz);
 	UINT CreateTexture(const char* psz);
-
 	UINT CreateObjVertexBuffer(UINT length, DWORD usage, DWORD fvf, D3DPOOL pool);
 	UINT CreateObjIndexBuffer(UINT length, DWORD usage, D3DFORMAT format, D3DPOOL pool);
 	HRESULT CopyObjVertexBuffer(UINT index, const void* p_src, int size);
@@ -84,9 +80,15 @@ public:
 	VOID DrawRect(CButton* pButton);
 	VOID DrawObjStripModel(CObjMgr* p_ObjMgr);
 	VOID DrawObjListModel(CObjMgr* p_ObjMgr);
+
+	VOID SetLight(BOOL bLight);
+	VOID SetMaterial();
+	VOID SetPosition(D3DXVECTOR3 pos);
+	HRESULT SetTexture(UINT texture);
 	VOID SetWorldMatrix(D3DXMATRIXA16& matWorld);
 	VOID SetProjMatrix(D3DXMATRIXA16& matProj);
 	VOID SetCameraMatrix(D3DXMATRIXA16& matView, D3DXVECTOR3 p_eye, D3DXVECTOR3 p_at, D3DXVECTOR3 p_up);
+
 	D3DXVECTOR3 GetEye() { return m_eye; }
 	D3DXVECTOR3 GetAt() { return m_at; }
 	D3DXVECTOR3 GetUp() { return m_up; }

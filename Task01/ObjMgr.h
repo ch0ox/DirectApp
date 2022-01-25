@@ -93,6 +93,8 @@ public:
 	std::string				map_Kd;			// diffuse Texture map
 	std::string				map_Bump;		// bump map (normal map)
 	std::string				map_Ks;
+	
+	UINT					texIndex;
 };
 
 
@@ -116,6 +118,7 @@ public:
 
 	VOID CreateObjBuffer(CDxDriver* pDriver);
 	VOID ObjDraw(CDxDriver* pDriver);
+	BOOL LoadTexture(CDxDriver* pDriver);
 	DWORD GetFVF() { return m_dwFVF; }
 
 	std::vector <CObj> m_objs;								// Objects Vector
@@ -123,7 +126,7 @@ public:
 	std::vector <FLOAT> StrtokFloat(char*, char*);
 	std::vector <std::string> StrtokString(char*, char*);
 	std::vector <INT> StrtokInt(char*, char*);
-	std::wstring StringToLPCWSTR(const std::string& str);
+	std::wstring StringToWstring(const std::string& str);
 
 // 	CArray <Node*>		m_nodes;
 // 	CArray <OBJVERTEX>	m_vertices;
@@ -138,7 +141,8 @@ public:
 
 
 private:
-	
+	BOOL									m_bObjTexLoad = FALSE;
+	VOID SetObjTex(BOOL b)					{ m_bObjTexLoad = b; }
 	bool m_bIsTexturing = FALSE;
 	VOID Term();
 	std::string m_mtl_str = "";

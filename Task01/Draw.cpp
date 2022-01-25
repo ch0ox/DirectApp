@@ -129,7 +129,7 @@ HRESULT CDraw::CreateTriangleBuffer(CDxDriver* pDriver)
 	memcpy(pIndices, triangleIndex, sizeof(triangleIndex));
 	pDriver->m_pIB_Tri->Unlock();
 
-	//D3DXCreateTextureFromFile(pDriver->m_pD3DDevice, TEXT("tree2.png"), &m_pTexture);
+	D3DXCreateTextureFromFile(pDriver->m_pD3DDevice, TEXT("tree2.png"), &m_pTexture);
 
 	return S_OK;
 }
