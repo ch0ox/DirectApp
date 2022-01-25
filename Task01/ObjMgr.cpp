@@ -243,6 +243,9 @@ BOOL CObjMgr::ObjMtlLoad()
 	std::ifstream file(m_mtl_str);
 	std::string line = "";
 	std::string originPath = "..\\";
+	std::vector<FLOAT> vf;
+	CMtl tmpMtl;
+	int mtlCnt = 0;
 
 	if (file.fail())
 	{
@@ -253,9 +256,70 @@ BOOL CObjMgr::ObjMtlLoad()
 
 	while (std::getline(file, line))
 	{
+		int len = line.length();
+
 		if (line[0] == 'n' && line[1] == 'e' && line[2] == 'w' && line[3] == 'm' && line[4] == 't' && line[5] == 'l' && line[6] == ' ')
 		{
+			if (mtlCnt > 0)
+			{
 
+			}
+
+			++mtlCnt;
+			tmpMtl.name = line.substr(7, len - 7);
+			m_mtls.push_back(tmpMtl);
+		}
+
+		// Ns
+		else if (line[0] == 'N' && line[1] == 's' && line[2] == ' ')
+		{
+			m_mtls[mtlCnt - 1].Ns = std::stof(line.substr(START_CONTEXT_else, len - START_CONTEXT_else));
+		}
+		
+		// Ka
+		else if (line[0] == 'K' && line[1] == 'a' && line[2] == ' ')
+		{
+			vf = StrtokFloat((char*)line.substr(START_CONTEXT_else, len - START_CONTEXT_else).c_str(), (char*)" ");
+			m_mtls[mtlCnt - 1].Ka = { vf[0], vf[1], vf[2] };
+		}
+
+		// Kd
+		else if (line[0] == 'K' && line[1] == 'd' && line[2] == ' ')
+		{
+			vf = StrtokFloat((char*)line.substr(START_CONTEXT_else, len - START_CONTEXT_else).c_str(), (char*)" ");
+			m_mtls[mtlCnt - 1].Kd = { vf[0], vf[1], vf[2] };
+		}
+
+		// Ks
+		else if (line[0] == 'K' && line[1] == 's' && line[2] == ' ')
+		{
+			vf = StrtokFloat((char*)line.substr(START_CONTEXT_else, len - START_CONTEXT_else).c_str(), (char*)" ");
+			m_mtls[mtlCnt - 1].Ks = { vf[0], vf[1], vf[2] };
+		}
+
+		// Ke
+		else if (line[0] == 'K' && line[1] == 'e' && line[2] == ' ')
+		{
+			vf = StrtokFloat((char*)line.substr(START_CONTEXT_else, len - START_CONTEXT_else).c_str(), (char*)" ");
+			m_mtls[mtlCnt - 1].Ke = { vf[0], vf[1], vf[2] };
+		}
+
+		// Ni
+		else if (line[0] == 'N' && line[1] == 'i' && line[2] == ' ')
+		{
+			m_mtls[mtlCnt - 1].Ni = std::stof(line.substr(START_CONTEXT_else, len - START_CONTEXT_else));
+		}
+
+		// d
+		else if (line[0] == 'd' && line[1] == ' ')
+		{
+			m_mtls[mtlCnt - 1].d = std::stof(line.substr(START_CONTEXT, len - START_CONTEXT));
+		}
+
+		// illum
+		else if (line[0] == 'i' && line[1] == 'l' && line[2] == 'l' && line[3] == 'u' && line[4] == 'm' && line[5] == ' ')
+		{
+			m_mtls[mtlCnt - 1].illum = std::stoi(line.substr(5, len - 5));
 		}
 
 		// map_ 으로 시작하는 라인
@@ -264,22 +328,21 @@ BOOL CObjMgr::ObjMtlLoad()
 			// map_Kd : diffuse
 			if (line[4] == 'K' && line[5] == 'd' && line[6] == ' ')
 			{
-
+				m_mtls[mtlCnt - 1].map_Kd = line.substr(6, len - 6);
 			}
 
 			// map_Bump : implementation
 			else if (line[4] == 'B' && line[5] == 'u' && line[6] == 'm' && line[7] == 'p' && line[8] == ' ')
 			{
-
+				m_mtls[mtlCnt - 1].map_Bump = line.substr(8, len - 8);
 			}
 
 			// map_Ks : specular color
 			else if (line[4] == 'K' && line[5] == 's' && line[6] == ' ')
 			{
-
+				m_mtls[mtlCnt - 1].map_Ks = line.substr(6, len - 6);
 			}
 		}
-
 	}
 
 	file.close();

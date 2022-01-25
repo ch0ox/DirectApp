@@ -82,7 +82,7 @@ class CMtl
 {
 public:
 	std::string				name;			// mtl name
-	D3DXVECTOR3				Ns;				// 재질의 반사 지수 (반사광 하이라이트 초점)
+	FLOAT					Ns;				// 재질의 반사 지수 (반사광 하이라이트 초점)
 	D3DXVECTOR3				Ka;				// 주변 반사율 (ambient)
 	D3DXVECTOR3				Kd;				// 기본 재질 색상 (diffuse color)
 	D3DXVECTOR3				Ks;				// 정반사율 지정 (specular color)
@@ -119,6 +119,7 @@ public:
 	DWORD GetFVF() { return m_dwFVF; }
 
 	std::vector <CObj> m_objs;								// Objects Vector
+	std::vector <CMtl> m_mtls;								// Material Vector
 	std::vector <FLOAT> StrtokFloat(char*, char*);
 	std::vector <std::string> StrtokString(char*, char*);
 	std::vector <INT> StrtokInt(char*, char*);
