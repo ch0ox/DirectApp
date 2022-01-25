@@ -1,140 +1,23 @@
-﻿  Button.cpp
-  C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\DXDriver.h(46,1): warning C4005: 'SAFE_RELEASE': 매크로 재정의
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.h(40): message : 'SAFE_RELEASE'의 이전 정의를 참조하십시오.
-  ButtonMgr.cpp
-  C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\DXDriver.h(46,1): warning C4005: 'SAFE_RELEASE': 매크로 재정의
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.h(40): message : 'SAFE_RELEASE'의 이전 정의를 참조하십시오.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ButtonMgr.cpp(29,18): warning C4245: '초기화 중': 'int'에서 'UINT'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ButtonMgr.cpp(57,32): warning C4244: '=': 'UINT'에서 'UINT16'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ButtonMgr.cpp(58,33): warning C4244: '=': 'UINT'에서 'UINT16'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ButtonMgr.cpp(49,3): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ButtonMgr.cpp(31,8): warning C4189: 'scaleY': 지역 변수가 초기화되었으나 참조되지 않았습니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ButtonMgr.cpp(30,8): warning C4189: 'scaleX': 지역 변수가 초기화되었으나 참조되지 않았습니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ButtonMgr.cpp(82,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ButtonMgr.cpp(102,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ButtonMgr.cpp(120,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-  DXDriver.cpp
+﻿  ObjMgr.cpp
   C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
 \\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.h(40,1): warning C4005: 'SAFE_RELEASE': 매크로 재정의
 \\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\DXDriver.h(46): message : 'SAFE_RELEASE'의 이전 정의를 참조하십시오.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\DXDriver.cpp(248,17): warning C4456: 'hr' 선언은 이전 로컬 선언을 숨깁니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\DXDriver.cpp(239,11): message : 'hr' 선언을 참조하십시오.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\DXDriver.cpp(294,19): warning C4245: '초기화 중': 'int'에서 'UINT'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\DXDriver.cpp(317,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\DXDriver.cpp(323,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\DXDriver.cpp(329,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\DXDriver.cpp(454,17): warning C4245: '초기화 중': 'int'에서 'UINT'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\DXDriver.cpp(517,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\DXDriver.cpp(551,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-  Draw.cpp
-  C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\DXDriver.h(46,1): warning C4005: 'SAFE_RELEASE': 매크로 재정의
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.h(40): message : 'SAFE_RELEASE'의 이전 정의를 참조하십시오.
-  KeyboardMgr.cpp
-  C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\DXDriver.h(46,1): warning C4005: 'SAFE_RELEASE': 매크로 재정의
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.h(40): message : 'SAFE_RELEASE'의 이전 정의를 참조하십시오.
-  MouseMgr.cpp
-  C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\DXDriver.h(46,1): warning C4005: 'SAFE_RELEASE': 매크로 재정의
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.h(40): message : 'SAFE_RELEASE'의 이전 정의를 참조하십시오.
-  ObjMgr.cpp
-  C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.h(40,1): warning C4005: 'SAFE_RELEASE': 매크로 재정의
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\DXDriver.h(46): message : 'SAFE_RELEASE'의 이전 정의를 참조하십시오.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(279,14): warning C4101: 'z' :참조되지 않은 지역 변수입니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(279,17): warning C4101: 'nx' :참조되지 않은 지역 변수입니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(279,32): warning C4101: 'v' :참조되지 않은 지역 변수입니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(279,21): warning C4101: 'ny' :참조되지 않은 지역 변수입니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(279,11): warning C4101: 'y' :참조되지 않은 지역 변수입니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(279,25): warning C4101: 'nz' :참조되지 않은 지역 변수입니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(279,8): warning C4101: 'x' :참조되지 않은 지역 변수입니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(279,29): warning C4101: 'u' :참조되지 않은 지역 변수입니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(407,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(478,21): warning C4244: '인수': 'double'에서 '_Ty'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(294,14): warning C4101: 'z' :참조되지 않은 지역 변수입니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(294,17): warning C4101: 'nx' :참조되지 않은 지역 변수입니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(294,32): warning C4101: 'v' :참조되지 않은 지역 변수입니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(294,21): warning C4101: 'ny' :참조되지 않은 지역 변수입니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(294,11): warning C4101: 'y' :참조되지 않은 지역 변수입니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(294,25): warning C4101: 'nz' :참조되지 않은 지역 변수입니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(294,8): warning C4101: 'x' :참조되지 않은 지역 변수입니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(294,29): warning C4101: 'u' :참조되지 않은 지역 변수입니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(422,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(492,21): warning C4244: '인수': 'double'에서 '_Ty'(으)로 변환하면서 데이터가 손실될 수 있습니다.
           with
           [
               _Ty=FLOAT
           ]
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(531,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(537,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(543,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(549,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-  Timer.cpp
-  C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\DXDriver.h(46,1): warning C4005: 'SAFE_RELEASE': 매크로 재정의
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.h(40): message : 'SAFE_RELEASE'의 이전 정의를 참조하십시오.
-  WinApp.cpp
-  C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\DXDriver.h(46,1): warning C4005: 'SAFE_RELEASE': 매크로 재정의
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.h(40): message : 'SAFE_RELEASE'의 이전 정의를 참조하십시오.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.cpp(49,35): warning C4316: 'CDxDriver': 힙에 할당된 개체가 16에 맞추어져 있지 않을 수도 있습니다
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.cpp(95,21): warning C4150: 불완전한 형식 'CObjModel'에 대한 포인터를 삭제했습니다. 소멸자가 호출되지 않습니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.h(58): message : 'CObjModel' 선언을 참조하십시오.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.cpp(180,8): warning C4189: 'd': 지역 변수가 초기화되었으나 참조되지 않았습니다.
-C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\xstring(2575,23): warning C4244: '인수': '_Elem'에서 'const _Elem'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-          with
-          [
-              _Elem=wchar_t
-          ]
-          and
-          [
-              _Elem=char
-          ]
-C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\xstring(2586): message : 컴파일되는 함수 템플릿 인스턴스화 'void std::basic_string<char,std::char_traits<char>,std::allocator<char>>::_Construct<_Iter>(_Iter,const _Iter,std::input_iterator_tag)'에 대한 참조를 확인하세요.
-          with
-          [
-              _Iter=wchar_t *
-          ]
-C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\xstring(2586): message : 컴파일되는 함수 템플릿 인스턴스화 'void std::basic_string<char,std::char_traits<char>,std::allocator<char>>::_Construct<_Iter>(_Iter,const _Iter,std::input_iterator_tag)'에 대한 참조를 확인하세요.
-          with
-          [
-              _Iter=wchar_t *
-          ]
-C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\xstring(2566): message : 컴파일되는 함수 템플릿 인스턴스화 'void std::basic_string<char,std::char_traits<char>,std::allocator<char>>::_Construct<_Iter>(const _Iter,const _Iter,std::forward_iterator_tag)'에 대한 참조를 확인하세요.
-          with
-          [
-              _Iter=wchar_t *
-          ]
-C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\xstring(2566): message : 컴파일되는 함수 템플릿 인스턴스화 'void std::basic_string<char,std::char_traits<char>,std::allocator<char>>::_Construct<_Iter>(const _Iter,const _Iter,std::forward_iterator_tag)'에 대한 참조를 확인하세요.
-          with
-          [
-              _Iter=wchar_t *
-          ]
-C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\xstring(3294): message : 컴파일되는 함수 템플릿 인스턴스화 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string<wchar_t*,0>(_Iter,_Iter,const _Alloc &)'에 대한 참조를 확인하세요.
-          with
-          [
-              _Iter=wchar_t *,
-              _Alloc=std::allocator<char>
-          ]
-C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\xstring(3294): message : 컴파일되는 함수 템플릿 인스턴스화 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string<wchar_t*,0>(_Iter,_Iter,const _Alloc &)'에 대한 참조를 확인하세요.
-          with
-          [
-              _Iter=wchar_t *,
-              _Alloc=std::allocator<char>
-          ]
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.cpp(219): message : 컴파일되는 함수 템플릿 인스턴스화 'std::basic_string<char,std::char_traits<char>,std::allocator<char>> &std::basic_string<char,std::char_traits<char>,std::allocator<char>>::assign<std::_String_iterator<std::_String_val<std::_Simple_types<_Elem>>>,0>(const _Iter,const _Iter)'에 대한 참조를 확인하세요.
-          with
-          [
-              _Elem=wchar_t,
-              _Iter=std::_String_iterator<std::_String_val<std::_Simple_types<wchar_t>>>
-          ]
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.cpp(219): message : 컴파일되는 함수 템플릿 인스턴스화 'std::basic_string<char,std::char_traits<char>,std::allocator<char>> &std::basic_string<char,std::char_traits<char>,std::allocator<char>>::assign<std::_String_iterator<std::_String_val<std::_Simple_types<_Elem>>>,0>(const _Iter,const _Iter)'에 대한 참조를 확인하세요.
-          with
-          [
-              _Elem=wchar_t,
-              _Iter=std::_String_iterator<std::_String_val<std::_Simple_types<wchar_t>>>
-          ]
-  main.cpp
-  C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\DXDriver.h(46,1): warning C4005: 'SAFE_RELEASE': 매크로 재정의
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.h(40): message : 'SAFE_RELEASE'의 이전 정의를 참조하십시오.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\main.cpp(26,113): warning C4100: 'nShowCmd': 참조되지 않은 정식 매개 변수입니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\main.cpp(26,93): warning C4100: 'lpCmdLine': 참조되지 않은 정식 매개 변수입니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\main.cpp(26,66): warning C4100: 'hPrevInstance': 참조되지 않은 정식 매개 변수입니다.
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\main.cpp(26,36): warning C4100: 'hInstance': 참조되지 않은 정식 매개 변수입니다.
-  코드를 생성하고 있습니다...
-\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.cpp(199): warning C4715: 'App::Render': 모든 제어 경로에서 값을 반환하지는 않습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(545,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(551,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(557,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\ObjMgr.cpp(563,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
   Task01.vcxproj -> \\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Debug\Task01.exe

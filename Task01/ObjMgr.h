@@ -78,8 +78,22 @@ public:
 	DWORD fvf;
 };
 
-
-
+class CMtl
+{
+public:
+	std::string				name;			// mtl name
+	D3DXVECTOR3				Ns;				// 재질의 반사 지수 (반사광 하이라이트 초점)
+	D3DXVECTOR3				Ka;				// 주변 반사율 (ambient)
+	D3DXVECTOR3				Kd;				// 기본 재질 색상 (diffuse color)
+	D3DXVECTOR3				Ks;				// 정반사율 지정 (specular color)
+	D3DXVECTOR3				Ke;				// 표면에서 방출되는 빛의 색상 (emission color)
+	FLOAT					Ni;				// 표면의 광하 밀도 (굴절률)
+	FLOAT					d;				// 재질의 투명성
+	UINT					illum;			// 재료에 사용할 조명 모델
+	std::string				map_Kd;			// diffuse Texture map
+	std::string				map_Bump;		// bump map (normal map)
+	std::string				map_Ks;
+};
 
 
 

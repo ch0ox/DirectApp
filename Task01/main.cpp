@@ -37,7 +37,7 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 	delete g_pApp;
 	g_pApp = nullptr;
 
-	//_CrtMemDumpAllObjectsSince(0);
+	_CrtMemDumpAllObjectsSince(0);
 
 	return 0;
 }

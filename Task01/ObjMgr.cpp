@@ -220,7 +220,18 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file, CDxDriver* pDriver)
 	{
 		MessageBox(NULL, elseLine, TEXT("예외 라인"), MB_OK);
 	}
-	
+
+	// is there material file ?
+	if (!m_mtl_str.empty())
+	{
+		std::cout << "material file Exist." << std::endl;
+		ObjMtlLoad();
+	}
+	else
+	{
+		std::cout << "No material file." << std::endl;
+	}
+
 	CreateObjBuffer(pDriver);
 
 	return TRUE;
@@ -231,15 +242,17 @@ BOOL CObjMgr::ObjMtlLoad()
 {
 	std::ifstream file(m_mtl_str);
 	std::string line = "";
+	std::string originPath = "..\\";
+
+	if (file.fail())
+	{
+//		MessageBox(NULL, TEXT("Mtl File Load Failed. Can't find the file in folder."), TEXT("Error"), MB_OK);
+		std::cout << "Material File Load Failed. Can't find the file in folder." << std::endl;
+		return false;
+	}
 
 	while (std::getline(file, line))
 	{
-		if (file.fail())
-		{
-			MessageBox(NULL, TEXT("Mtl File Load Failed."), TEXT("Error"), MB_OK);
-			break;
-		}
-
 		if (line[0] == 'n' && line[1] == 'e' && line[2] == 'w' && line[3] == 'm' && line[4] == 't' && line[5] == 'l' && line[6] == ' ')
 		{
 
@@ -456,7 +469,6 @@ VOID CObjMgr::ObjDraw(CDxDriver* pDriver)
 {
 	// Culling CCW (반시계)
 	pDriver->m_pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);		// 안나오면 D3DCULL_NONE 로 확인
-	//pDriver->m_pD3DDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
 	
 // Drawing
 	pDriver->DrawObjListModel(this);
