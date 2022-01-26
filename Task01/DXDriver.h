@@ -79,6 +79,7 @@ public:
 	VOID DrawRect(CButton* pButton);
 	VOID DrawObjStripModel(CObjMgr* p_ObjMgr);
 	VOID DrawObjListModel(CObjMgr* p_ObjMgr);
+	VOID DrawObjOriginalModel(CObjMgr* p_ObjMgr);
 
 	VOID SetLight(BOOL bLight);
 	VOID SetMaterial();

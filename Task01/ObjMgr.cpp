@@ -38,6 +38,7 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file, CDxDriver* pDriver)
 	int cur_objCnt = 1;
 	int lineNum = 1;
 	DWORD umap_index = 0;
+	DWORD origin_index = 0;
 
 	// prev vertex count
 	int prev_v = 0;
@@ -49,6 +50,8 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file, CDxDriver* pDriver)
 	OBJVERTEXLIST							vertices;
 	INDEXLIST								strip_indices;				// triangle strip
 	INDEXLIST								list_indices;				// trinagle list
+	OBJVERTEXLIST							origin_vertices;
+	INDEXLIST								origin_Indices;
 
 	std::unordered_map<std::string, DWORD>	uMap;
 
@@ -147,6 +150,12 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file, CDxDriver* pDriver)
 					list_indices.push_back(index);
 				}
 
+
+				OBJVERTEX tmpV = FaceToVertex(objCnt - 1, p3i);
+				origin_vertices.push_back(tmpV);
+				origin_Indices.push_back(origin_index);
+				origin_index++;
+
 			}
 		}
 
@@ -176,8 +185,13 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file, CDxDriver* pDriver)
 		{
 			// Make (triangle_list) Indices List.
 			SaveToListIndices(list_indices);
-
 			list_indices.clear();
+		}
+
+		if (b_face && (!origin_Indices.empty()))
+		{
+			SaveToOriginalIndices(origin_Indices);
+			origin_Indices.clear();
 		}
 
 		// obj 가 2개 이상일 경우에만 if 문에 들어감.
@@ -187,8 +201,13 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file, CDxDriver* pDriver)
 			m_verticesList.push_back(vertices);
 			m_indicesList.push_back(strip_indices);
 			m_list_indicesList.push_back(m_list_indices);
+			m_original_V_List.push_back(origin_vertices);
+			m_original_I_List.push_back(m_original_indices);
 			vertices.clear();
 			strip_indices.clear();
+			//list_indices.clear();
+			//m_list_indices.clear();
+			origin_vertices.clear();
 			uMap.clear();
 			if (m_bIsTexturing)
 				m_bIsTexturingList.push_back(TRUE);
@@ -205,8 +224,13 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file, CDxDriver* pDriver)
 		m_verticesList.push_back(vertices);
 		m_indicesList.push_back(strip_indices);
 		m_list_indicesList.push_back(m_list_indices);
+		m_original_V_List.push_back(origin_vertices);
+		m_original_I_List.push_back(m_original_indices);
 		vertices.clear();
 		strip_indices.clear();
+		//list_indices.clear();
+		//m_list_indices.clear();
+		origin_vertices.clear();
 		uMap.clear();
 		if (m_bIsTexturing)
 			m_bIsTexturingList.push_back(TRUE);
@@ -232,7 +256,8 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file, CDxDriver* pDriver)
 		std::cout << "No material file." << std::endl;
 	}
 
-	CreateObjBuffer(pDriver);
+	//CreateObjBuffer(pDriver);
+	CreateOriginalObjBuffer(pDriver);
 	if (LoadTexture(pDriver))	// Success Load Texture 
 	{
 		SetObjTex(TRUE);
@@ -482,6 +507,41 @@ VOID CObjMgr::SaveToListIndices(INDEXLIST list)
 	list_indices.clear();
 }
 
+VOID CObjMgr::SaveToOriginalIndices(INDEXLIST list)
+{
+	INDEXLIST::iterator indiceIter;
+	INDEXLIST::iterator tmpIter;
+	INDEXLIST::iterator checkIter;
+
+
+	// triangle list
+	INDEXLIST list_indices;
+
+	indiceIter = list.begin();
+	tmpIter = indiceIter;
+	tmpIter++;		// 두번째부터
+
+	for (; list.end() != indiceIter;)
+	{
+		checkIter = indiceIter;
+		indiceIter = tmpIter;
+
+		if (++checkIter != list.end())
+		{
+			list_indices.push_back(*list.begin());
+			list_indices.push_back(*(tmpIter));
+			list_indices.push_back(*(++indiceIter));
+			tmpIter = indiceIter;
+		}
+		else
+			break;
+	}
+
+	m_original_indices.insert(m_original_indices.end(), list_indices.begin(), list_indices.end());
+
+	list_indices.clear();
+}
+
 // To Create Obj Buffer. each obj.
 VOID CObjMgr::CreateObjBuffer(CDxDriver* pDriver)
 {
@@ -537,6 +597,42 @@ VOID CObjMgr::CreateObjBuffer(CDxDriver* pDriver)
 	
 }
 
+VOID CObjMgr::CreateOriginalObjBuffer(CDxDriver* pDriver)
+{
+	if (pDriver == nullptr)
+	{
+		MessageBox(NULL, TEXT("No driver."), TEXT("Error"), MB_OK);
+		return;
+	}
+
+	for (int i = 0; i < m_original_V_List.size(); i++)
+	{
+		DWORD dwFVF;
+
+		if (m_bIsTexturingList[i])
+			dwFVF = D3DFVF_TEXTUREVERTEX;
+		else
+			dwFVF = D3DFVF_NOTEXTUREVERTEX;
+
+		UINT index = pDriver->CreateObjVertexBuffer(m_original_V_List[i].size() * m_vtxSize, 0, dwFVF, D3DPOOL_MANAGED);
+		if (index == (UINT)-1)
+			return;
+
+		HRESULT hr = pDriver->CopyObjVertexBuffer(index, &m_original_V_List[i][0], m_vtxSize * m_original_V_List[i].size());
+		if (FAILED(hr))
+			return;
+
+		// List
+		index = pDriver->CreateObjIndexBuffer((m_original_I_List[i].size()) * m_indexSize, 0, m_vFormat, D3DPOOL_MANAGED);
+		if (index == (UINT)-1)
+			return;
+
+		hr = pDriver->CopyObjIndexBuffer(index, &m_original_I_List[i][0], m_indexSize * m_original_I_List[i].size());
+		if (FAILED(hr))
+			return;
+	}
+}
+
 
 /* Draw 부분 */
 VOID CObjMgr::ObjDraw(CDxDriver* pDriver)
@@ -549,16 +645,11 @@ VOID CObjMgr::ObjDraw(CDxDriver* pDriver)
 
 	// Culling CCW (반시계)
 	pDriver->m_pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);		// 안나오면 D3DCULL_NONE 로 확인
-	
-// TO DO : Set Texture
-// 	if (m_bObjTexLoad)
-// 	{
-// 		pDriver->SetTexture(m_mtls[0].texIndex);
-// 	}
 
 	// Drawing
-	pDriver->DrawObjListModel(this);
+	//pDriver->DrawObjListModel(this);
 	//pDriver->DrawObjStripModel(this);
+	pDriver->DrawObjOriginalModel(this);
 }
 
 // Create Obj Texture
@@ -656,11 +747,17 @@ VOID CObjMgr::Term()
 	m_list_indices.clear();
 	m_bIsTexturingList.clear();
 
-	for (int i = 0; i < m_verticesList.size(); i++)
+	for (int i = 0; i < m_original_V_List.size(); i++)
 	{
-		m_verticesList[i].clear();
+		m_original_V_List[i].clear();
 	}
-	m_verticesList.clear();
+	m_original_V_List.clear();
+
+	for (int i = 0; i < m_original_I_List.size(); i++)
+	{
+		m_original_I_List[i].clear();
+	}
+	m_original_I_List.clear();
 
 	for (int i = 0; i < m_indicesList.size(); i++)
 	{

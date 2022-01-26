@@ -1,1 +1,18 @@
-﻿  Task01.vcxproj -> \\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Debug\Task01.exe
+﻿  DXDriver.cpp
+  C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\WinApp.h(40,1): warning C4005: 'SAFE_RELEASE': 매크로 재정의
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\DXDriver.h(46): message : 'SAFE_RELEASE'의 이전 정의를 참조하십시오.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\DXDriver.cpp(249,17): warning C4456: 'hr' 선언은 이전 로컬 선언을 숨깁니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\DXDriver.cpp(240,11): message : 'hr' 선언을 참조하십시오.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\DXDriver.cpp(295,19): warning C4245: '초기화 중': 'int'에서 'UINT'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\DXDriver.cpp(318,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\DXDriver.cpp(324,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\DXDriver.cpp(330,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\DXDriver.cpp(455,17): warning C4245: '초기화 중': 'int'에서 'UINT'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\DXDriver.cpp(519,21): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\DXDriver.cpp(530,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\DXDriver.cpp(569,21): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\DXDriver.cpp(580,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Task01\DXDriver.cpp(617,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+DXInput.obj : warning LNK4099: 'vc142.pdb' PDB를 'DXInput.obj' 또는 '\\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Debug\vc142.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+  Task01.vcxproj -> \\ifs01\서든어택1실\SA_Depts\클라이언트팀\99. 공유\김채원\Study_Git\directApp\Debug\Task01.exe

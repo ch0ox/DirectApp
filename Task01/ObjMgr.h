@@ -115,8 +115,10 @@ public:
 	BOOL ObjMtlLoad();
 	OBJVERTEX FaceToVertex(int, CPoint3i);
 	VOID SaveToListIndices(INDEXLIST list);
+	VOID SaveToOriginalIndices(INDEXLIST list);
 
 	VOID CreateObjBuffer(CDxDriver* pDriver);
+	VOID CreateOriginalObjBuffer(CDxDriver* pDriver);
 	VOID ObjDraw(CDxDriver* pDriver);
 	BOOL LoadTexture(CDxDriver* pDriver);
 	DWORD GetFVF() { return m_dwFVF; }
@@ -135,12 +137,14 @@ public:
 
 	OBJVERTEXLIST							m_vertices;
 	INDEXLIST								m_list_indices;
+	INDEXLIST								m_original_indices;
 	std::unordered_map<std::string, DWORD>	m_uMap;
 	std::vector<OBJVERTEXLIST>				m_verticesList;
 	std::vector<INDEXLIST>					m_indicesList;
 	std::vector<INDEXLIST>					m_list_indicesList;					// triangle_list
 	std::vector<BOOL>						m_bIsTexturingList;
-
+	std::vector<OBJVERTEXLIST>				m_original_V_List;					// 다 때려넣을 Vertex List
+	std::vector<INDEXLIST>					m_original_I_List;					// 다 때려넣을 Index  List
 
 private:
 	std::string m_mtl_str = "";

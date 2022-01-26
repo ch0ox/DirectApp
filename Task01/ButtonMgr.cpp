@@ -150,6 +150,16 @@ VOID CButtonMgr::Action(CDxDriver* pDriver, CDxInput* pInput, int buttonAction)
 		pDriver->m_fAngle -= 0.05f;
 		break;
 	case 3:
-		pDriver->m_pD3DDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+		if (m_btn_flag == 0)
+		{
+			pDriver->m_pD3DDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+			m_btn_flag = 1;
+		}
+		else if (m_btn_flag == 1)
+		{
+			pDriver->m_pD3DDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
+			m_btn_flag = 0;
+		}
+			
 	}
 }

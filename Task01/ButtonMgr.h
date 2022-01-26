@@ -29,6 +29,7 @@ public:
 private:
 	std::vector<CButton*>				m_btnVector;
 	std::vector<CButton*>::iterator		m_btnIter;
+	int m_btn_flag = 0;
 
 protected:
 };

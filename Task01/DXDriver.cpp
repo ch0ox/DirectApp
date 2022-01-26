@@ -124,7 +124,8 @@ HRESULT CDxDriver::InitVB()
 	// After Obj file Load ( for Toggle )
 	if (m_pApp->m_bObjLoad)
 	{
-		m_pApp->GetObjMgr()->CreateObjBuffer(this);
+		//m_pApp->GetObjMgr()->CreateObjBuffer(this);
+		m_pApp->GetObjMgr()->CreateOriginalObjBuffer(this);
 	}
 
 	return S_OK;
@@ -509,6 +510,55 @@ HRESULT CDxDriver::CopyObjIndexBuffer(UINT index, const void* p_src, int p_size)
 	return S_OK;
 }
 
+VOID CDxDriver::DrawObjOriginalModel(CObjMgr* pObjMgr)
+{
+	DWORD dwFVF;
+
+	if (pObjMgr->GetObjTex())
+	{
+		for (int i = 0; i < pObjMgr->m_mtls.size(); i++)
+		{
+			if (pObjMgr->m_mtls[i].texIndex != (UINT)-1)
+				SetTexture(pObjMgr->m_mtls[i].texIndex);
+			else
+				SetTexture(NO_TEXTURE);
+		}
+	}
+	else
+		SetTexture(NO_TEXTURE);
+
+	for (int i = 0; i < m_pVertexBufferList.size(); i++)
+	{
+		if (pObjMgr->m_bIsTexturingList[i])
+		{
+			dwFVF = D3DFVF_TEXTUREVERTEX;
+
+		}
+
+		else
+		{
+			dwFVF = D3DFVF_NOTEXTUREVERTEX;
+			SetTexture(NO_TEXTURE);
+		}
+
+
+		// Drawing Preparation
+		m_pD3DDevice->SetStreamSource(0, m_pVertexBufferList[i], 0, sizeof(OBJVERTEX));
+		m_pD3DDevice->SetFVF(dwFVF);
+
+		m_pD3DDevice->SetIndices(m_pIndexBufferList[i]);
+		// Drawing
+		HRESULT hr = m_pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0,
+			pObjMgr->m_original_V_List[i].size(), 0,
+			pObjMgr->m_original_I_List[i].size() / 3);
+
+		if (FAILED(hr))
+			MessageBox(NULL, TEXT("DrawIndexedPrimitive Error"), TEXT("DrawIndexedPrimitive Error"), MB_OK);
+		//		else
+		//			MessageBox(NULL, TEXT("DrawIndexedPrimitive Success"), TEXT("Success"), MB_OK);
+	}
+}
+
 // If Obj Model is Triangle_List Mode, 
 VOID CDxDriver::DrawObjListModel(CObjMgr* pObjMgr)
 {
@@ -518,10 +568,14 @@ VOID CDxDriver::DrawObjListModel(CObjMgr* pObjMgr)
 	{
 		for (int i = 0; i < pObjMgr->m_mtls.size(); i++)
 		{
-			if (pObjMgr->m_mtls[i].texIndex != (UINT)-1) 
+			if (pObjMgr->m_mtls[i].texIndex != (UINT)-1)
 				SetTexture(pObjMgr->m_mtls[i].texIndex);
+			else
+				SetTexture(0);
 		}
 	}
+	else
+		SetTexture(0);
 
 	for (int i = 0; i < m_pVertexBufferList.size(); i++)
 	{
@@ -534,7 +588,7 @@ VOID CDxDriver::DrawObjListModel(CObjMgr* pObjMgr)
 		else
 		{
 			dwFVF = D3DFVF_NOTEXTUREVERTEX;
-			SetTexture(NO_TEXTURE);
+			SetTexture(0);
 		}
 
 
