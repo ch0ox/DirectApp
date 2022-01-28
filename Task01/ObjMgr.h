@@ -16,9 +16,9 @@
 #define START_CONTEXT 2
 #define START_CONTEXT_else 3
 
-//								V				Vt				Vn
-#define D3DFVF_TEXTUREVERTEX (D3DFVF_XYZ | D3DFVF_TEX1 | D3DFVF_NORMAL )		// | D3DFVF_DIFFUSE 
-#define D3DFVF_NOTEXTUREVERTEX (D3DFVF_XYZ | D3DFVF_TEX1 | D3DFVF_NORMAL )		// | D3DFVF_DIFFUSE 
+//								V				Vn				Vt
+#define D3DFVF_TEXTUREVERTEX ( D3DFVF_XYZ | D3DFVF_NORMAL  | D3DFVF_TEX1 )		
+#define D3DFVF_NOTEXTUREVERTEX (D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX1 )		
 //#define D3DFVF_NOTEXTUREVERTEX (D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_DIFFUSE)
 
 #define NO_TEXTURE 0
@@ -60,8 +60,8 @@ typedef struct Node
 typedef struct OBJVERTEX
 {
 	float x, y, z;				// VERTEX ÁÂÇ¥
-	float u, v;					// TEXTURE ÁÂÇ¥
 	float nx, ny, nz;			// NORMAL ÁÂÇ¥
+	float u, v;					// TEXTURE ÁÂÇ¥
 	//DWORD color = 0x666666;	// gray
 }objVertex;
 

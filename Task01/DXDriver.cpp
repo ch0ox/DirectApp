@@ -117,7 +117,7 @@ HRESULT CDxDriver::InitD3D()
 HRESULT CDxDriver::InitVB()
 {
 	// Triangle
-	//m_pDraw->CreateTriangleBuffer();
+	m_pDraw->CreateTriangleBuffer(this);
 
 	m_pDraw->TextInit(this);
 
@@ -160,8 +160,8 @@ VOID CDxDriver::Drawing()
 	// Triangle
 	else
 	{
-		//m_pD3DDevice->SetTexture(0, m_pDraw->m_pTexture);
-		//m_pDraw->DrawTriangle();
+		m_pD3DDevice->SetTexture(0, m_pDraw->m_pTexture);
+		m_pDraw->DrawTriangle(this);
 	}
 
 
@@ -194,7 +194,7 @@ VOID CDxDriver::InputRender(CDxInput* pInput)
 	else if (pInput->m_pKey->IsKeyDown(DIK_S))
 	{
 		p_eye.z += 0.02f;
-		p_at.z -= 0.01f;
+		p_at.z -= 0.001f;
 	}
 	else if (pInput->m_pKey->IsKeyDown(DIK_W))
 	{
@@ -614,7 +614,7 @@ VOID CDxDriver::DrawObjStripModel(CObjMgr* pObjMgr)
 {
 	DWORD dwFVF;
 
-	for (int i = 0; i < pObjMgr->m_verticesList.size(); i++)
+	for (int i = 0; i < m_pVertexBufferList.size(); i++)
 	{
 		if (pObjMgr->m_bIsTexturingList[i])
 			dwFVF = D3DFVF_TEXTUREVERTEX;

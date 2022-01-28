@@ -45,6 +45,8 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file, CDxDriver* pDriver)
 	int prev_vt = 0;
 	int prev_vn = 0;
 
+	int vtCnt = 0;
+
 	bool b_face = FALSE;
 
 	OBJVERTEXLIST							vertices;
@@ -98,8 +100,14 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file, CDxDriver* pDriver)
 		else if (line[0] == 'v' && line[1] == 't' && line[2] == ' ')	// vertex texture ?
 		{
 			vf = StrtokFloat((char*)line.substr(START_CONTEXT_else, len - START_CONTEXT_else).c_str(), (char*)" ");
-			p2f.d = { vf[0], vf[1] };
+//			p2f.d = { 0, 0 };
+			p2f.d = { vf[0], 1 - vf[1] };
 			m_objs[objCnt - 1].vt.push_back(p2f);
+			/************************************************/
+//			std::cout << "u: " << vf[0] << ", v: " << vf[1] << std::endl;
+//			std::cout << "u: " << vf[0] << ", 1 - v: " << 1 - vf[1] << std::endl;
+ 			vtCnt++;
+			/************************************************/
 		}
 
 		// vn
@@ -263,7 +271,7 @@ BOOL CObjMgr::ObjLoad(std::ifstream& file, CDxDriver* pDriver)
 		SetObjTex(TRUE);
 		std::cout << "Obj Texture file Load Success." << std::endl;
 	}
-
+	std::cout << "vt 개수 : " << vtCnt << std::endl;
 	return TRUE;
 }
 
@@ -577,19 +585,6 @@ VOID CObjMgr::CreateObjBuffer(CDxDriver* pDriver)
 		if (FAILED(hr))
 			return;
 
-		// Test Code
-// 		std::cout << "vertex ***************************" << std::endl;
-// 		for (auto& v : m_verticesList[i])
-// 		{
-// 			std::cout << "v: " << v.x << "/" << v.y << "/" << v.z << std::endl;
-// 		}
-// 
-// 		std::cout << "indices ****************************" << std::endl;
-// 		for (auto& indes : m_list_indicesList[i])
-// 		{
-// 			std::cout << "i: " << indes << std::endl;
-// 		}
-
 		// Strip
 // 		index = pDriver->CreateObjIndexBuffer(m_indicesList[i].size() * m_indexSize, 0, m_vFormat, D3DPOOL_MANAGED);
 // 		hr = pDriver->CopyObjIndexBuffer(index, &m_indicesList[i].begin(), sizeof(m_indicesList[i]));
@@ -644,7 +639,12 @@ VOID CObjMgr::ObjDraw(CDxDriver* pDriver)
 	}
 
 	// Culling CCW (반시계)
-	pDriver->m_pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);		// 안나오면 D3DCULL_NONE 로 확인
+	pDriver->m_pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);					// 안나오면 D3DCULL_NONE 로 확인
+	pDriver->m_pD3DDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+	pDriver->m_pD3DDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+// 	pDriver->m_pD3DDevice->SetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_BORDER);
+// 	pDriver->m_pD3DDevice->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_BORDER);
+// 	pDriver->m_pD3DDevice->SetSamplerState(0, D3DSAMP_BORDERCOLOR, 0x00000000);
 
 	// Drawing
 	//pDriver->DrawObjListModel(this);
